@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ja" class="h-100">
+<html lang="ja" class="h-100" data-theme="dim">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,26 +8,25 @@
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='img/icon.svg') }}">
 
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}">
+    <!-- Tailwind CSS + daisyUI -->
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5" rel="stylesheet" type="text/css" />
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@5/themes.css" rel="stylesheet" type="text/css" />
+    <!-- カスタムテーマ -->
     {% block extra_css %}{% endblock %}
 </head>
-<body class="d-flex flex-column h-100" >
+<body class="flex flex-col min-h-screen">
     {% include 'components/navbar.html' %}
 
     <!-- Main Content -->
-    <main class="flex-shrink-0">
-        <div class="container my-5">
+    <main class="flex-grow">
+        <div class="container mx-auto px-4 py-8">
             {% block content %}{% endblock %}
         </div>
     </main>
 
     {% include 'components/footer.html' %}
 
-    <!-- Bootstrap JS Bundle -->
-    <script src="{{ url_for('static', filename='js/bootstrap.bundle.js') }}"></script>
     {% block extra_js %}{% endblock %}
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
 </body>
 </html>

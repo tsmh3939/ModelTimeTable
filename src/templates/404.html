@@ -3,89 +3,76 @@
 {% block title %}404 - ページが見つかりません{% endblock %}
 
 {% block content %}
-<div class="row justify-content-center">
-    <div class="col-lg-8 col-md-10">
-        <!-- Error Card -->
-        <div class="card shadow-lg border-0 rounded-3">
-            <div class="card-body p-5 text-center">
-                <!-- 404 Icon -->
-                <div class="mb-4">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" fill="currentColor"
-                         class="bi bi-exclamation-triangle text-warning" viewBox="0 0 16 16">
-                        <path d="M7.938 2.016A.13.13 0 0 1 8.002 2a.13.13 0 0 1 .063.016.146.146 0 0 1 .054.057l6.857 11.667c.036.06.035.124.002.183a.163.163 0 0 1-.054.06.116.116 0 0 1-.066.017H1.146a.115.115 0 0 1-.066-.017.163.163 0 0 1-.054-.06.176.176 0 0 1 .002-.183L7.884 2.073a.147.147 0 0 1 .054-.057zm1.044-.45a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566z"/>
-                        <path d="M7.002 12a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 5.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995z"/>
+<div class="max-w-4xl mx-auto">
+    <!-- Error Card -->
+    <div class="card bg-base-100 shadow-2xl">
+        <div class="card-body items-center text-center p-12">
+            <!-- 404 Icon -->
+            <div class="mb-6">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-32 w-32 text-warning" fill="currentColor" viewBox="0 0 16 16">
+                    <path d="M7.938 2.016A.13.13 0 0 1 8.002 2a.13.13 0 0 1 .063.016.146.146 0 0 1 .054.057l6.857 11.667c.036.06.035.124.002.183a.163.163 0 0 1-.054.06.116.116 0 0 1-.066.017H1.146a.115.115 0 0 1-.066-.017.163.163 0 0 1-.054-.06.176.176 0 0 1 .002-.183L7.884 2.073a.147.147 0 0 1 .054-.057zm1.044-.45a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566z"/>
+                    <path d="M7.002 12a1 1 0 1 1 2 0 1 1 0 0 1-2 0zM7.1 5.995a.905.905 0 1 1 1.8 0l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995z"/>
+                </svg>
+            </div>
+
+            <!-- Error Code -->
+            <h1 class="text-9xl font-bold text-error mb-6">404</h1>
+
+            <!-- Error Title -->
+            <h2 class="text-3xl font-semibold mb-6">ページが見つかりません</h2>
+
+            <!-- Error Message -->
+            <div class="mb-8 max-w-lg">
+                <p class="text-base-content/70 text-lg mb-3">
+                    お探しのページは存在しないか、移動した可能性があります。
+                </p>
+                <p class="text-base-content/70 text-lg">
+                    URLをご確認いただくか、以下のボタンからホームページにお戻りください。
+                </p>
+            </div>
+
+            <!-- Action Buttons -->
+            <div class="flex flex-col sm:flex-row gap-4 mb-8">
+                <a href="{{ url_for('index') }}" class="btn btn-primary btn-lg gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4.5a.5.5 0 0 0 .5-.5v-4h2v4a.5.5 0 0 0 .5.5H14a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146zM2.5 14V7.707l5.5-5.5 5.5 5.5V14H10v-4a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5v4H2.5z"/>
                     </svg>
-                </div>
+                    ホームに戻る
+                </a>
+                <button onclick="history.back()" class="btn btn-outline btn-lg gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="currentColor" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
+                    </svg>
+                    前のページ
+                </button>
+            </div>
 
-                <!-- Error Code -->
-                <h1 class="display-1 fw-bold text-danger mb-3">404</h1>
+            <!-- Divider -->
+            <div class="divider my-6"></div>
 
-                <!-- Error Title -->
-                <h2 class="h3 mb-4">ページが見つかりません</h2>
-
-                <!-- Error Message -->
-                <div class="mb-4">
-                    <p class="text-muted fs-5 mb-2">
-                        お探しのページは存在しないか、移動した可能性があります。
-                    </p>
-                    <p class="text-muted fs-5">
-                        URLをご確認いただくか、以下のボタンからホームページにお戻りください。
-                    </p>
-                </div>
-
-                <!-- Action Buttons -->
-                <div class="d-grid gap-3 d-md-flex justify-content-md-center mb-4">
-                    <a href="{{ url_for('index') }}" class="btn btn-primary btn-lg px-5">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
-                             class="bi bi-house-door me-2" viewBox="0 0 16 16">
-                            <path d="M8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4.5a.5.5 0 0 0 .5-.5v-4h2v4a.5.5 0 0 0 .5.5H14a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146zM2.5 14V7.707l5.5-5.5 5.5 5.5V14H10v-4a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5v4H2.5z"/>
-                        </svg>
-                        ホームに戻る
-                    </a>
-                    <button onclick="history.back()" class="btn btn-outline-secondary btn-lg px-5">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
-                             class="bi bi-arrow-left me-2" viewBox="0 0 16 16">
-                            <path fill-rule="evenodd" d="M15 8a.5.5 0 0 0-.5-.5H2.707l3.147-3.146a.5.5 0 1 0-.708-.708l-4 4a.5.5 0 0 0 0 .708l4 4a.5.5 0 0 0 .708-.708L2.707 8.5H14.5A.5.5 0 0 0 15 8z"/>
-                        </svg>
-                        前のページ
-                    </button>
-                </div>
-
-                <!-- Divider -->
-                <hr class="my-4">
-
-                <!-- Helpful Links -->
-                <div class="text-muted">
-                    <p class="small mb-3">お困りの場合は、以下のページもご覧ください</p>
-                    <nav class="nav justify-content-center">
-                        <a href="{{ url_for('index') }}" class="nav-link text-primary">ホーム</a>
-                        <span class="nav-link disabled">|</span>
-                        <a href="{{ url_for('other1') }}" class="nav-link text-primary">テスト</a>
-                    </nav>
+            <!-- Helpful Links -->
+            <div class="text-base-content/60">
+                <p class="text-sm mb-4">お困りの場合は、以下のページもご覧ください</p>
+                <div class="flex flex-wrap justify-center gap-2">
+                    <a href="{{ url_for('index') }}" class="link link-primary">ホーム</a>
+                    <span>|</span>
+                    <a href="{{ url_for('other1') }}" class="link link-primary">テスト</a>
                 </div>
             </div>
         </div>
+    </div>
 
-        <!-- Additional Help Card -->
-        <div class="card mt-4 border-0 bg-light">
-            <div class="card-body p-4">
-                <div class="row align-items-center">
-                    <div class="col-md-2 text-center mb-3 mb-md-0">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor"
-                             class="bi bi-info-circle text-info" viewBox="0 0 16 16">
-                            <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"/>
-                            <path d="m8.93 6.588-2.29.287-.082.38.45.083c.294.07.352.176.288.469l-.738 3.468c-.194.897.105 1.319.808 1.319.545 0 1.178-.252 1.465-.598l.088-.416c-.2.176-.492.246-.686.246-.275 0-.375-.193-.304-.533L8.93 6.588zM9 4.5a1 1 0 1 1-2 0 1 1 0 0 1 2 0z"/>
-                        </svg>
-                    </div>
-                    <div class="col-md-10">
-                        <h5 class="card-title mb-2">ヒント</h5>
-                        <p class="card-text text-muted mb-0">
-                            URLが正しいか確認してください。ブックマークからアクセスした場合は、
-                            ページが移動または削除されている可能性があります。
-                        </p>
-                    </div>
-                </div>
-            </div>
+    <!-- Additional Help Card -->
+    <div class="alert alert-info mt-6 shadow-lg">
+        <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-12 w-12" fill="none" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+        </svg>
+        <div>
+            <h3 class="font-bold">ヒント</h3>
+            <p class="text-sm">
+                URLが正しいか確認してください。ブックマークからアクセスした場合は、
+                ページが移動または削除されている可能性があります。
+            </p>
         </div>
     </div>
 </div>

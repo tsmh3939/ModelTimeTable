@@ -1,22 +1,29 @@
 <!-- Navbar -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-primary shadow">
-    <div class="container">
-        <a class="navbar-brand fw-bold" href="{{ url_for('index') }}">
-            {{ config['APP_NAME'] }}
-        </a>
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ms-auto">
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('index') }}">ホーム</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{{ url_for('other1') }}">テスト</a>
-                </li>
+<div class="navbar bg-base-200 shadow-lg">
+    <div class="navbar-start">
+        <a href="{{ url_for('index') }}" class="btn btn-ghost text-xl font-bold">{{ config['APP_NAME'] }}</a>
+    </div>
+    <div class="navbar-end gap-2">
+        <!-- Theme Controller -->
+        {% include 'components/themecontroller_swap.html' %}
+
+        <!-- Desktop Menu -->
+        <ul class="menu menu-horizontal px-1 hidden lg:flex">
+            <li><a href="{{ url_for('index') }}" class="btn btn-ghost">ホーム</a></li>
+            <li><a href="{{ url_for('other1') }}" class="btn btn-ghost">テスト</a></li>
+        </ul>
+
+        <!-- Mobile Dropdown Menu -->
+        <div class="dropdown dropdown-end lg:hidden">
+            <div tabindex="0" role="button" class="btn btn-ghost">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h8m-8 6h16" />
+                </svg>
+            </div>
+            <ul tabindex="0" class="menu dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
+                <li><a href="{{ url_for('index') }}" class="text-base-content">ホーム</a></li>
+                <li><a href="{{ url_for('other1') }}" class="text-base-content">テスト</a></li>
             </ul>
         </div>
     </div>
-</nav>
+</div>
