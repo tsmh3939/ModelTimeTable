@@ -1,0 +1,93 @@
+{% extends "base.html" %}
+
+{% block title %}500 - サーバーエラー{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8 col-md-10">
+        <!-- Error Card -->
+        <div class="card shadow-lg border-0 rounded-3">
+            <div class="card-body p-5 text-center">
+                <!-- 500 Icon -->
+                <div class="mb-4">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" fill="currentColor"
+                         class="bi bi-x-octagon text-danger" viewBox="0 0 16 16">
+                        <path d="M4.54.146A.5.5 0 0 1 4.893 0h6.214a.5.5 0 0 1 .353.146l4.394 4.394a.5.5 0 0 1 .146.353v6.214a.5.5 0 0 1-.146.353l-4.394 4.394a.5.5 0 0 1-.353.146H4.893a.5.5 0 0 1-.353-.146L.146 11.46A.5.5 0 0 1 0 11.107V4.893a.5.5 0 0 1 .146-.353L4.54.146zM5.1 1 1 5.1v5.8L5.1 15h5.8l4.1-4.1V5.1L10.9 1H5.1z"/>
+                        <path d="M4.646 4.646a.5.5 0 0 1 .708 0L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 0 1 0-.708z"/>
+                    </svg>
+                </div>
+
+                <!-- Error Code -->
+                <h1 class="display-1 fw-bold text-danger mb-3">500</h1>
+
+                <!-- Error Title -->
+                <h2 class="h3 mb-4">サーバーエラーが発生しました</h2>
+
+                <!-- Error Message -->
+                <div class="mb-4">
+                    <p class="text-muted fs-5 mb-2">
+                        申し訳ございません。サーバーで予期しないエラーが発生しました。
+                    </p>
+                    <p class="text-muted fs-5">
+                        しばらく時間をおいてから、再度お試しください。
+                    </p>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="d-grid gap-3 d-md-flex justify-content-md-center mb-4">
+                    <a href="{{ url_for('index') }}" class="btn btn-primary btn-lg px-5">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+                             class="bi bi-house-door me-2" viewBox="0 0 16 16">
+                            <path d="M8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4.5a.5.5 0 0 0 .5-.5v-4h2v4a.5.5 0 0 0 .5.5H14a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146zM2.5 14V7.707l5.5-5.5 5.5 5.5V14H10v-4a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5v4H2.5z"/>
+                        </svg>
+                        ホームに戻る
+                    </a>
+                    <button onclick="location.reload()" class="btn btn-outline-secondary btn-lg px-5">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+                             class="bi bi-arrow-clockwise me-2" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd" d="M8 3a5 5 0 1 0 4.546 2.914.5.5 0 0 1 .908-.417A6 6 0 1 1 8 2v1z"/>
+                            <path d="M8 4.466V.534a.25.25 0 0 1 .41-.192l2.36 1.966c.12.1.12.284 0 .384L8.41 4.658A.25.25 0 0 1 8 4.466z"/>
+                        </svg>
+                        再読み込み
+                    </button>
+                </div>
+
+                <!-- Divider -->
+                <hr class="my-4">
+
+                <!-- Helpful Links -->
+                <div class="text-muted">
+                    <p class="small mb-3">以下のページもご利用いただけます</p>
+                    <nav class="nav justify-content-center">
+                        <a href="{{ url_for('index') }}" class="nav-link text-primary">ホーム</a>
+                        <span class="nav-link disabled">|</span>
+                        <a href="{{ url_for('other1') }}" class="nav-link text-primary">テスト</a>
+                    </nav>
+                </div>
+            </div>
+        </div>
+
+        <!-- Additional Help Card -->
+        <div class="card mt-4 border-0 bg-light">
+            <div class="card-body p-4">
+                <div class="row align-items-center">
+                    <div class="col-md-2 text-center mb-3 mb-md-0">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor"
+                             class="bi bi-gear text-secondary" viewBox="0 0 16 16">
+                            <path d="M8 4.754a3.246 3.246 0 1 0 0 6.492 3.246 3.246 0 0 0 0-6.492zM5.754 8a2.246 2.246 0 1 1 4.492 0 2.246 2.246 0 0 1-4.492 0z"/>
+                            <path d="M9.796 1.343c-.527-1.79-3.065-1.79-3.592 0l-.094.319a.873.873 0 0 1-1.255.52l-.292-.16c-1.64-.892-3.433.902-2.54 2.541l.159.292a.873.873 0 0 1-.52 1.255l-.319.094c-1.79.527-1.79 3.065 0 3.592l.319.094a.873.873 0 0 1 .52 1.255l-.16.292c-.892 1.64.901 3.434 2.541 2.54l.292-.159a.873.873 0 0 1 1.255.52l.094.319c.527 1.79 3.065 1.79 3.592 0l.094-.319a.873.873 0 0 1 1.255-.52l.292.16c1.64.893 3.434-.902 2.54-2.541l-.159-.292a.873.873 0 0 1 .52-1.255l.319-.094c1.79-.527 1.79-3.065 0-3.592l-.319-.094a.873.873 0 0 1-.52-1.255l.16-.292c.893-1.64-.902-3.433-2.541-2.54l-.292.159a.873.873 0 0 1-1.255-.52l-.094-.319z"/>
+                        </svg>
+                    </div>
+                    <div class="col-md-10">
+                        <h5 class="card-title mb-2">ご注意</h5>
+                        <p class="card-text text-muted mb-0">
+                            このエラーが繰り返し発生する場合は、システム管理者にお問い合わせください。
+                            現在、システムのメンテナンスを行っている可能性があります。
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

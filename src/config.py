@@ -1,2 +1,2 @@
-APP_NAME = "ModelTimeTables"
+APP_NAME = "ModelTimeTable"
 DEBUG = True

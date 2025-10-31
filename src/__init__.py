@@ -12,4 +12,5 @@ app = Flask(
 )
 app.config.from_object('src.config')
 
+
 import src.views

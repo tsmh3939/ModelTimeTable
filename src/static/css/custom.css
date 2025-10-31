@@ -1,0 +1,113 @@
+/* カスタムスタイル */
+
+/* ==================== カラーテーマ ==================== */
+:root {
+    --theme-primary: #f99300;
+    --theme-primary-dark: #e67e00;
+    --theme-primary-light: #ffa726;
+    --theme-accent: #F9D423;
+    --theme-primary-rgb: 249, 147, 0;
+}
+
+/* プライマリカラーのオーバーライド */
+.bg-primary {
+    background-color: var(--theme-primary) !important;
+}
+
+.text-primary {
+    color: var(--theme-primary) !important;
+}
+
+.btn-primary {
+    background-color: var(--theme-primary);
+    border-color: var(--theme-primary);
+}
+
+.btn-primary:hover {
+    background-color: var(--theme-primary-dark);
+    border-color: var(--theme-primary-dark);
+}
+
+.btn-primary:focus,
+.btn-primary:active {
+    background-color: var(--theme-primary-dark);
+    border-color: var(--theme-primary-dark);
+    box-shadow: 0 0 0 0.2rem rgba(var(--theme-primary-rgb), 0.5);
+}
+
+.btn-outline-primary {
+    color: var(--theme-primary);
+    border-color: var(--theme-primary);
+}
+
+.btn-outline-primary:hover {
+    background-color: var(--theme-primary);
+    border-color: var(--theme-primary);
+    color: white;
+}
+
+/* リンクカラー */
+a {
+    color: var(--theme-primary);
+}
+
+a:hover {
+    color: var(--theme-primary-dark);
+}
+
+/* ナビゲーションバー */
+.navbar-dark .navbar-brand:hover {
+    color: var(--theme-accent) !important;
+}
+
+.navbar-dark .nav-link:hover {
+    color: var(--theme-accent) !important;
+}
+
+.navbar-dark .nav-link:focus {
+    color: var(--theme-accent) !important;
+}
+
+/* フォーカス状態 */
+.form-control:focus,
+.form-select:focus {
+    border-color: var(--theme-primary-light);
+    box-shadow: 0 0 0 0.2rem rgba(var(--theme-primary-rgb), 0.25);
+}
+
+/* アクセントカラーの適用 */
+.text-warning {
+    color: var(--theme-accent) !important;
+}
+
+.text-success {
+    color: var(--theme-primary-light) !important;
+}
+
+.text-danger {
+    color: var(--theme-primary-dark) !important;
+}
+
+/* アラート */
+.alert-info {
+    background-color: rgba(var(--theme-primary-rgb), 0.1);
+    border-left: 4px solid var(--theme-primary);
+}
+
+.alert-info .bi-info-circle-fill {
+    color: var(--theme-primary);
+}
+
+/* カードホバーエフェクト */
+.card:hover {
+    transform: translateY(-5px);
+    transition: transform 0.3s ease;
+}
+
+/* ==================== 枠線のカスタマイズ ==================== */
+/* アクティブ時とフォーカス時の枠線を細くする */
+.navbar-toggler:focus {
+    outline: 1px solid !important;
+    box-shadow: 0 0 0 0.1rem rgba(var(--theme-primary-rgb), 0.25) !important;
+}
+

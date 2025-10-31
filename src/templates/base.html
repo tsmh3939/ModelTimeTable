@@ -1,31 +1,33 @@
 <!DOCTYPE html>
-<html lang="ja">
+<html lang="ja" class="h-100">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}{{ config['APP_NAME'] }}{% endblock %}</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="{{ url_for('static', filename='img/icon.svg') }}">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}">
     {% block extra_css %}{% endblock %}
 </head>
-<body>
-    <header>
-        <h1>{{ config['APP_NAME'] }}</h1>
-        <nav>
-            <ul>
-                <li><a href="{{ url_for('index') }}">ホーム</a></li>
-                <li><a href="{{ url_for('other1') }}">テスト</a></li>
-            </ul>
-        </nav>
-    </header>
+<body class="d-flex flex-column h-100" >
+    {% include 'components/navbar.html' %}
 
-    <main>
-        {% block content %}{% endblock %}
+    <!-- Main Content -->
+    <main class="flex-shrink-0">
+        <div class="container my-5">
+            {% block content %}{% endblock %}
+        </div>
     </main>
 
-    <footer>
-        <p>&copy; 2024 {{ config['APP_NAME'] }}</p>
-    </footer>
+    {% include 'components/footer.html' %}
 
+    <!-- Bootstrap JS Bundle -->
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.js') }}"></script>
     {% block extra_js %}{% endblock %}
 </body>
 </html>
