@@ -1,0 +1,10 @@
+/* lightテーマのカスタマイズ */
+
+:root:has(input.theme-controller[value=light]:checked),
+[data-theme="light"] {
+    /* 鮮やかな緑色のプライマリーカラー（OKLCH形式） */
+    /* --color-primary: ;
+    --color-primary-content: ; */
+
+    /* セカンダリーカラー */
+}

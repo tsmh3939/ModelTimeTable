@@ -1,6 +1,8 @@
-<div class="dropdown mb-72">
-  <div tabindex="0" role="button" class="btn m-1">
-    Theme
+<div class="dropdown dropdown-end">
+  <div tabindex="0" role="button" class="btn btn-ghost btn-sm gap-1">
+    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" />
+    </svg>
     <svg
       width="12px"
       height="12px"
@@ -10,46 +12,17 @@
       <path d="M1799 349l242 241-1017 1017L7 590l242-241 775 775 775-775z"></path>
     </svg>
   </div>
-  <ul tabindex="-1" class="dropdown-content bg-base-300 rounded-box z-1 w-52 p-2 shadow-2xl">
+  <ul tabindex="0" class="dropdown-content menu bg-base-300 rounded-box z-[1] w-52 p-2 shadow-2xl max-h-svh overflow-y-auto">
+    {% for theme in config['AVAILABLE_THEMES'] %}
     <li>
       <input
         type="radio"
         name="theme-dropdown"
-        class="theme-controller w-full btn btn-sm btn-block btn-ghost justify-start"
-        aria-label="Default"
-        value="default" />
+        class="theme-controller btn btn-sm btn-block btn-ghost justify-start"
+        aria-label="{{ theme | title }}"
+        value="{{ theme }}"
+        {% if theme == config['DEFAULT_THEME_NAME'] %}checked{% endif %} />
     </li>
-    <li>
-      <input
-        type="radio"
-        name="theme-dropdown"
-        class="theme-controller w-full btn btn-sm btn-block btn-ghost justify-start"
-        aria-label="Retro"
-        value="retro" />
-    </li>
-    <li>
-      <input
-        type="radio"
-        name="theme-dropdown"
-        class="theme-controller w-full btn btn-sm btn-block btn-ghost justify-start"
-        aria-label="Cyberpunk"
-        value="cyberpunk" />
-    </li>
-    <li>
-      <input
-        type="radio"
-        name="theme-dropdown"
-        class="theme-controller w-full btn btn-sm btn-block btn-ghost justify-start"
-        aria-label="Valentine"
-        value="valentine" />
-    </li>
-    <li>
-      <input
-        type="radio"
-        name="theme-dropdown"
-        class="theme-controller w-full btn btn-sm btn-block btn-ghost justify-start"
-        aria-label="Aqua"
-        value="aqua" />
-    </li>
+    {% endfor %}
   </ul>
 </div>
