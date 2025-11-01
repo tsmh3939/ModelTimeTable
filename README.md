@@ -6,7 +6,7 @@ Flaskを使用したWebアプリケーションプロジェクトです。
 
 ```
 ModelTimeTable/
-├── server.py             # アプリケーションのエントリーポイント
+├── app.py                # アプリケーションのエントリーポイント
 ├── requirements.txt      # 依存パッケージ
 ├── .gitignore            # Git除外ファイル
 ├── Dockerfile            # Dockerイメージ定義
@@ -48,7 +48,7 @@ flask db migrate -m "Initial migration"
 
 flask db upgrade
 
-python server.py
+python app.py
 
 deactivate
 ```
@@ -175,3 +175,60 @@ DEFAULT_THEME_NAME = "dark"  # light, dark, dim, cupcake, など
     --color-primary-content: oklch(100% 0 0);
 }
 ```
+
+## 使用しているツール・ライブラリ
+
+### バックエンド
+- **Flask** - Pythonマイクロウェブフレームワーク
+  - 公式サイト: https://flask.palletsprojects.com/
+  - GitHub: https://github.com/pallets/flask
+  - ドキュメント: https://flask.palletsprojects.com/en/3.0.x/
+
+- **Flask-SQLAlchemy** - FlaskのSQLAlchemyサポート
+  - GitHub: https://github.com/pallets-eco/flask-sqlalchemy
+  - ドキュメント: https://flask-sqlalchemy.palletsprojects.com/
+
+- **Flask-Migrate** - FlaskのAlembicベースのデータベースマイグレーション
+  - GitHub: https://github.com/miguelgrinberg/flask-migrate
+  - ドキュメント: https://flask-migrate.readthedocs.io/
+
+- **SQLAlchemy** - PythonのSQLツールキットとORM
+  - 公式サイト: https://www.sqlalchemy.org/
+  - ドキュメント: https://docs.sqlalchemy.org/
+
+### フロントエンド
+- **Tailwind CSS** - ユーティリティファーストのCSSフレームワーク
+  - 公式サイト: https://tailwindcss.com/
+  - ドキュメント: https://tailwindcss.com/docs
+  - GitHub: https://github.com/tailwindlabs/tailwindcss
+
+- **daisyUI** - Tailwind CSSのコンポーネントライブラリ
+  - 公式サイト: https://daisyui.com/
+  - ドキュメント: https://daisyui.com/docs/
+  - GitHub: https://github.com/saadeghi/daisyui
+  - テーマ一覧: https://daisyui.com/docs/themes/
+
+### テンプレートエンジン
+- **Jinja2** - Pythonテンプレートエンジン
+  - 公式サイト: https://jinja.palletsprojects.com/
+  - ドキュメント: https://jinja.palletsprojects.com/en/3.1.x/
+
+### 開発ツール
+- **Python** - プログラミング言語
+  - 公式サイト: https://www.python.org/
+  - ドキュメント: https://docs.python.org/3/
+
+- **Docker** - コンテナプラットフォーム
+  - 公式サイト: https://www.docker.com/
+  - ドキュメント: https://docs.docker.com/
+  - Docker Hub: https://hub.docker.com/
+
+- **Docker Compose** - 複数コンテナのDocker環境定義ツール
+  - ドキュメント: https://docs.docker.com/compose/
+
+### その他のリソース
+- **OKLCH カラーピッカー** - daisyUIで使用するカラー形式
+  - https://oklch.com/
+
+- **Material Design Icons** - アイコンライブラリ
+  - https://fonts.google.com/icons

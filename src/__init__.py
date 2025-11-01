@@ -3,9 +3,6 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 import os
 
-# データベースのインスタンスを作成
-db = SQLAlchemy()
-migrate = Migrate()
 
 dir_name = os.path.dirname(__file__)
 template_folder = os.path.join(dir_name, 'templates')
@@ -17,6 +14,11 @@ app = Flask(
     static_folder=static_folder
 )
 app.config.from_object('src.config')
+
+
+# データベースのインスタンスを作成
+db = SQLAlchemy()
+migrate = Migrate()
 
 # データベースの初期化
 db.init_app(app)

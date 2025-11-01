@@ -10,7 +10,15 @@
         <!-- Desktop Menu -->
         <ul class="menu menu-horizontal px-1 hidden lg:flex">
             <li><a href="{{ url_for('index') }}" class="btn btn-ghost">ホーム</a></li>
-            <li><a href="{{ url_for('other1') }}" class="btn btn-ghost">テスト</a></li>
+            <li><a href="{{ url_for('test') }}" class="btn btn-ghost">テスト</a></li>
+            {% if config['DEBUG'] %}
+            <li><a href="{{ url_for('sql') }}" class="btn btn-ghost">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" />
+                </svg>
+                SQL
+            </a></li>
+            {% endif %}
         </ul>
 
         <!-- Mobile Dropdown Menu -->
@@ -22,7 +30,15 @@
             </div>
             <ul tabindex="0" class="menu dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
                 <li><a href="{{ url_for('index') }}" class="text-base-content">ホーム</a></li>
-                <li><a href="{{ url_for('other1') }}" class="text-base-content">テスト</a></li>
+                <li><a href="{{ url_for('test') }}" class="text-base-content">テスト</a></li>
+                {% if config['DEBUG'] %}
+                <li><a href="{{ url_for('sql') }}" class="text-base-content">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" />
+                    </svg>
+                    SQL
+                </a></li>
+                {% endif %}
             </ul>
         </div>
     </div>

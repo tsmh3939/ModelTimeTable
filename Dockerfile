@@ -20,9 +20,10 @@ RUN sed -i 's/\r$//' docker-entrypoint.sh && chmod +x docker-entrypoint.sh
 EXPOSE 5000
 
 # 環境変数を設定
-ENV FLASK_APP=server.py
+ENV FLASK_APP=app.py
 ENV FLASK_HOST=0.0.0.0
 ENV FLASK_PORT=5000
+ENV FLASK_DEBUG=true
 ENV PYTHONUNBUFFERED=1
 
 # エントリーポイントスクリプトを実行
