@@ -4,6 +4,8 @@ services:
     ports:
       - "5000:5000"
     volumes:
+      # ソースコードとデータベースファイルをホストと同期
+      # migrations/ と src/app.db が永続化されます
       - .:/app
     environment:
       - FLASK_APP=server.py

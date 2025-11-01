@@ -13,6 +13,9 @@ RUN pip install --no-cache-dir -r requirements.txt
 # アプリケーションファイルをコピー
 COPY . .
 
+# エントリーポイントスクリプトの改行コードを変換して実行権限を付与
+RUN sed -i 's/\r$//' docker-entrypoint.sh && chmod +x docker-entrypoint.sh
+
 # ポート5000を公開
 EXPOSE 5000
 
@@ -22,5 +25,5 @@ ENV FLASK_HOST=0.0.0.0
 ENV FLASK_PORT=5000
 ENV PYTHONUNBUFFERED=1
 
-# アプリケーションを実行
-CMD ["python", "server.py"]
+# エントリーポイントスクリプトを実行
+CMD ["/bin/bash", "./docker-entrypoint.sh"]

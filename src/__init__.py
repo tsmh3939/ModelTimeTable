@@ -1,5 +1,11 @@
 from flask import Flask
+from flask_sqlalchemy import SQLAlchemy
+from flask_migrate import Migrate
 import os
+
+# データベースのインスタンスを作成
+db = SQLAlchemy()
+migrate = Migrate()
 
 dir_name = os.path.dirname(__file__)
 template_folder = os.path.join(dir_name, 'templates')
@@ -12,5 +18,9 @@ app = Flask(
 )
 app.config.from_object('src.config')
 
+# データベースの初期化
+db.init_app(app)
+migrate.init_app(app, db)
 
 import src.views
+import src.models
