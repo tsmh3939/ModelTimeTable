@@ -17,12 +17,18 @@ app.config.from_object('src.config')
 
 
 # データベースのインスタンスを作成
-db = SQLAlchemy()
-migrate = Migrate()
+db: SQLAlchemy = SQLAlchemy()
+migrate: Migrate = Migrate()
+
+basedir = os.path.abspath(os.path.dirname(__file__))
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, 'app.db')
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # データベースの初期化
 db.init_app(app)
 migrate.init_app(app, db)
 
+
 import src.views
 import src.models
+

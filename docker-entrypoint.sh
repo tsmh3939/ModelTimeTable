@@ -21,9 +21,9 @@ fi
 
 echo "Database setup complete!"
 
-# サンプルデータを挿入
+# データを挿入
 echo "Seeding database..."
-python seed_data.py
+python seed_master_data.py
 
 # アプリケーションを起動
 echo "Starting application..."

@@ -16,6 +16,9 @@
         <a href="{{ url_for('index') }}" class="btn btn-ghost text-xl font-bold">{{ config['APP_NAME'] }}</a>
     </div>
     <div class="navbar-end gap-2">
+        <!-- Language Selector -->
+        {% include 'components/language_selector.html' %}
+
         <!-- Theme Controller Dropdown (All Themes) -->
         {% include 'components/themecontroller.html' %}
 
