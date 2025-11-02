@@ -28,7 +28,9 @@
                         name="query"
                         class="textarea textarea-bordered h-32 font-mono"
                         placeholder="SELECT * FROM users;"
-                        autofocus>{{ query }}</textarea>
+                        autofocus>
+                        {{ query }}
+                    </textarea>
                 </div>
 
                 <div class="card-actions justify-end mt-4">
@@ -50,7 +52,7 @@
             <h2 class="card-title">サンプルクエリ</h2>
             <div class="space-y-2">
                 <div class="collapse collapse-arrow bg-base-300">
-                    <input type="radio" name="sample-queries" />
+                    <input type="checkbox" />
                     <div class="collapse-title font-medium">
                         全テーブル一覧を表示
                     </div>
@@ -59,7 +61,7 @@
                     </div>
                 </div>
                 <div class="collapse collapse-arrow bg-base-300">
-                    <input type="radio" name="sample-queries" />
+                    <input type="checkbox" />
                     <div class="collapse-title font-medium">
                         テーブル構造を表示
                     </div>
@@ -68,7 +70,7 @@
                     </div>
                 </div>
                 <div class="collapse collapse-arrow bg-base-300">
-                    <input type="radio" name="sample-queries" />
+                    <input type="checkbox" />
                     <div class="collapse-title font-medium">
                         全レコードを取得
                     </div>

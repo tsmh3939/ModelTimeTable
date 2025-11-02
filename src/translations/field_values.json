@@ -1,0 +1,104 @@
+{
+  "period": {
+    "description": "時限で取る値。0は曜日が「他」の場合。",
+    "description_en": "Period values. 0 is used when day is 'Other'.",
+    "values": [0, 1, 2, 3, 4, 5, 6]
+  },
+  "semester": {
+    "description": "セメスタで取る値",
+    "description_en": "Semester values",
+    "values": [1, 2, 3, 4, 5, 6, 7, 8]
+  },
+  "credits": {
+    "description": "単位数で取る値。1,2以外は卒業研究のみ。",
+    "description_en": "Credit values. Values other than 1 and 2 are for graduation research only.",
+    "values": [1, 2, 8]
+  },
+  "grade": {
+    "description": "学年名で取る値",
+    "description_en": "Grade/Year values",
+    "values": [1, 2, 3, 4]
+  },
+  "course_category_master": {
+    "description": "履修区分マスタ",
+    "description_en": "Course Category Master",
+    "values": [
+      {"id": 1, "name_ja": "必修", "name_en": "Required"},
+      {"id": 2, "name_ja": "選択必修", "name_en": "Required Elective"},
+      {"id": 3, "name_ja": "選択", "name_en": "Elective"},
+      {"id": 4, "name_ja": "必履修", "name_en": "Mandatory"}
+    ]
+  },
+  "offering_category_master": {
+    "description": "開講区分マスタ",
+    "description_en": "Offering Category Master",
+    "values": [
+      {"id": 0, "name_ja": "通年", "name_en": "Full Year"},
+      {"id": 1, "name_ja": "1Q", "name_en": "1st Quarter"},
+      {"id": 2, "name_ja": "2Q", "name_en": "2nd Quarter"},
+      {"id": 3, "name_ja": "3Q", "name_en": "3rd Quarter"},
+      {"id": 4, "name_ja": "4Q", "name_en": "4th Quarter"},
+      {"id": 5, "name_ja": "前期", "name_en": "First Semester"},
+      {"id": 6, "name_ja": "後期", "name_en": "Second Semester"}
+    ]
+  },
+  "day_master": {
+    "description": "曜日マスタ",
+    "description_en": "Day Master",
+    "values": [
+      {"id": 0, "name_ja": "他", "name_en": "Other"},
+      {"id": 1, "name_ja": "月", "name_en": "Monday"},
+      {"id": 2, "name_ja": "火", "name_en": "Tuesday"},
+      {"id": 3, "name_ja": "水", "name_en": "Wednesday"},
+      {"id": 4, "name_ja": "木", "name_en": "Thursday"},
+      {"id": 5, "name_ja": "金", "name_en": "Friday"},
+      {"id": 6, "name_ja": "土", "name_en": "Saturday"}
+    ]
+  },
+  "major_master": {
+    "description": "メジャーマスタ",
+    "description_en": "Major Master",
+    "values": [
+      {"id": 1, "name_ja": "IS", "name_en": "IS"},
+      {"id": 2, "name_ja": "NC", "name_en": "NC"},
+      {"id": 3, "name_ja": "XD", "name_en": "XD"}
+    ]
+  },
+  "class_format_master": {
+    "description": "授業形態マスタ",
+    "description_en": "Class Format Master",
+    "values": [
+      {"id": 1, "name_ja": "講義", "name_en": "Lecture"},
+      {"id": 2, "name_ja": "演習", "name_en": "Seminar"},
+      {"id": 3, "name_ja": "実験", "name_en": "Experiment"},
+      {"id": 4, "name_ja": "講義・演習", "name_en": "Lecture & Seminar"}
+    ]
+  },
+  "course_type_master": {
+    "description": "授業種別マスタ",
+    "description_en": "Course Type Master",
+    "values": [
+      {"id": 1, "name_ja": "普通", "name_en": "Regular"},
+      {"id": 2, "name_ja": "集中", "name_en": "Intensive"},
+      {"id": 3, "name_ja": "実験・実習", "name_en": "Experiment & Practice"}
+    ]
+  },
+  "special_values": {
+    "classroom_undecided": {
+      "name_ja": "未定",
+      "name_en": "TBD"
+    }
+  },
+  "table_types": {
+    "master_table": {
+      "color": "pink",
+      "description_ja": "マスタテーブル",
+      "description_en": "Master Table"
+    },
+    "junction_table": {
+      "color": "green",
+      "description_ja": "中間テーブル",
+      "description_en": "Junction Table"
+    }
+  }
+}

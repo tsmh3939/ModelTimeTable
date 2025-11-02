@@ -1,17 +1,10 @@
-<!-- SQL Icon Macro -->
-{% macro sql_icon() %}
-<svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" />
-</svg>
-{% endmacro %}
-
 <!-- Menu Items Macro -->
 {% macro menu_items(style_class) %}
     <li><a href="{{ url_for('index') }}" class="{{ style_class }}">ホーム</a></li>
     <li><a href="{{ url_for('test') }}" class="{{ style_class }}">テスト</a></li>
     {% if config['DEBUG'] %}
     <li><a href="{{ url_for('sql') }}" class="{{ style_class }}">
-        {{ sql_icon() }}
+        <img src="{{ url_for('static', filename='images/sql-icon.svg') }}" alt="SQL" class="h-5 w-5 inline-block">
         SQL
     </a></li>
     {% endif %}
@@ -24,7 +17,7 @@
     </div>
     <div class="navbar-end gap-2">
         <!-- Theme Controller Dropdown (All Themes) -->
-        {% include 'components/themecontroller_dropdown.html' %}
+        {% include 'components/themecontroller.html' %}
 
         <!-- Desktop Menu -->
         <ul class="menu menu-horizontal px-1 hidden lg:flex">
@@ -34,9 +27,7 @@
         <!-- Mobile Dropdown Menu -->
         <div class="dropdown dropdown-end lg:hidden">
             <div tabindex="0" role="button" class="btn btn-ghost">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h8m-8 6h16" />
-                </svg>
+                <img src="{{ url_for('static', filename='images/menu-icon.svg') }}" alt="Menu" class="h-5 w-5">
             </div>
             <ul tabindex="0" class="menu dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
                 {{ menu_items('text-base-content') }}
