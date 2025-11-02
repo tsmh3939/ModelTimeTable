@@ -59,17 +59,45 @@ Dockerを使用して、環境構築なしで簡単にアプリケーション�
 
 #### 前提条件
 - Docker と Docker Compose がインストールされていること
+- Docker Desktopが起動していること（Windowsの場合）
 
 #### 実行方法
 
-**Dockerコマンドで実行:**
+**Docker Composeで実行（推奨）:**
+
+```bash
+# コンテナをビルドして起動
+docker-compose up --build
+
+# バックグラウンドで実行する場合
+docker-compose up -d --build
+
+# ログを確認
+docker-compose logs -f
+
+# 停止
+docker-compose down
+```
+
+**Dockerコマンドで実行（詳細制御が必要な場合）:**
 ```bash
 # イメージをビルド
 docker build -t modeltimetable .
 
-# コンテナを実行
-docker run -p 5000:5000 modeltimetable
+# コンテナを実行（環境変数を明示的に指定）
+docker run -p 5000:5000 \
+  -e FLASK_APP=app.py \
+  -e FLASK_HOST=0.0.0.0 \
+  -e FLASK_PORT=5000 \
+  -e FLASK_DEBUG=true \
+  -e PYTHONUNBUFFERED=1 \
+  modeltimetable
 ```
+
+**データベースについて:**
+- コンテナ起動時に自動的にデータベースが初期化されます
+- サンプルデータ（ユーザー3件）が自動的に挿入されます
+- `migrations/` と `src/app.db` はホストマシンに永続化されます
 
 アプリケーションは `http://localhost:5000` でアクセスできます。
 
@@ -77,6 +105,7 @@ docker run -p 5000:5000 modeltimetable
 
 - `/` - ホームページ
 - `/test` - テストページ
+- `/sql` - SQL実行ツール（DEBUGモード時のみ表示）
 
 ## 開発
 

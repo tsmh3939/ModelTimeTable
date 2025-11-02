@@ -1,0 +1,20 @@
+# シェルスクリプトは常にLF（Unix形式）で保存
+*.sh text eol=lf
+
+# Python、HTML、CSS、JSファイルは自動改行変換
+*.py text
+*.html text
+*.css text
+*.js text
+*.json text
+*.md text
+*.yml text
+*.yaml text
+
+# バイナリファイル
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.db binary
