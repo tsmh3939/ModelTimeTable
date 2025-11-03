@@ -1,1 +1,1 @@
-gcloud run deploy modeltimetable --source . --region asia-northeast2 --allow-unauthenticated --set-env-vars="FLASK_DB_NAME=modeltimetable.db"
+modeltimetable --source . --region asia-northeast2 --allow-unauthenticated --set-env-vars="FLASK_APP=app.py,FLASK_DB_NAME=modeltimetable.db"
