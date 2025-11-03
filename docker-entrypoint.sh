@@ -11,7 +11,7 @@ if [ ! -d "migrations" ]; then
 fi
 
 # データベースファイルが存在しない場合、またはマイグレーションが適用されていない場合
-if [ ! -f "src/app.db" ]; then
+if [ ! -f "src/$FLASK_DB_NAME" ]; then
     echo "Creating database..."
     flask db upgrade
 else
@@ -27,4 +27,4 @@ python seed_master_data.py
 
 # アプリケーションを起動
 echo "Starting application..."
-exec python app.py
+exec gunicorn --bind 0.0.0.0:5000 --workers 4 --timeout 120 --access-logfile - --error-logfile - "src:app"

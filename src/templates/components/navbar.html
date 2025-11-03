@@ -1,12 +1,15 @@
 <!-- Menu Items Macro -->
 {% macro menu_items(style_class) %}
-    <li><a href="{{ url_for('index') }}" class="{{ style_class }}">ホーム</a></li>
-    <li><a href="{{ url_for('test') }}" class="{{ style_class }}">テスト</a></li>
+    <li>
+        <a href="{{ url_for('index') }}" class="{{ style_class }}">{{ t('nav', 'home') }}</a>
+    </li>
     {% if config['DEBUG'] %}
-    <li><a href="{{ url_for('sql') }}" class="{{ style_class }}">
-        <img src="{{ url_for('static', filename='images/sql-icon.svg') }}" alt="SQL" class="h-5 w-5 inline-block">
-        SQL
-    </a></li>
+    <li>
+        <a href="{{ url_for('sql') }}" class="{{ style_class }}">
+            <img src="{{ url_for('static', filename='images/sql-icon.svg') }}" alt="SQL" class="h-5 w-5 inline-block">
+            {{ t('nav', 'sql_tool') }}
+        </a>
+    </li>
     {% endif %}
 {% endmacro %}
 

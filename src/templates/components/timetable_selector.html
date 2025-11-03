@@ -1,0 +1,108 @@
+<!-- 時間割選択フォーム -->
+<div class="card bg-base-100 shadow-xl">
+    <div class="card-body">
+        <h2 class="card-title text-2xl mb-4">{{ t('index', 'select_timetable') }}</h2>
+
+        <form method="POST" action="{{ url_for('index') }}" class="space-y-4">
+            <!-- セメスタ選択 -->
+            <div class="form-control w-full">
+                <label class="label">
+                    <span class="label-text text-lg font-semibold">{{ t('index', 'semester') }}</span>
+                    <span class="label-text-alt text-error">{{ t('common', 'required') }}</span>
+                </label>
+                <select name="semester" class="select select-bordered w-full" required>
+                    <option disabled selected>{{ t('index', 'select_semester') }}</option>
+                    {% for sem_id in semesters.keys() %}
+                    <option value="{{ sem_id }}" {% if selected_semester == sem_id %}selected{% endif %}>
+                        {{ translate_semester(sem_id) }}
+                    </option>
+                    {% endfor %}
+                </select>
+            </div>
+
+            <!-- 第一メジャー選択 -->
+            <div class="form-control w-full">
+                <label class="label">
+                    <span class="label-text text-lg font-semibold">{{ t('index', 'major1') }}</span>
+                    <span class="label-text-alt text-error">{{ t('common', 'required') }}</span>
+                </label>
+                <select name="major1_id" id="major1_select" class="select select-bordered w-full" required>
+                    <option value="" disabled selected>{{ t('index', 'select_major1') }}</option>
+                    {% for major in majors %}
+                    <option value="{{ major.major_id }}" {% if selected_major1 == major.major_id %}selected{% endif %}>
+                        {{ major.major_name }}
+                    </option>
+                    {% endfor %}
+                </select>
+                <label class="label">
+                    <span class="label-text-alt">{{ t('index', 'major1_help') }}</span>
+                </label>
+            </div>
+
+            <!-- 第二メジャー選択 -->
+            <div class="form-control w-full">
+                <label class="label">
+                    <span class="label-text text-lg font-semibold">{{ t('index', 'major2') }}</span>
+                    <span class="label-text-alt text-error">{{ t('common', 'required') }}</span>
+                </label>
+                <select name="major2_id" id="major2_select" class="select select-bordered w-full" required>
+                    <option value="" disabled selected>{{ t('index', 'select_major2') }}</option>
+                    {% for major in majors %}
+                    <option value="{{ major.major_id }}" {% if selected_major2 == major.major_id %}selected{% endif %} data-major-id="{{ major.major_id }}">
+                        {{ major.major_name }}
+                    </option>
+                    {% endfor %}
+                </select>
+                <label class="label">
+                    <span class="label-text-alt">{{ t('index', 'major2_help') }}</span>
+                </label>
+            </div>
+
+            <!-- 送信ボタン -->
+            <div class="card-actions justify-end mt-6">
+                <button type="submit" class="btn btn-primary btn-lg">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+                    </svg>
+                    {{ t('index', 'generate_timetable') }}
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script>
+    // 第一メジャーが選択されたときに、第二メジャーの選択肢を更新
+    document.addEventListener('DOMContentLoaded', function() {
+        const major1Select = document.getElementById('major1_select');
+        const major2Select = document.getElementById('major2_select');
+
+        function updateMajor2Options() {
+            const major1Value = major1Select.value;
+            const major2Options = major2Select.querySelectorAll('option[data-major-id]');
+
+            major2Options.forEach(option => {
+                const majorId = option.getAttribute('data-major-id');
+                if (majorId === major1Value) {
+                    option.disabled = true;
+                    option.style.display = 'none';
+                    // もし第二メジャーで選択されていたら、リセット
+                    if (option.selected) {
+                        major2Select.value = '';
+                    }
+                } else {
+                    option.disabled = false;
+                    option.style.display = 'block';
+                }
+            });
+        }
+
+        // 第一メジャーが変更されたときに実行
+        major1Select.addEventListener('change', updateMajor2Options);
+
+        // ページロード時に初期化（選択済みの値がある場合）
+        if (major1Select.value) {
+            updateMajor2Options();
+        }
+    });
+</script>

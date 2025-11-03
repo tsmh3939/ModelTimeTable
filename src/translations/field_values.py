@@ -8,15 +8,20 @@ from enum import IntEnum
 from typing import Dict, List
 
 
-# 時限の値（Period values）
-# 0は曜日が「他」の場合 / 0 is used when day is 'Other'
+# 時限の値
+# 0は曜日が「他」の場合
 PERIODS = [0, 1, 2, 3, 4, 5, 6]
 
-# セメスタの値（Semester values）
-SEMESTERS = [1, 2, 3, 4, 5, 6, 7, 8]
+# セメスタの値
+SEMESTERS = {
+    3: {"ja": "2年前期", "en": "2nd Year 1st Semester"},
+    4: {"ja": "2年後期", "en": "2nd Year 2nd Semester"},
+    5: {"ja": "3年前期", "en": "3rd Year 1st Semester"},
+    6: {"ja": "3年後期", "en": "3rd Year 2nd Semester"}
+}
 
-# 単位数の値（Credit values）
-# 1,2以外は卒業研究のみ / Values other than 1 and 2 are for graduation research only
+# 単位数の値
+# 1,2以外は卒業研究のみ
 CREDITS = [1, 2, 8]
 
 # 学年の値（Grade/Year values）
@@ -239,3 +244,17 @@ def get_classroom_undecided(lang: str = 'ja') -> str:
         未定の表示
     """
     return CLASSROOM_UNDECIDED.get(lang, "TBD")
+
+
+def get_semester_name(semester_id: int, lang: str = 'ja') -> str:
+    """
+    セメスタIDから名称を取得
+
+    Args:
+        semester_id: セメスタID (3-6)
+        lang: 言語 ('ja' or 'en')
+
+    Returns:
+        セメスタ名
+    """
+    return SEMESTERS.get(semester_id, {}).get(lang, str(semester_id))
