@@ -2,15 +2,12 @@ services:
   web:
     build: .
     ports:
-      - "5000:5000"
+      - "8080:8080"
     volumes:
       # ソースコードとデータベースファイルをホストと同期
       - .:/app
     environment:
       - FLASK_APP=app.py
       - FLASK_DB_NAME=modeltimetable.db
-      - FLASK_HOST=0.0.0.0
-      - FLASK_PORT=5000
-      - FLASK_DEBUG=true
       - PYTHONUNBUFFERED=1
     restart: unless-stopped
