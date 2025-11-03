@@ -21,7 +21,7 @@ db: SQLAlchemy = SQLAlchemy()
 migrate: Migrate = Migrate()
 
 basedir = os.path.abspath(os.path.dirname(__file__))
-db_name = os.environ.get("FLASK_DB", "app.db")
+db_name = os.environ.get("FLASK_DB_NAME", "app.db")
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + os.path.join(basedir, db_name)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
