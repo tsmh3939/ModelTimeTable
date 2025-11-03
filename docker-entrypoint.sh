@@ -19,11 +19,7 @@ else
     flask db upgrade
 fi
 
-echo "Database setup complete!"
-
 # データを挿入
 echo "Seeding database..."
 python seed_master_data.py
-
 exec python app.py
-
