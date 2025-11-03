@@ -25,6 +25,6 @@ echo "Database setup complete!"
 echo "Seeding database..."
 python seed_master_data.py
 
-# アプリケーションを起動
+# アプリケーションを起動（開発環境用）
 echo "Starting application..."
-exec gunicorn --bind 0.0.0.0:5000 --workers 4 --timeout 120 --access-logfile - --error-logfile - "src:app"
+exec python app.py
