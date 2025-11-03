@@ -19,7 +19,7 @@ Flaskを使用したWebアプリケーションプロジェクトです。
 ```bash
 python -m venv venv
 venv\Scripts\activate
-pip install -r requirements.txt
+pip install --no-cache-dir -r requirements.txt
 flask db init
 flask db migrate -m "Initial migration"
 flask db upgrade
