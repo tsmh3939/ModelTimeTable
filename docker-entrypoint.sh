@@ -25,14 +25,5 @@ echo "Database setup complete!"
 echo "Seeding database..."
 python seed_master_data.py
 
-# 環境に応じてアプリケーションを起動
-if [ "$DEPLOYMENT_ENV" = "production" ]; then
-    # 本番環境: Gunicornで起動（Cloud Run用）
-    echo "Starting application with Gunicorn (production mode)..."
-    PORT="${PORT:-8080}"
-    exec gunicorn --bind 0.0.0.0:$PORT --workers 2 --threads 4 --timeout 120 --access-logfile - --error-logfile - "src:app"
-else
-    # 開発環境: Flask開発サーバーで起動
-    echo "Starting application with Flask (development mode)..."
-    exec python app.py
-fi
+exec python app.py
+

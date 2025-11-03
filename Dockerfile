@@ -16,7 +16,7 @@ COPY . .
 # エントリーポイントスクリプトの改行コードを変換して実行権限を付与
 RUN sed -i 's/\r$//' docker-entrypoint.sh && chmod +x docker-entrypoint.sh
 
-# ポートを公開（開発: 5000, Cloud Run: 8080）
+# ポートを公開
 EXPOSE 8080
 
 # エントリーポイントスクリプトを実行
