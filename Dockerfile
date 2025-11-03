@@ -1,5 +1,5 @@
 # Python 3.13のイメージを使用
-FROM python:3.14-slim
+FROM python:3.13-slim
 
 # 作業ディレクトリを設定
 WORKDIR /app
@@ -16,8 +16,8 @@ COPY . .
 # エントリーポイントスクリプトの改行コードを変換して実行権限を付与
 RUN sed -i 's/\r$//' docker-entrypoint.sh && chmod +x docker-entrypoint.sh
 
-# ポート5000を公開
-EXPOSE 5000
+# ポートを公開（開発: 5000, Cloud Run: 8080）
+EXPOSE 8080
 
 # エントリーポイントスクリプトを実行
 CMD ["/bin/bash", "./docker-entrypoint.sh"]
