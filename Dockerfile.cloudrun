@@ -1,0 +1,28 @@
+# Google Cloud Run用のDockerfile
+FROM python:3.13-slim
+
+# 作業ディレクトリを設定
+WORKDIR /app
+
+# 依存関係ファイルをコピー
+COPY requirements.txt .
+
+# 依存関係をインストール
+RUN pip install --no-cache-dir -r requirements.txt
+
+# アプリケーションファイルをコピー
+COPY . .
+
+# Cloud Run用エントリーポイントスクリプトの改行コードを変換して実行権限を付与
+RUN sed -i 's/\r$//' docker-entrypoint.cloudrun.sh && chmod +x docker-entrypoint.cloudrun.sh
+
+# Cloud Runはデフォルトで8080を使用
+ENV PORT=8080
+ENV FLASK_DEBUG=false
+ENV PYTHONUNBUFFERED=1
+
+# ポートを公開（Cloud Runが自動的に設定するが明示的に記載）
+EXPOSE 8080
+
+# Cloud Run用エントリーポイントスクリプトを実行
+CMD ["/bin/bash", "./docker-entrypoint.cloudrun.sh"]
