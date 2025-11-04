@@ -20,19 +20,6 @@
     </div>
     {% endif %}
 
-    <!-- 選択結果の表示（POSTリクエスト後のみ） -->
-    {% if message %}
-    <div role="alert" class="alert alert-success shadow-lg mb-6">
-        <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
-        </svg>
-        <div>
-            <h3 class="font-bold">{{ t('index', 'selection_complete') }}</h3>
-            <div class="text-sm">{{ message }}</div>
-        </div>
-    </div>
-    {% endif %}
-
     <!-- 時間割選択フォーム（コンポーネント） -->
     {% include 'components/timetable_selector.html' %}
 

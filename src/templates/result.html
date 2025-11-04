@@ -1,0 +1,246 @@
+{% extends "base.html" %}
+
+{% block title %}{{ t('result', 'title') }} - {{ super() }}{% endblock %}
+
+{% block content %}
+<div class="max-w-5xl mx-auto">
+    <!-- ヘッダー -->
+    <div class="text-center mb-8">
+        <div class="flex items-center justify-center gap-4 mb-2">
+            <h1 class="text-4xl font-bold">{{ t('result', 'title') }}</h1>
+            {% if fiscal_year %}
+            <span class="text-xl text-base-content/60">{{ fiscal_year }}</span>
+            {% endif %}
+        </div>
+    </div>
+
+    <!-- 選択内容の表示（Collapse） -->
+    <div class="collapse collapse-arrow bg-base-100 shadow-xl mb-6">
+        <input type="checkbox" />
+        <div class="collapse-title text-xl font-medium">
+            {{ t('result', 'selected_conditions') }}
+        </div>
+        <div class="collapse-content">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 pt-4">
+                <!-- セメスタ -->
+                <div class="stats shadow">
+                    <div class="stat">
+                        <div class="stat-title">{{ t('index', 'semester') }}</div>
+                        <div class="stat-value text-2xl text-primary">{{ semester_name }}</div>
+                    </div>
+                </div>
+
+                <!-- 第一メジャー -->
+                <div class="stats shadow">
+                    <div class="stat">
+                        <div class="stat-title">{{ t('index', 'major1') }}</div>
+                        <div class="stat-value text-2xl text-secondary">{{ major1_name }}</div>
+                    </div>
+                </div>
+
+                <!-- 第二メジャー -->
+                <div class="stats shadow">
+                    <div class="stat">
+                        <div class="stat-title">{{ t('index', 'major2') }}</div>
+                        <div class="stat-value text-2xl text-accent">{{ major2_name }}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 時間割プレースホルダー -->
+    <div class="card bg-base-100 shadow-xl mb-6">
+        <div class="card-body">
+            <h2 class="card-title text-2xl mb-4">{{ t('result', 'timetable') }}</h2>
+
+            <!-- 準備中メッセージ -->
+            <div class="alert alert-info">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+                <span>{{ t('result', 'generating_message') }}</span>
+            </div>
+
+            <!-- 時間割表 -->
+            <div class="overflow-x-auto mt-6">
+                <table class="table w-full">
+                    <thead>
+                        <tr class="bg-base-200">
+                            <th class="text-center w-16">{{ t('result', 'period') }}</th>
+                            <th class="text-center">{{ t('result', 'monday') }}</th>
+                            <th class="text-center">{{ t('result', 'tuesday') }}</th>
+                            <th class="text-center">{{ t('result', 'wednesday') }}</th>
+                            <th class="text-center">{{ t('result', 'thursday') }}</th>
+                            <th class="text-center">{{ t('result', 'friday') }}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- 1限 -->
+                        <tr class="hover">
+                            <td class="text-center font-semibold bg-base-200">1</td>
+                            <td class="p-2">
+                                <div class="text-sm">
+                                    <div class="font-semibold text-primary">データベース論</div>
+                                    <div class="text-xs text-base-content/70">山田 太郎</div>
+                                    <div class="text-xs text-base-content/60">A101</div>
+                                </div>
+                            </td>
+                            <td class="p-2">
+                                <div class="text-sm">
+                                    <div class="font-semibold text-secondary">プログラミング演習</div>
+                                    <div class="text-xs text-base-content/70">佐藤 花子</div>
+                                    <div class="text-xs text-base-content/60">B201</div>
+                                </div>
+                            </td>
+                            <td class="p-2 text-center text-base-content/40">-</td>
+                            <td class="p-2">
+                                <div class="text-sm">
+                                    <div class="font-semibold text-accent">情報デザイン</div>
+                                    <div class="text-xs text-base-content/70">鈴木 一郎</div>
+                                    <div class="text-xs text-base-content/60">C305</div>
+                                </div>
+                            </td>
+                            <td class="p-2 text-center text-base-content/40">-</td>
+                        </tr>
+                        <!-- 2限 -->
+                        <tr class="hover">
+                            <td class="text-center font-semibold bg-base-200">2</td>
+                            <td class="p-2 text-center text-base-content/40">-</td>
+                            <td class="p-2">
+                                <div class="text-sm">
+                                    <div class="font-semibold text-primary">アルゴリズム</div>
+                                    <div class="text-xs text-base-content/70">田中 次郎</div>
+                                    <div class="text-xs text-base-content/60">A102</div>
+                                </div>
+                            </td>
+                            <td class="p-2">
+                                <div class="text-sm">
+                                    <div class="font-semibold text-secondary">ネットワーク基礎</div>
+                                    <div class="text-xs text-base-content/70">高橋 美咲</div>
+                                    <div class="text-xs text-base-content/60">B203</div>
+                                </div>
+                            </td>
+                            <td class="p-2 text-center text-base-content/40">-</td>
+                            <td class="p-2">
+                                <div class="text-sm">
+                                    <div class="font-semibold text-accent">UI/UX デザイン</div>
+                                    <div class="text-xs text-base-content/70">渡辺 健太</div>
+                                    <div class="text-xs text-base-content/60">C306</div>
+                                </div>
+                            </td>
+                        </tr>
+                        <!-- 3限 -->
+                        <tr class="hover">
+                            <td class="text-center font-semibold bg-base-200">3</td>
+                            <td class="p-2">
+                                <div class="text-sm">
+                                    <div class="font-semibold text-primary">情報システム実験</div>
+                                    <div class="text-xs text-base-content/70">伊藤 翔</div>
+                                    <div class="text-xs text-base-content/60">A702</div>
+                                </div>
+                            </td>
+                            <td class="p-2 text-center text-base-content/40">-</td>
+                            <td class="p-2">
+                                <div class="text-sm">
+                                    <div class="font-semibold text-secondary">機械学習</div>
+                                    <div class="text-xs text-base-content/70">中村 あゆみ</div>
+                                    <div class="text-xs text-base-content/60">B301</div>
+                                </div>
+                            </td>
+                            <td class="p-2">
+                                <div class="text-sm">
+                                    <div class="font-semibold text-accent">アプリデザイン演習</div>
+                                    <div class="text-xs text-base-content/70">小林 優</div>
+                                    <div class="text-xs text-base-content/60">C601</div>
+                                </div>
+                            </td>
+                            <td class="p-2 text-center text-base-content/40">-</td>
+                        </tr>
+                        <!-- 4限 -->
+                        <tr class="hover">
+                            <td class="text-center font-semibold bg-base-200">4</td>
+                            <td class="p-2">
+                                <div class="text-sm">
+                                    <div class="font-semibold text-primary">情報システム実験</div>
+                                    <div class="text-xs text-base-content/70">伊藤 翔</div>
+                                    <div class="text-xs text-base-content/60">A702</div>
+                                </div>
+                            </td>
+                            <td class="p-2">
+                                <div class="text-sm">
+                                    <div class="font-semibold text-secondary">ソフトウェア工学</div>
+                                    <div class="text-xs text-base-content/70">加藤 恵</div>
+                                    <div class="text-xs text-base-content/60">B204</div>
+                                </div>
+                            </td>
+                            <td class="p-2 text-center text-base-content/40">-</td>
+                            <td class="p-2">
+                                <div class="text-sm">
+                                    <div class="font-semibold text-accent">アプリデザイン演習</div>
+                                    <div class="text-xs text-base-content/70">小林 優</div>
+                                    <div class="text-xs text-base-content/60">C601</div>
+                                </div>
+                            </td>
+                            <td class="p-2">
+                                <div class="text-sm">
+                                    <div class="font-semibold text-primary">情報セキュリティ</div>
+                                    <div class="text-xs text-base-content/70">吉田 隆</div>
+                                    <div class="text-xs text-base-content/60">A103</div>
+                                </div>
+                            </td>
+                        </tr>
+                        <!-- 5限 -->
+                        <tr class="hover">
+                            <td class="text-center font-semibold bg-base-200">5</td>
+                            <td class="p-2">
+                                <div class="text-sm">
+                                    <div class="font-semibold text-primary">情報学ゼミナール</div>
+                                    <div class="text-xs text-base-content/70">各教員</div>
+                                </div>
+                            </td>
+                            <td class="p-2 text-center text-base-content/40">-</td>
+                            <td class="p-2">
+                                <div class="text-sm">
+                                    <div class="font-semibold text-primary">情報学ゼミナール</div>
+                                    <div class="text-xs text-base-content/70">各教員</div>
+                                </div>
+                            </td>
+                            <td class="p-2 text-center text-base-content/40">-</td>
+                            <td class="p-2 text-center text-base-content/40">-</td>
+                        </tr>
+                        <!-- 集中講義 -->
+                        <tr class="hover">
+                            <td class="text-center font-semibold bg-base-200">{{ t('result', 'intensive') }}</td>
+                            <td colspan="5" class="p-2">
+                                <div class="text-sm">
+                                    <div class="font-semibold text-secondary">インシデントレスポンス演習</div>
+                                    <div class="text-xs text-base-content/70">川橋 裕也</div>
+                                    <div class="text-xs text-base-content/60">集中講義期間中に実施</div>
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- アクションボタン -->
+    <div class="flex justify-center gap-4 mb-8">
+        <a href="{{ url_for('index') }}" class="btn btn-outline btn-primary">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+            </svg>
+            {{ t('result', 'back') }}
+        </a>
+
+        <button class="btn btn-primary" disabled>
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+            </svg>
+            {{ t('result', 'download') }}
+        </button>
+    </div>
+</div>
+{% endblock %}

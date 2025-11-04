@@ -13,3 +13,5 @@ SUPPORTED_LANGUAGES = {
     "ja": "日本語",
     "en": "English"
 }
+
+FISCAL_YEAR = {"ja": "令和7年度", "en": "Fiscal Year 2025"}

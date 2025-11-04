@@ -10,8 +10,8 @@
                     <span class="label-text text-lg font-semibold">{{ t('index', 'semester') }}</span>
                     <span class="label-text-alt text-error">{{ t('common', 'required') }}</span>
                 </label>
-                <select name="semester" class="select select-bordered w-full" required>
-                    <option disabled selected>{{ t('index', 'select_semester') }}</option>
+                <select name="semester" id="semester_select" class="select select-bordered w-full" required>
+                    <option value="" disabled selected>{{ t('index', 'select_semester') }}</option>
                     {% for sem_id in semesters.keys() %}
                     <option value="{{ sem_id }}" {% if selected_semester == sem_id %}selected{% endif %}>
                         {{ translate_semester(sem_id) }}
@@ -29,7 +29,7 @@
                 <select name="major1_id" id="major1_select" class="select select-bordered w-full" required>
                     <option value="" disabled selected>{{ t('index', 'select_major1') }}</option>
                     {% for major in majors %}
-                    <option value="{{ major.major_id }}" {% if selected_major1 == major.major_id %}selected{% endif %}>
+                    <option value="{{ major.major_id }}" {% if selected_major1 == major.major_id %}selected{% endif %} data-major-id="{{ major.major_id }}">
                         {{ major.major_name }}
                     </option>
                     {% endfor %}
@@ -54,7 +54,7 @@
 
             <!-- 送信ボタン -->
             <div class="card-actions justify-end mt-6">
-                <button type="submit" class="btn btn-primary btn-lg">
+                <button type="submit" id="submit_button" class="btn btn-primary btn-lg" disabled>
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
                     </svg>
@@ -66,11 +66,14 @@
 </div>
 
 <script>
-    // 第一メジャーが選択されたときに、第二メジャーの選択肢を更新
+    // メジャー選択の相互フィルタリングとボタンの有効/無効を制御
     document.addEventListener('DOMContentLoaded', function() {
+        const semesterSelect = document.querySelector('select[name="semester"]');
         const major1Select = document.getElementById('major1_select');
         const major2Select = document.getElementById('major2_select');
+        const submitButton = document.getElementById('submit_button');
 
+        // 第二メジャーの選択肢を更新（第一メジャーで選択されたものを除外）
         function updateMajor2Options() {
             const major1Value = major1Select.value;
             const major2Options = major2Select.querySelectorAll('option[data-major-id]');
@@ -91,12 +94,65 @@
             });
         }
 
+        // 第一メジャーの選択肢を更新（第二メジャーで選択されたものを除外）
+        function updateMajor1Options() {
+            const major2Value = major2Select.value;
+            const major1Options = major1Select.querySelectorAll('option[data-major-id]');
+
+            major1Options.forEach(option => {
+                const majorId = option.getAttribute('data-major-id');
+                if (majorId === major2Value) {
+                    option.disabled = true;
+                    option.style.display = 'none';
+                    // もし第一メジャーで選択されていたら、リセット
+                    if (option.selected) {
+                        major1Select.value = '';
+                    }
+                } else {
+                    option.disabled = false;
+                    option.style.display = 'block';
+                }
+            });
+        }
+
+        // すべてのフィールドが選択されているかチェック
+        function updateSubmitButton() {
+            const semesterValue = semesterSelect ? semesterSelect.value : '';
+            const major1Value = major1Select.value;
+            const major2Value = major2Select.value;
+
+            // すべてのフィールドが選択されている場合のみボタンを有効化
+            if (semesterValue && major1Value && major2Value) {
+                submitButton.disabled = false;
+            } else {
+                submitButton.disabled = true;
+            }
+        }
+
         // 第一メジャーが変更されたときに実行
-        major1Select.addEventListener('change', updateMajor2Options);
+        major1Select.addEventListener('change', function() {
+            updateMajor2Options();
+            updateSubmitButton();
+        });
+
+        // 第二メジャーが変更されたときに実行
+        major2Select.addEventListener('change', function() {
+            updateMajor1Options();
+            updateSubmitButton();
+        });
+
+        // セメスタが変更されたときに実行
+        if (semesterSelect) {
+            semesterSelect.addEventListener('change', updateSubmitButton);
+        }
 
         // ページロード時に初期化（選択済みの値がある場合）
         if (major1Select.value) {
             updateMajor2Options();
         }
+        if (major2Select.value) {
+            updateMajor1Options();
+        }
+        updateSubmitButton();
     });
 </script>

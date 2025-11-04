@@ -49,6 +49,7 @@ INDEX = {
     "major2_help": {"ja": "第二メジャーを選択してください（第一メジャーと異なるもの）", "en": "Select your second major (different from first major)"},
     "generate_timetable": {"ja": "時間割を生成", "en": "Generate Timetable"},
     "selection_label": {"ja": "選択", "en": "Selection"},
+    "error_semester_required": {"ja": "セメスタは必須です。", "en": "Semester is required."},
     "error_major_required": {"ja": "第一メジャーと第二メジャーは必須です。", "en": "First and second majors are required."},
     "error_major_same": {"ja": "第一メジャーと第二メジャーに同じメジャーは選択できません。", "en": "First and second majors must be different."},
     "how_to_use": {"ja": "使い方", "en": "How to Use"},
@@ -74,6 +75,25 @@ SQL = {
     "query_success": {"ja": "クエリが正常に実行されました。", "en": "Query executed successfully."},
     "query_results": {"ja": "クエリ結果", "en": "Query Results"},
     "no_results": {"ja": "結果が0件です。", "en": "No results found."},
+}
+
+# リザルトページ
+RESULT = {
+    "title": {"ja": "時間割", "en": "Timetable"},
+    "subtitle": {"ja": "選択した条件に基づく時間割", "en": "Timetable based on your selections"},
+    "back": {"ja": "戻る", "en": "Back"},
+    "selected_conditions": {"ja": "選択した条件", "en": "Selected Conditions"},
+    "timetable": {"ja": "時間割表", "en": "Timetable"},
+    "generating_message": {"ja": "時間割を生成する機能は現在準備中です。", "en": "Timetable generation feature is currently under development."},
+    "period": {"ja": "時限", "en": "Period"},
+    "monday": {"ja": "月", "en": "Mon"},
+    "tuesday": {"ja": "火", "en": "Tue"},
+    "wednesday": {"ja": "水", "en": "Wed"},
+    "thursday": {"ja": "木", "en": "Thu"},
+    "friday": {"ja": "金", "en": "Fri"},
+    "intensive": {"ja": "集中", "en": "Intensive"},
+    "intensive_courses": {"ja": "集中講義", "en": "Intensive Courses"},
+    "download": {"ja": "ダウンロード", "en": "Download"},
 }
 
 # エラーページ
@@ -103,6 +123,7 @@ def get_text(category: str, key: str, lang: str = 'ja') -> str:
         'common': COMMON,
         'footer': FOOTER,
         'index': INDEX,
+        'result': RESULT,
         'sql': SQL,
         'error': ERROR,
     }
