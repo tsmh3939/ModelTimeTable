@@ -3,17 +3,8 @@
 メインルート
 Main Routes
 """
-from flask import render_template, request, session, redirect, url_for
+from flask import render_template, request, redirect, url_for
 from src import app
-
-
-@app.route('/set-language/<lang>')
-def set_language(lang):
-    """言語を切り替える"""
-    supported_languages = app.config.get('SUPPORTED_LANGUAGES', {})
-    if lang in supported_languages:
-        session['language'] = lang
-    return redirect(request.referrer or url_for('index'))
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -48,8 +39,11 @@ def result():
     """時間割結果ページ"""
     from src.translations.field_values import get_semester_name, get_major_name
 
-    # 現在の言語を取得
-    current_lang = session.get('language', app.config.get('DEFAULT_LANGUAGE', 'ja'))
+    # 現在の言語を取得（クエリパラメータから）
+    current_lang = request.args.get('lang', app.config.get('DEFAULT_LANGUAGE', 'ja'))
+
+    # 型チェック: current_langは常にstrであることを保証
+    assert isinstance(current_lang, str)
 
     # クエリパラメータから選択内容を取得
     semester = request.args.get('semester', type=int)

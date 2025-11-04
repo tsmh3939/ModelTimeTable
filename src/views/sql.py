@@ -3,7 +3,7 @@
 SQL開発ツールルート
 SQL Development Tool Routes
 """
-from flask import render_template, request, session
+from flask import render_template, request
 from sqlalchemy import text
 from src import app, db
 
@@ -17,7 +17,9 @@ def sql():
     if not app.config.get('DEBUG'):
         return render_template('404.html'), 404
 
-    current_lang = session.get('language', app.config.get('DEFAULT_LANGUAGE', 'ja'))
+    # 現在の言語を取得（クエリパラメータから）
+    current_lang = request.args.get('lang', app.config.get('DEFAULT_LANGUAGE', 'ja'))
+    assert isinstance(current_lang, str)
     results = None
     error = None
     query = ''
