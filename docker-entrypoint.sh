@@ -10,16 +10,8 @@ if [ ! -d "migrations" ]; then
     flask db migrate -m "Initial migration"
 fi
 
-# データベースファイルが存在しない場合、またはマイグレーションが適用されていない場合
-if [ ! -f "src/$FLASK_DB_NAME" ]; then
-    echo "Creating database..."
-    flask db upgrade
-else
-    echo "Applying pending migrations..."
-    flask db upgrade
-fi
+flask db upgrade
 
-# データを挿入
-echo "Seeding database..."
 python seed_master_data.py
+
 exec python app.py
