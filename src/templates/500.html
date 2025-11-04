@@ -56,8 +56,10 @@
                 <p class="text-sm mb-4">以下のページもご利用いただけます</p>
                 <div class="flex flex-wrap justify-center gap-2">
                     <a href="{{ url_for('index') }}" class="link link-primary">ホーム</a>
+                    {% if config['DEBUG'] %}
                     <span>|</span>
-                    <a href="{{ url_for('test') }}" class="link link-primary">テスト</a>
+                    <a href="{{ url_for('sql') }}" class="link link-primary">SQLツール</a>
+                    {% endif %}
                 </div>
             </div>
         </div>
