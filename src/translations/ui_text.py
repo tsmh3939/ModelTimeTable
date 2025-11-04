@@ -79,7 +79,7 @@ SQL = {
 
 # リザルトページ
 RESULT = {
-    "title": {"ja": "時間割", "en": "Timetable"},
+    "title": {"ja": "モデル時間割", "en": "ModelTimetable"},
     "subtitle": {"ja": "選択した条件に基づく時間割", "en": "Timetable based on your selections"},
     "back": {"ja": "戻る", "en": "Back"},
     "selected_conditions": {"ja": "選択した条件", "en": "Selected Conditions"},
@@ -94,6 +94,11 @@ RESULT = {
     "intensive": {"ja": "集中", "en": "Intensive"},
     "intensive_courses": {"ja": "集中講義", "en": "Intensive Courses"},
     "download": {"ja": "ダウンロード", "en": "Download"},
+    "credit_info": {"ja": "単位情報", "en": "Credit Information"},
+    "required": {"ja": "必修", "en": "Required"},
+    "elective": {"ja": "選択", "en": "Elective"},
+    "credits": {"ja": "単位", "en": "credits"},
+    "total": {"ja": "合計", "en": "Total"},
 }
 
 # エラーページ

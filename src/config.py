@@ -1,6 +1,6 @@
 import os
 
-APP_NAME = "ModelTimeTable"
+APP_NAME = "ModelTimetable"
 DEFAULT_THEME_NAME = "light"
 DEBUG = True
 
