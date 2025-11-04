@@ -1,2 +1,4 @@
 cd C:\Dev\ModelTimeTable
 gcloud run deploy modeltimetable --source . --region asia-northeast2 --allow-unauthenticated --set-env-vars="FLASK_APP=app.py,FLASK_DB_NAME=modeltimetable.db"
+
+# migration と modeltimetable.db を削除してからデプロイする
