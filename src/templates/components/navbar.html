@@ -1,12 +1,19 @@
 <!-- Menu Items Macro -->
 {% macro menu_items(style_class) %}
     <li>
-        <a href="{{ url_for('index') }}" class="{{ style_class }}">{{ t('nav', 'home') }}</a>
+        <a href="{{ url_for('index') }}" class="{{ style_class }}">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
+            </svg>
+            {{ t('nav', 'home') }}
+        </a>
     </li>
     {% if config['DEBUG'] %}
     <li>
         <a href="{{ url_for('sql') }}" class="{{ style_class }}">
-            <img src="{{ url_for('static', filename='images/sql-icon.svg') }}" alt="SQL" class="h-5 w-5 inline-block">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 inline-block" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 7v10c0 2.21 3.582 4 8 4s8-1.79 8-4V7M4 7c0 2.21 3.582 4 8 4s8-1.79 8-4M4 7c0-2.21 3.582-4 8-4s8 1.79 8 4m0 5c0 2.21-3.582 4-8 4s-8-1.79-8-4" />
+            </svg>
             {{ t('nav', 'sql_tool') }}
         </a>
     </li>
@@ -18,7 +25,7 @@
     <div class="navbar-start">
         <a href="{{ url_for('index') }}" class="btn btn-ghost text-xl font-bold">{{ config['APP_NAME'] }}</a>
     </div>
-    <div class="navbar-end gap-2">
+    <div class="navbar-end">
         <!-- Language Selector -->
         {% include 'components/language_selector.html' %}
 
@@ -33,9 +40,11 @@
         <!-- Mobile Dropdown Menu -->
         <div class="dropdown dropdown-end lg:hidden">
             <div tabindex="0" role="button" class="btn btn-ghost">
-                <img src="{{ url_for('static', filename='images/menu-icon.svg') }}" alt="Menu" class="h-5 w-5">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h8m-8 6h16" />
+                </svg>
             </div>
-            <ul tabindex="0" class="menu dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
+            <ul tabindex="0" class="menu dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-32 p-2 shadow">
                 {{ menu_items('text-base-content') }}
             </ul>
         </div>

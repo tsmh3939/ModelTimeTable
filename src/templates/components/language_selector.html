@@ -5,13 +5,29 @@
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129" />
         </svg>
         <span class="hidden md:inline">{{ supported_languages[current_language] }}</span>
+        <svg
+            width="12px"
+            height="12px"
+            class="inline-block h-2 w-2 fill-current opacity-60"
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 2048 2048"
+            >
+            <path
+                d="M1799 349l242 241-1017 1017L7 590l242-241 775 775 775-775z"
+            ></path>
+        </svg>
     </div>
-    <ul tabindex="0" class="menu dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-40 p-2 shadow">
+    <ul tabindex="0" class="menu dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-32 p-2 shadow">
         {% for lang_code, lang_name in supported_languages.items() %}
         <li>
             <a href="{{ url_for('set_language', lang=lang_code) }}"
-               class="{% if current_language == lang_code %}active{% endif %}">
-                {{ lang_name }}
+               class="{% if current_language == lang_code %}active font-semibold{% endif %} flex justify-between items-center">
+                <span>{{ lang_name }}</span>
+                {% if current_language == lang_code %}
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                </svg>
+                {% endif %}
             </a>
         </li>
         {% endfor %}
