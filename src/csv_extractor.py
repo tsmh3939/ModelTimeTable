@@ -1,0 +1,198 @@
+"""
+DB2-1.csvから各テーブル用のCSVデータを抽出する関数群
+"""
+import csv
+from typing import List, Dict, Set, Tuple
+
+
+def extract_offering_history(input_csv_path: str, output_csv_path: str) -> None:
+    """
+    開講曜限（CourseOfferingHistory）のデータを抽出
+
+    抽出ロジック：
+    - 曜日列を1文字ずつ分割（月火水木金土日）
+    - 時限列を1文字ずつ分割（1-6限）
+    - 曜日の数と時限の数が等しい場合：ペアで対応（例：水金,11 → 水1限,金1限）
+    - 曜日が1つで時限が複数：その曜日の全時限（例：火,34 → 火3限,火4限）
+
+    Args:
+        input_csv_path: 入力CSVファイルのパス（DB2-1.csv）
+        output_csv_path: 出力CSVファイルのパス
+    """
+    # 重複を避けるためにSetで管理
+    records: Set[Tuple[str, str, str]] = set()
+
+    with open(input_csv_path, 'r', encoding='utf-8-sig') as f:
+        reader = csv.DictReader(f)
+
+        for row in reader:
+            timetable_code = row['時間割コード'].strip()
+            days_str = row['曜日'].strip()
+            periods_str = row['時限'].strip()
+
+            # 曜日を1文字ずつ分割
+            days = list(days_str)
+            # 時限を1文字ずつ分割
+            periods = list(periods_str)
+
+            # 曜日と時限の組み合わせを生成
+            if len(days) == len(periods):
+                # 曜日と時限がペアで対応する場合（例：水金,11 → 水1限,金1限）
+                for day, period in zip(days, periods):
+                    records.add((timetable_code, day, period))
+            elif len(days) == 1:
+                # 曜日が1つで時限が複数の場合（例：火,34 → 火3限,火4限）
+                for period in periods:
+                    records.add((timetable_code, days[0], period))
+            elif len(periods) == 1:
+                # 時限が1つで曜日が複数の場合（例：月水,1 → 月1限,水1限）
+                for day in days:
+                    records.add((timetable_code, day, periods[0]))
+            else:
+                # その他の場合は全組み合わせ（念のため）
+                for day in days:
+                    for period in periods:
+                        records.add((timetable_code, day, period))
+
+    # CSVに書き出し
+    with open(output_csv_path, 'w', encoding='utf-8-sig', newline='') as f:
+        writer = csv.writer(f)
+        writer.writerow(['時間割コード', '曜日', '時限'])
+
+        # ソートして書き出し
+        for record in sorted(records):
+            writer.writerow(record)
+
+    print(f"開講曜限データを抽出しました: {len(records)}件 → {output_csv_path}")
+
+
+def extract_grade_years(input_csv_path: str, output_csv_path: str) -> None:
+    """
+    学年（GradeYear）のデータを抽出
+
+    抽出ロジック：
+    - 学年列を1文字ずつ分割
+    - 各文字を学年名として出力（234 → "2","3","4"）
+
+    Args:
+        input_csv_path: 入力CSVファイルのパス（DB2-1.csv）
+        output_csv_path: 出力CSVファイルのパス
+    """
+    # 重複を避けるためにSetで管理
+    records: Set[Tuple[str, str]] = set()
+
+    with open(input_csv_path, 'r', encoding='utf-8-sig') as f:
+        reader = csv.DictReader(f)
+
+        for row in reader:
+            timetable_code = row['時間割コード'].strip()
+            grades_str = row['学年 '].strip()  # カラム名の後ろにスペースあり
+
+            # 学年を1文字ずつ分割
+            for grade in grades_str:
+                if grade.strip():  # 空白文字を除外
+                    records.add((timetable_code, grade))
+
+    # CSVに書き出し
+    with open(output_csv_path, 'w', encoding='utf-8-sig', newline='') as f:
+        writer = csv.writer(f)
+        writer.writerow(['時間割コード', '学年名'])
+
+        # ソートして書き出し
+        for record in sorted(records):
+            writer.writerow(record)
+
+    print(f"学年データを抽出しました: {len(records)}件 → {output_csv_path}")
+
+
+def extract_affiliated_majors(input_csv_path: str, output_csv_path: str) -> None:
+    """
+    所属メジャー（AffiliatedMajor）のデータを抽出
+
+    抽出ロジック：
+    - メジャー列を2文字ずつ分割（IS, NC, XD等）
+    - "その他"のうち、開講科目名に「情報応用」が含まれる場合は「情報応用科目」として扱う
+    - それ以外の"その他"は1つのメジャーとして扱う
+    - 同じ時間割コードでもメジャーごとに履修区分IDが異なる場合があるため、
+      元のCSVの行ごとに処理
+
+    Args:
+        input_csv_path: 入力CSVファイルのパス（DB2-1.csv）
+        output_csv_path: 出力CSVファイルのパス
+    """
+    # 重複を避けるためにSetで管理
+    records: Set[Tuple[str, str, str]] = set()
+
+    with open(input_csv_path, 'r', encoding='utf-8-sig') as f:
+        reader = csv.DictReader(f)
+
+        for row in reader:
+            timetable_code = row['時間割コード'].strip()
+            course_title = row['開講科目名'].strip()
+            majors_str = row['メジャー'].strip()
+            course_category = row['履修区分ID'].strip()
+
+            # メジャーの分割
+            if majors_str == 'その他':
+                # 開講科目名に「情報応用」が含まれる場合は「情報応用科目」として扱う
+                if '情報応用' in course_title:
+                    records.add((timetable_code, '情報応用科目', course_category))
+                else:
+                    # それ以外の"その他"は1つのメジャーとして扱う
+                    records.add((timetable_code, majors_str, course_category))
+            else:
+                # 2文字ずつ分割（IS, NC, XD等）
+                for i in range(0, len(majors_str), 2):
+                    major = majors_str[i:i+2]
+                    if major:  # 空でない場合のみ追加
+                        records.add((timetable_code, major, course_category))
+
+    # CSVに書き出し
+    with open(output_csv_path, 'w', encoding='utf-8-sig', newline='') as f:
+        writer = csv.writer(f)
+        writer.writerow(['時間割コード', 'メジャー', '履修区分ID'])
+
+        # ソートして書き出し
+        for record in sorted(records):
+            writer.writerow(record)
+
+    print(f"所属メジャーデータを抽出しました: {len(records)}件 → {output_csv_path}")
+
+
+if __name__ == '__main__':
+    """
+    実行例：
+    python src/csv_extractor.py
+    """
+    import os
+
+    # 入力ファイル
+    input_file = 'docs/DB2-1.csv'
+
+    # 出力ディレクトリを作成
+    output_dir = 'docs/extracted'
+    os.makedirs(output_dir, exist_ok=True)
+
+    # 各関数を実行
+    print("=" * 60)
+    print("CSV抽出処理を開始します")
+    print("=" * 60)
+
+    extract_offering_history(
+        input_file,
+        f'{output_dir}/course_offering_history.csv'
+    )
+
+    extract_grade_years(
+        input_file,
+        f'{output_dir}/grade_year.csv'
+    )
+
+    extract_affiliated_majors(
+        input_file,
+        f'{output_dir}/affiliated_major.csv'
+    )
+
+    print("=" * 60)
+    print("すべての抽出処理が完了しました")
+    print("=" * 60)

@@ -150,6 +150,7 @@ class Course(db.Model):
     __tablename__ = 'course'
 
     timetable_code: Mapped[str] = mapped_column(String(20), primary_key=True)
+    syllabus_url: Mapped[Optional[str]] = mapped_column(String(500))
     course_title: Mapped[str] = mapped_column(String(200))
     credits: Mapped[int] = mapped_column(Integer)
     course_category_id: Mapped[Optional[int]] = mapped_column(Integer, ForeignKey('course_category_master.course_category_id'))
@@ -260,10 +261,12 @@ class AffiliatedMajor(db.Model):
 
     timetable_code: Mapped[str] = mapped_column(String(20), ForeignKey('course.timetable_code'), primary_key=True)
     major_id: Mapped[int] = mapped_column(Integer, ForeignKey('major_master.major_id'), primary_key=True)
+    course_category_id: Mapped[Optional[int]] = mapped_column(Integer, ForeignKey('course_category_master.course_category_id'))
 
     # リレーション
     course: Mapped["Course"] = relationship(back_populates='affiliated_majors')
     major: Mapped["MajorMaster"] = relationship(back_populates='affiliated_majors')
+    course_category: Mapped[Optional["CourseCategoryMaster"]] = relationship()
 
     def __repr__(self):
         return f'<AffiliatedMajor {self.timetable_code} Major:{self.major_id}>'

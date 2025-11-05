@@ -5,7 +5,6 @@ Field Values Definitions and Translations
 """
 
 from enum import IntEnum
-from typing import Dict, List
 
 
 # 時限の値
@@ -64,6 +63,7 @@ class MajorEnum(IntEnum):
     NC = 2     # NC
     XD = 3     # XD
     OTHERS = 4 # その他メジャー
+    INFO_APP = 5 # 情報応用科目
 
 class ClassFormatEnum(IntEnum):
     """授業形態マスタ / Class Format Master"""
@@ -126,6 +126,8 @@ MAJOR_MASTER = {
     1: {"ja": "IS", "en": "IS"},
     2: {"ja": "NC", "en": "NC"},
     3: {"ja": "XD", "en": "XD"},
+    4: {"ja": "その他", "en": "Others"},
+    5: {"ja": "情報応用科目", "en": "Information Application"},
 }
 
 # 授業形態マスタ（Class Format Master）
@@ -148,113 +150,41 @@ CLASSROOM_UNDECIDED = {"ja": "未定", "en": "TBD"}
 
 
 def get_course_category_name(category_id: int, lang: str = 'ja') -> str:
-    """
-    履修区分IDから名称を取得
-
-    Args:
-        category_id: 履修区分ID (1-4)
-        lang: 言語 ('ja' or 'en')
-
-    Returns:
-        履修区分名
-    """
+    """履修区分IDから名称を取得"""
     return COURSE_CATEGORY_MASTER.get(category_id, {}).get(lang, str(category_id))
 
 
 def get_offering_category_name(category_id: int, lang: str = 'ja') -> str:
-    """
-    開講区分IDから名称を取得
-
-    Args:
-        category_id: 開講区分ID (0-6)
-        lang: 言語 ('ja' or 'en')
-
-    Returns:
-        開講区分名
-    """
+    """開講区分IDから名称を取得"""
     return OFFERING_CATEGORY_MASTER.get(category_id, {}).get(lang, str(category_id))
 
 
 def get_day_name(day_id: int, lang: str = 'ja', short: bool = False) -> str:
-    """
-    曜日IDから名称を取得
-
-    Args:
-        day_id: 曜日ID (0-6)
-        lang: 言語 ('ja' or 'en')
-        short: 短縮形を使用するか
-
-    Returns:
-        曜日名
-    """
+    """曜日IDから名称を取得"""
     master = DAY_MASTER_SHORT if short else DAY_MASTER
     return master.get(day_id, {}).get(lang, str(day_id))
 
 
 def get_major_name(major_id: int, lang: str = 'ja') -> str:
-    """
-    メジャーIDから名称を取得
-
-    Args:
-        major_id: メジャーID (1-3)
-        lang: 言語 ('ja' or 'en')
-
-    Returns:
-        メジャー名
-    """
+    """メジャーIDから名称を取得"""
     return MAJOR_MASTER.get(major_id, {}).get(lang, str(major_id))
 
 
 def get_class_format_name(format_id: int, lang: str = 'ja') -> str:
-    """
-    授業形態IDから名称を取得
-
-    Args:
-        format_id: 授業形態ID (1-4)
-        lang: 言語 ('ja' or 'en')
-
-    Returns:
-        授業形態名
-    """
+    """授業形態IDから名称を取得"""
     return CLASS_FORMAT_MASTER.get(format_id, {}).get(lang, str(format_id))
 
 
 def get_course_type_name(type_id: int, lang: str = 'ja') -> str:
-    """
-    授業種別IDから名称を取得
-
-    Args:
-        type_id: 授業種別ID (1-3)
-        lang: 言語 ('ja' or 'en')
-
-    Returns:
-        授業種別名
-    """
+    """授業種別IDから名称を取得"""
     return COURSE_TYPE_MASTER.get(type_id, {}).get(lang, str(type_id))
 
 
 def get_classroom_undecided(lang: str = 'ja') -> str:
-    """
-    教室未定の表示を取得
-
-    Args:
-        lang: 言語 ('ja' or 'en')
-
-    Returns:
-        未定の表示
-    """
+    """教室未定の表示を取得"""
     return CLASSROOM_UNDECIDED.get(lang, "TBD")
 
 
 def get_semester_name(semester_id: int, lang: str = 'ja') -> str:
-    """
-    セメスタIDから名称を取得
-
-    Args:
-        semester_id: セメスタID (3-6)
-        lang: 言語 ('ja' or 'en')
-
-    Returns:
-        セメスタ名
-    """
+    """セメスタIDから名称を取得"""
     return SEMESTERS.get(semester_id, {}).get(lang, str(semester_id))
