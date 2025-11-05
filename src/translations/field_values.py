@@ -60,10 +60,10 @@ class DayEnum(IntEnum):
 
 class MajorEnum(IntEnum):
     """メジャーマスタ / Major Master"""
-    IS = 1  # IS
-    NC = 2  # NC
-    XD = 3  # XD
-
+    IS = 1     # IS
+    NC = 2     # NC
+    XD = 3     # XD
+    OTHERS = 4 # その他メジャー
 
 class ClassFormatEnum(IntEnum):
     """授業形態マスタ / Class Format Master"""
