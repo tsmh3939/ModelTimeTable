@@ -226,6 +226,42 @@ def extract_affiliated_majors(input_csv_path: str, output_csv_path: str) -> None
     print(f"所属メジャーデータを抽出しました: {len(records)}件 → {output_csv_path}")
 
 
+def extract_instructors(input_csv_path: str, output_csv_path: str) -> None:
+    """
+    教員マスタ（InstructorMaster）のデータを抽出
+
+    抽出ロジック：
+    - 主担当教員ID列から一意の教員名を抽出
+    - 自動採番でIDを割り当て（1から開始）
+
+    Args:
+        input_csv_path: 入力CSVファイルのパス（DB2-1.csv）
+        output_csv_path: 出力CSVファイルのパス
+    """
+    # 一意の教員名を収集
+    instructors: Set[str] = set()
+
+    with open(input_csv_path, 'r', encoding='utf-8-sig') as f:
+        reader = csv.DictReader(f)
+
+        for row in reader:
+            instructor_name = row['主担当教員ID'].strip()
+            if instructor_name:  # 空でない場合のみ追加
+                instructors.add(instructor_name)
+
+    # CSVに書き出し（ソートしてからIDを割り当て）
+    with open(output_csv_path, 'w', encoding='utf-8-sig', newline='') as f:
+        writer = csv.writer(f)
+        writer.writerow(['教員ID', '教員名'])
+
+        # ソートして書き出し
+        for idx, instructor_name in enumerate(sorted(instructors), start=1):
+            writer.writerow([idx, instructor_name])
+
+    print(f"教員マスタデータを抽出しました: {len(instructors)}件 → {output_csv_path}")
+
+
+
 if __name__ == '__main__':
     """
     実行例：
@@ -264,6 +300,13 @@ if __name__ == '__main__':
         input_file,
         f'{output_dir}/affiliated_major.csv'
     )
+
+    extract_instructors(
+        input_file,
+        f'{output_dir}/instructor_master.csv'
+    )
+
+
 
     print("=" * 60)
     print("すべての抽出処理が完了しました")

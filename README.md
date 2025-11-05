@@ -6,6 +6,9 @@ Flaskを使用したWebアプリケーションプロジェクトです。
 - [GitHub](https://github.com/tsmh3939/ModelTimeTable)からファイルをダウンロードする
 - PythonとDockerのインストール
 
+## エラー発生時
+- migration と src/modeltimetable.db を削除してもう一度実行する
+
 ## セットアップ方法
 
 ### オプション1: 仮想環境で実行（開発環境推奨）
