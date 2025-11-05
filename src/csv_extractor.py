@@ -2,7 +2,74 @@
 DB2-1.csvから各テーブル用のCSVデータを抽出する関数群
 """
 import csv
-from typing import List, Dict, Set, Tuple
+from typing import List, Dict, Set, Tuple, Optional
+
+
+def extract_courses(input_csv_path: str, output_csv_path: str) -> None:
+    """
+    科目（Course）のデータを抽出
+
+    抽出ロジック：
+    - 時間割コードをキーに重複を削除
+    - 同じ時間割コードで異なるメジャーの行がある場合があるが、
+      科目情報自体は同じなので最初に出現した行を使用
+    - 履修区分IDは所属メジャーテーブルに属するため、ここでは抽出しない
+
+    Args:
+        input_csv_path: 入力CSVファイルのパス（DB2-1.csv）
+        output_csv_path: 出力CSVファイルのパス
+    """
+    # 時間割コードで重複を避ける
+    courses: Dict[str, Tuple[str, str, str, str, str, str, str, str]] = {}
+
+    with open(input_csv_path, 'r', encoding='utf-8-sig') as f:
+        reader = csv.DictReader(f)
+
+        for row in reader:
+            timetable_code = row['時間割コード'].strip()
+
+            # 既に登録済みの時間割コードはスキップ
+            if timetable_code in courses:
+                continue
+
+            syllabus_url = row['シラバスURL'].strip()
+            course_title = row['開講科目名'].strip()
+            credits = row['単位数'].strip()
+            offering_category = row['開講区分ID'].strip()
+            class_format = row['授業形態ID'].strip()
+            course_type = row['授業種別ID'].strip()
+            main_instructor = row['主担当教員ID'].strip()
+
+            courses[timetable_code] = (
+                timetable_code,
+                syllabus_url,
+                course_title,
+                credits,
+                offering_category,
+                class_format,
+                course_type,
+                main_instructor
+            )
+
+    # CSVに書き出し
+    with open(output_csv_path, 'w', encoding='utf-8-sig', newline='') as f:
+        writer = csv.writer(f)
+        writer.writerow([
+            '時間割コード',
+            'シラバスURL',
+            '開講科目名',
+            '単位数',
+            '開講区分ID',
+            '授業形態ID',
+            '授業種別ID',
+            '主担当教員ID'
+        ])
+
+        # ソートして書き出し
+        for timetable_code in sorted(courses.keys()):
+            writer.writerow(courses[timetable_code])
+
+    print(f"科目データを抽出しました: {len(courses)}件 → {output_csv_path}")
 
 
 def extract_offering_history(input_csv_path: str, output_csv_path: str) -> None:
@@ -177,6 +244,11 @@ if __name__ == '__main__':
     print("=" * 60)
     print("CSV抽出処理を開始します")
     print("=" * 60)
+
+    extract_courses(
+        input_file,
+        f'{output_dir}/course.csv'
+    )
 
     extract_offering_history(
         input_file,
