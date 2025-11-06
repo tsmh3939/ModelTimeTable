@@ -75,12 +75,6 @@ def main():
     print("  - migrations/        (マイグレーションフォルダ)")
     print()
 
-    # 確認
-    response = input("削除してもよろしいですか？ (yes/no): ").strip().lower()
-    if response not in ['yes', 'y']:
-        print("\nキャンセルしました。")
-        sys.exit(0)
-
     print("\n" + "=" * 70)
     print("削除処理を開始します...")
     print("=" * 70)
