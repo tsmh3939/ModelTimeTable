@@ -261,6 +261,84 @@ def extract_instructors(input_csv_path: str, output_csv_path: str) -> None:
     print(f"教員マスタデータを抽出しました: {len(instructors)}件 → {output_csv_path}")
 
 
+def extract_classrooms(input_csv_path: str, output_csv_path: str) -> None:
+    """
+    教室マスタ（ClassroomMaster）のデータを抽出
+
+    抽出ロジック：
+    - 教室名列からスペース区切りで一意の教室名を抽出
+    - 自動採番でIDを割り当て（1から開始）
+
+    Args:
+        input_csv_path: 入力CSVファイルのパス（DB2-1.csv）
+        output_csv_path: 出力CSVファイルのパス
+    """
+    # 一意の教室名を収集
+    classrooms: Set[str] = set()
+
+    with open(input_csv_path, 'r', encoding='utf-8-sig') as f:
+        reader = csv.DictReader(f)
+
+        for row in reader:
+            classroom_names = row['教室名'].strip()
+            if classroom_names:
+                # スペース区切りで分割
+                for classroom in classroom_names.split():
+                    if classroom.strip():
+                        classrooms.add(classroom.strip())
+
+    # CSVに書き出し（ソートしてからIDを割り当て）
+    with open(output_csv_path, 'w', encoding='utf-8-sig', newline='') as f:
+        writer = csv.writer(f)
+        writer.writerow(['教室ID', '教室名'])
+
+        # ソートして書き出し
+        for idx, classroom_name in enumerate(sorted(classrooms), start=1):
+            writer.writerow([idx, classroom_name])
+
+    print(f"教室マスタデータを抽出しました: {len(classrooms)}件 → {output_csv_path}")
+
+
+def extract_course_classrooms(input_csv_path: str, output_csv_path: str) -> None:
+    """
+    科目教室（CourseClassroom）中間テーブルのデータを抽出
+
+    抽出ロジック：
+    - 教室名列からスペース区切りで教室を分割
+    - 各科目と教室の組み合わせを出力
+    - 教室名はマスタと照合する必要があるため、名前のまま出力
+
+    Args:
+        input_csv_path: 入力CSVファイルのパス（DB2-1.csv）
+        output_csv_path: 出力CSVファイルのパス
+    """
+    # 重複を避けるためにSetで管理
+    records: Set[Tuple[str, str]] = set()
+
+    with open(input_csv_path, 'r', encoding='utf-8-sig') as f:
+        reader = csv.DictReader(f)
+
+        for row in reader:
+            timetable_code = row['時間割コード'].strip()
+            classroom_names = row['教室名'].strip()
+
+            if classroom_names:
+                # スペース区切りで分割
+                for classroom in classroom_names.split():
+                    if classroom.strip():
+                        records.add((timetable_code, classroom.strip()))
+
+    # CSVに書き出し
+    with open(output_csv_path, 'w', encoding='utf-8-sig', newline='') as f:
+        writer = csv.writer(f)
+        writer.writerow(['時間割コード', '教室名'])
+
+        # ソートして書き出し
+        for record in sorted(records):
+            writer.writerow(record)
+
+    print(f"科目教室データを抽出しました: {len(records)}件 → {output_csv_path}")
+
 
 if __name__ == '__main__':
     """
@@ -306,7 +384,15 @@ if __name__ == '__main__':
         f'{output_dir}/instructor_master.csv'
     )
 
+    extract_classrooms(
+        input_file,
+        f'{output_dir}/classroom_master.csv'
+    )
 
+    extract_course_classrooms(
+        input_file,
+        f'{output_dir}/course_classroom.csv'
+    )
 
     print("=" * 60)
     print("すべての抽出処理が完了しました")

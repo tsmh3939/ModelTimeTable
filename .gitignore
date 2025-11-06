@@ -53,3 +53,5 @@ migrations/versions/
 *.log
 
 tests/
+migrations
+docs/extracted/
