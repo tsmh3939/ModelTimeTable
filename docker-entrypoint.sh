@@ -13,5 +13,8 @@ fi
 flask db upgrade
 
 python seed_master_data.py
+python csv_extractor.py
+python csv_converter.py
+python import_csv_data.py
 
 exec python app.py

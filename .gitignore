@@ -55,3 +55,4 @@ migrations/versions/
 tests/
 migrations
 docs/extracted/
+docs/converted/
