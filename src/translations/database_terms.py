@@ -8,7 +8,7 @@ Database Terms Translation Dictionary (Japanese-English)
 TABLES = {
     "時間割科目": "TimetableSubject",
     "時間割モデル": "TimetableModel",
-    "開講履歴": "CourseOfferingHistory",
+    "開講曜限": "CourseSchedule",
     "曜日マスタ": "DayMaster",
     "学年": "GradeYear",
     "メジャーマスタ": "MajorMaster",
@@ -88,7 +88,7 @@ FIELD_LABELS = {
 TABLE_DESCRIPTIONS = {
     "TimetableSubject": "Junction table linking timetable models to courses",
     "TimetableModel": "Timetable configuration model for each semester",
-    "CourseOfferingHistory": "Historical record of course offerings with day and period",
+    "CourseSchedule": "Course schedule information with day of week and period",
     "DayMaster": "Master table for days of the week",
     "GradeYear": "Target grade/year levels for courses",
     "MajorMaster": "Master table for academic majors/programs",

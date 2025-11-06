@@ -16,7 +16,7 @@ class DayMaster(db.Model):
     day_name: Mapped[str] = mapped_column(String(10))
 
     # リレーション
-    offering_histories: Mapped[List["CourseOfferingHistory"]] = relationship(back_populates='day')
+    schedules: Mapped[List["CourseSchedule"]] = relationship(back_populates='day')
 
     def __repr__(self):
         return f'<DayMaster {self.day_name}>'
@@ -166,7 +166,7 @@ class Course(db.Model):
     course_type: Mapped[Optional["CourseTypeMaster"]] = relationship(back_populates='courses')
     main_instructor: Mapped[Optional["InstructorMaster"]] = relationship(back_populates='main_courses')
     timetable_subjects: Mapped[List["TimetableSubject"]] = relationship(back_populates='course')
-    offering_histories: Mapped[List["CourseOfferingHistory"]] = relationship(back_populates='course')
+    schedules: Mapped[List["CourseSchedule"]] = relationship(back_populates='course')
     course_classrooms: Mapped[List["CourseClassroom"]] = relationship(back_populates='course')
     course_instructors: Mapped[List["CourseInstructor"]] = relationship(back_populates='course')
     affiliated_majors: Mapped[List["AffiliatedMajor"]] = relationship(back_populates='course')
@@ -176,20 +176,20 @@ class Course(db.Model):
         return f'<Course {self.timetable_code} {self.course_title}>'
 
 
-class CourseOfferingHistory(db.Model):
-    """開講履歴"""
-    __tablename__ = 'course_offering_history'
+class CourseSchedule(db.Model):
+    """開講曜限"""
+    __tablename__ = 'course_schedule'
 
     timetable_code: Mapped[str] = mapped_column(String(20), ForeignKey('course.timetable_code'), primary_key=True)
     day_id: Mapped[int] = mapped_column(Integer, ForeignKey('day_master.day_id'), primary_key=True)
     period: Mapped[int] = mapped_column(Integer)
 
     # リレーション
-    course: Mapped["Course"] = relationship(back_populates='offering_histories')
-    day: Mapped["DayMaster"] = relationship(back_populates='offering_histories')
+    course: Mapped["Course"] = relationship(back_populates='schedules')
+    day: Mapped["DayMaster"] = relationship(back_populates='schedules')
 
     def __repr__(self):
-        return f'<CourseOfferingHistory {self.timetable_code} Day:{self.day_id} Period:{self.period}>'
+        return f'<CourseSchedule {self.timetable_code} Day:{self.day_id} Period:{self.period}>'
 
 
 class GradeYear(db.Model):

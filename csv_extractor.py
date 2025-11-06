@@ -74,7 +74,7 @@ def extract_courses(input_csv_path: str, output_csv_path: str) -> None:
 
 def extract_offering_history(input_csv_path: str, output_csv_path: str) -> None:
     """
-    開講曜限（CourseOfferingHistory）のデータを抽出
+    開講曜限（CourseSchedule）のデータを抽出
 
     抽出ロジック：
     - 曜日列を1文字ずつ分割（月火水木金土日）
@@ -366,7 +366,7 @@ if __name__ == '__main__':
 
     extract_offering_history(
         input_file,
-        f'{output_dir}/course_offering_history.csv'
+        f'{output_dir}/course_schedule.csv'
     )
 
     extract_grade_years(

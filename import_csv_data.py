@@ -11,7 +11,7 @@ from app import app
 from src import db
 from src.models import (
     Course,
-    CourseOfferingHistory,
+    CourseSchedule,
     GradeYear,
     AffiliatedMajor,
     CourseClassroom,
@@ -106,7 +106,7 @@ def import_courses(csv_path: str) -> None:
     print(f"科目: {count}件追加")
 
 
-def import_offering_history(csv_path: str) -> None:
+def import_course_schedules(csv_path: str) -> None:
     """開講曜限をインポート"""
     print("\n開講曜限をインポート中...")
     count = 0
@@ -119,18 +119,18 @@ def import_offering_history(csv_path: str) -> None:
             day_id = int(row['day_id'])
             period = int(row['period'])
 
-            existing = CourseOfferingHistory.query.filter_by(
+            existing = CourseSchedule.query.filter_by(
                 timetable_code=timetable_code,
                 day_id=day_id
             ).first()
 
             if not existing:
-                history = CourseOfferingHistory(
+                schedule = CourseSchedule(
                     timetable_code=timetable_code,  # pyright: ignore[reportCallIssue]
                     day_id=day_id,  # pyright: ignore[reportCallIssue]
                     period=period  # pyright: ignore[reportCallIssue]
                 )
-                db.session.add(history)
+                db.session.add(schedule)
                 count += 1
             else:
                 print(f"  スキップ: {timetable_code} 曜日ID:{day_id} (既存)")
@@ -248,7 +248,7 @@ def main():
             import_courses(f'{converted_dir}/course.csv')
 
             # 中間テーブルをインポート（科目データ依存）
-            import_offering_history(f'{converted_dir}/course_offering_history.csv')
+            import_course_schedules(f'{converted_dir}/course_schedule.csv')
             import_grade_years(f'{converted_dir}/grade_year.csv')
             import_affiliated_majors(f'{converted_dir}/affiliated_major.csv')
             import_course_classrooms(f'{converted_dir}/course_classroom.csv')
@@ -265,7 +265,7 @@ def main():
             print(f"教員マスタ: {InstructorMaster.query.count()}件")
             print(f"教室マスタ: {ClassroomMaster.query.count()}件")
             print(f"科目: {Course.query.count()}件")
-            print(f"開講曜限: {CourseOfferingHistory.query.count()}件")
+            print(f"開講曜限: {CourseSchedule.query.count()}件")
             print(f"学年: {GradeYear.query.count()}件")
             print(f"所属メジャー: {AffiliatedMajor.query.count()}件")
             print(f"科目教室: {CourseClassroom.query.count()}件")

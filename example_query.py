@@ -8,7 +8,7 @@ from app import app
 from src import db
 from src.models import (
     Course,
-    CourseOfferingHistory,
+    CourseSchedule,
     GradeYear,
     AffiliatedMajor,
     InstructorMaster,
@@ -24,10 +24,10 @@ def print_separator():
     print("=" * 80)
 
 
-def example1_course_offering_history():
+def example1_course_schedule():
     """
     例1: 科目の開講曜限を表示
-    リレーション: Course → CourseOfferingHistory → DayMaster
+    リレーション: Course → CourseSchedule → DayMaster
     """
     print_separator()
     print("例1: 科目の開講曜限を表示")
@@ -42,10 +42,10 @@ def example1_course_offering_history():
         print(f"\n開講曜限:")
 
         # リレーションを使って開講曜限を取得
-        for history in course.offering_histories:
+        for schedule in course.schedules:
             # 曜日IDから曜日名を取得
-            day_name = get_day_name(history.day_id)
-            print(f"  - {day_name}曜 {history.period}限")
+            day_name = get_day_name(schedule.day_id)
+            print(f"  - {day_name}曜 {schedule.period}限")
 
 
 def example2_course_with_instructor():
@@ -179,10 +179,10 @@ def example6_comprehensive_course_info():
 
         # 開講曜限
         print(f"\n【開講曜限】")
-        if course.offering_histories:
-            for history in course.offering_histories:
-                day_name = get_day_name(history.day_id)
-                print(f"  {day_name}曜 {history.period}限")
+        if course.schedules:
+            for schedule in course.schedules:
+                day_name = get_day_name(schedule.day_id)
+                print(f"  {day_name}曜 {schedule.period}限")
 
         # 対象学年
         print(f"\n【対象学年】")
@@ -268,7 +268,7 @@ def main():
 
         try:
             # 各例を実行
-            example1_course_offering_history()
+            example1_course_schedule()
             example2_course_with_instructor()
             example3_course_with_majors()
             example4_course_with_classrooms()

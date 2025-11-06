@@ -151,13 +151,13 @@ def convert_courses(input_csv: str, output_csv: str,
     print(f"科目データを変換しました: {len(converted_records)}件 → {output_csv}")
 
 
-def convert_offering_history(input_csv: str, output_csv: str,
+def convert_course_schedules(input_csv: str, output_csv: str,
                              mappings: Dict[str, Dict[str, int]]) -> None:
     """
     開講曜限CSVを変換（文字列→ID）
 
     Args:
-        input_csv: 入力CSVファイルパス（course_offering_history.csv）
+        input_csv: 入力CSVファイルパス（course_schedule.csv）
         output_csv: 出力CSVファイルパス
         mappings: マスタの逆引き辞書
     """
@@ -310,9 +310,9 @@ if __name__ == '__main__':
         mappings
     )
 
-    convert_offering_history(
-        f'{extracted_dir}/course_offering_history.csv',
-        f'{converted_dir}/course_offering_history.csv',
+    convert_course_schedules(
+        f'{extracted_dir}/course_schedule.csv',
+        f'{converted_dir}/course_schedule.csv',
         mappings
     )
 
