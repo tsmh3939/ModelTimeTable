@@ -219,8 +219,8 @@ def main():
         print("\n\n")
 
         # 使用例3: セメスタ4（2年後期）
-        print("【使用例3】セメスタ4（2年後期）、NCメジャーの科目を取得")
-        query_courses_by_semester_and_major(semester=4, major_id=2)
+        # print("【使用例3】セメスタ4（2年後期）、NCメジャーの科目を取得")
+        # query_courses_by_semester_and_major(semester=4, major_id=2)
 
 
 if __name__ == '__main__':
