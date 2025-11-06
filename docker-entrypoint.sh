@@ -3,6 +3,8 @@ set -e
 
 echo "Waiting for database initialization..."
 
+python cleanup.py
+
 # マイグレーションディレクトリが存在しない場合は初期化
 if [ ! -d "migrations" ]; then
     echo "Initializing database migrations..."
