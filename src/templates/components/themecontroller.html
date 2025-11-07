@@ -35,12 +35,12 @@
   </div>
   <ul
     tabindex="0"
-    class="dropdown-content menu bg-base-300 rounded-box z-[1] w-32 p-2 shadow-2xl max-h-svh overflow-y-auto"
+    class="dropdown-content menu bg-base-300 rounded-box z-[1] w-80 p-2 shadow-2xl max-h-96 overflow-y-auto"
   >
     {% for theme in available_themes %}
     <li>
       <a href="{{ update_query_params(theme=theme) }}"
-         class="{% if theme == current_theme %}active font-semibold{% endif %} flex justify-between items-center capitalize">
+         class="{% if theme == current_theme %}active font-semibold{% endif %} flex justify-between items-center capitalize whitespace-nowrap">
         <span>{{ theme }}</span>
         {% if theme == current_theme %}
         <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
