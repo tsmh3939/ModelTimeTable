@@ -11,7 +11,7 @@ from src import app
 def index():
     """ホームページ - 時間割選択"""
     from src.models import MajorMaster
-    from src.translations.field_values import SEMESTERS
+    from src.translations.field_values import SEMESTERS, MajorEnum
 
     if request.method == 'POST':
         semester = request.form.get('semester', type=int)
@@ -27,9 +27,14 @@ def index():
                                 major2_id=major2_id))
     else:
         # GETリクエストの処理
+        # 「その他」と「情報応用科目」を除外
+        majors = MajorMaster.query.filter(
+            MajorMaster.major_id.notin_([MajorEnum.OTHERS, MajorEnum.INFO_APP])
+        ).all()
+
         return render_template(
             'index.html',
-            majors=MajorMaster.query.all(),
+            majors=majors,
             semesters=SEMESTERS
         )
 
@@ -38,6 +43,7 @@ def index():
 def result():
     """時間割結果ページ"""
     from src.translations.field_values import get_semester_name, get_major_name
+    from query_timetable import get_courses_by_semester_and_major
 
     # 現在の言語を取得（クエリパラメータから）
     current_lang = request.args.get('lang', app.config.get('DEFAULT_LANGUAGE', 'ja'))
@@ -66,8 +72,41 @@ def result():
     fiscal_year_dict = app.config.get('FISCAL_YEAR', {})
     fiscal_year = fiscal_year_dict.get(current_lang, fiscal_year_dict.get('ja', ''))
 
-    # TODO: 時間割モデルを検索または生成
-    # 今は静的な時間割を表示
+    # 第一メジャーと第二メジャーの科目を取得
+    major1_courses = get_courses_by_semester_and_major(semester, major1_id)
+    major2_courses = get_courses_by_semester_and_major(semester, major2_id)
+
+    # 両メジャーの科目を統合（重複排除）
+    all_courses = major1_courses.copy()
+    for course in major2_courses:
+        if course not in all_courses:
+            all_courses.append(course)
+
+    # 時間割を曜日・時限ごとに整理
+    # timetable[day_id][period] = {'course_title': ..., 'instructor_name': ...}
+    timetable = {}
+    for day_id in range(1, 6):  # 月曜(1)〜金曜(5)
+        timetable[day_id] = {}
+
+    for course in all_courses:
+        # 各科目のスケジュールを取得
+        if course.schedules:
+            for schedule in course.schedules:
+                day_id = schedule.day_id
+                period = schedule.period
+
+                # 月〜金のみ
+                if day_id in range(1, 6):
+                    # 時限が1〜5の範囲であることを確認
+                    if period >= 1 and period <= 5:
+                        # まだ授業が入っていない場合のみ追加
+                        if period not in timetable[day_id]:
+                            instructor_name = course.main_instructor.instructor_name if course.main_instructor else ''
+                            timetable[day_id][period] = {
+                                'course_title': course.course_title,
+                                'instructor_name': instructor_name
+                            }
+
     return render_template(
         'result.html',
         semester=semester,
@@ -76,5 +115,6 @@ def result():
         major1_name=major1_name,
         major2_id=major2_id,
         major2_name=major2_name,
-        fiscal_year=fiscal_year
+        fiscal_year=fiscal_year,
+        timetable=timetable
     )

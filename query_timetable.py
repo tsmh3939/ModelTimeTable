@@ -201,6 +201,61 @@ def query_courses_by_semester_and_major(semester: int, major_id: Optional[int] =
     print("=" * 80)
 
 
+def get_courses_by_semester_and_major(semester: int, major_id: Optional[int] = None) -> list:
+    """
+    セメスタとメジャーを指定して、該当する科目のリストを返す
+
+    Args:
+        semester: セメスタ（学期）1~8
+        major_id: メジャーID（Noneの場合は全メジャー）
+
+    Returns:
+        該当する科目のリスト
+    """
+    # 科目を検索
+    # 1. メジャーで絞り込み（指定がある場合）
+    if major_id is not None:
+        course_ids = db.session.query(AffiliatedMajor.timetable_code).filter(
+            AffiliatedMajor.major_id == major_id
+        ).distinct().all()
+        course_ids = [c[0] for c in course_ids]
+
+        if not course_ids:
+            return []
+
+        query = Course.query.filter(Course.timetable_code.in_(course_ids))
+    else:
+        query = Course.query
+
+    all_courses = query.all()
+
+    # 2. 各科目について、学年と開講区分からセメスタを計算してフィルタリング
+    matching_courses = []
+
+    for course in all_courses:
+        # 学年の最小値を取得
+        if not course.grade_years:
+            continue
+
+        min_grade_value = min(int(gy.grade_name) for gy in course.grade_years)
+
+        # 開講区分IDを取得
+        if course.offering_category_id is None:
+            continue
+
+        # セメスタを計算
+        course_semesters = calculate_semester_from_grade_and_offering(
+            min_grade_value,
+            course.offering_category_id
+        )
+
+        # 指定セメスタに該当するか確認
+        if semester in course_semesters:
+            matching_courses.append(course)
+
+    return matching_courses
+
+
 def main():
     """メイン処理"""
     with app.app_context():
