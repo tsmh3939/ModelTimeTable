@@ -219,7 +219,24 @@
                     <div class="card-body p-4">
                         <h3 class="font-semibold text-lg mb-3">{{ t('result', 'credit_info') }}</h3>
 
-                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4">
+                            <!-- 情報学領域共有科目（1単位以上の場合のみ表示） -->
+                            {% if (shared_credits['required'] + shared_credits['elective']) >= 1 %}
+                            <div>
+                                <div class="text-sm font-medium text-primary mb-2">{{ t('result', 'shared_courses') }}</div>
+                                <div class="stats stats-vertical shadow w-full">
+                                    <div class="stat py-2 px-3">
+                                        <div class="stat-title text-xs">{{ t('result', 'required_mandatory') }}</div>
+                                        <div class="stat-value text-xl">{{ shared_credits['required'] }}</div>
+                                    </div>
+                                    <div class="stat py-2 px-3">
+                                        <div class="stat-title text-xs">{{ t('result', 'elective_required_elective') }}</div>
+                                        <div class="stat-value text-xl">{{ shared_credits['elective'] }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endif %}
+
                             <!-- 第一メジャー単位 -->
                             <div>
                                 <div class="text-sm font-medium text-primary mb-2">{{ t('result', 'major1_courses') }}</div>
@@ -233,20 +250,6 @@
                                         <div class="stat-value text-xl">{{ major1_credits['elective'] }}</div>
                                     </div>
                                 </div>
-                                <!-- 情報学領域共有科目（1単位以上の場合のみ表示） -->
-                                {% if (shared_credits['required'] + shared_credits['elective']) >= 1 %}
-                                <div class="text-sm font-medium text-primary mb-2 mt-4">{{ t('result', 'shared_courses') }}</div>
-                                <div class="stats stats-vertical shadow w-full">
-                                    <div class="stat py-2 px-3">
-                                        <div class="stat-title text-xs">{{ t('result', 'required_mandatory') }}</div>
-                                        <div class="stat-value text-xl">{{ shared_credits['required'] }}</div>
-                                    </div>
-                                    <div class="stat py-2 px-3">
-                                        <div class="stat-title text-xs">{{ t('result', 'elective_required_elective') }}</div>
-                                        <div class="stat-value text-xl">{{ shared_credits['elective'] }}</div>
-                                    </div>
-                                </div>
-                                {% endif %}
                             </div>
 
                             <!-- 第二メジャー単位 -->
@@ -297,15 +300,16 @@
                                 </div>
                             </div>
                             {% endif %}
+                        </div>
 
-                            <!-- 合計単位 -->
-                            <div>
-                                <div class="text-sm font-medium mb-2">&nbsp;</div>
+                        <!-- 合計単位（改行後） -->
+                        <div class="mt-6 flex justify-center">
+                            <div class="w-full max-w-xs">
                                 <div class="stats shadow w-full bg-accent/10">
-                                    <div class="stat py-2 px-3">
-                                        <div class="stat-title text-xs font-semibold">{{ t('result', 'total_simple') }}</div>
-                                        <div class="stat-value text-2xl text-accent">{{ total_credits }}</div>
-                                        <div class="stat-desc text-xs font-medium">{{ t('result', 'credits') }}</div>
+                                    <div class="stat py-3 px-4">
+                                        <div class="stat-title text-sm font-semibold">{{ t('result', 'total_simple') }}</div>
+                                        <div class="stat-value text-3xl text-accent">{{ total_credits }}</div>
+                                        <div class="stat-desc text-sm font-medium">{{ t('result', 'credits') }}</div>
                                     </div>
                                 </div>
                             </div>
