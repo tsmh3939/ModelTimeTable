@@ -117,6 +117,9 @@ RESULT = {
     "quarter_2": {"ja": "2Q", "en": "2Q"},
     "quarter_3": {"ja": "3Q", "en": "3Q"},
     "quarter_4": {"ja": "4Q", "en": "4Q"},
+    "semester_first": {"ja": "前期", "en": "1st Sem"},
+    "semester_second": {"ja": "後期", "en": "2nd Sem"},
+    "credit_unit_badge": {"ja": "単位", "en": "cr"},
 }
 
 # エラーページ

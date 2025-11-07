@@ -160,7 +160,8 @@ def result():
                                 'course_title': course.course_title,
                                 'instructor_name': instructor_name,
                                 'major_type': major_type,
-                                'offering_category_id': course.offering_category_id
+                                'offering_category_id': course.offering_category_id,
+                                'credits': course.credits
                             })
 
     # 単位数を計算

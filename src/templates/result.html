@@ -96,9 +96,26 @@
                                         {% for item in courses_in_slot %}
                                         <div class="text-sm {% if not loop.first %}mt-2 pt-2 border-t border-base-300{% endif %}">
                                             {% set major_type = item['major_type'] %}
+                                            {% set offering_category = item['offering_category_id'] %}
 
                                             {% set indicator = '' %}
                                             {% set color_class = 'text-base-content' %}
+
+                                            {# 開講区分のタグ設定 #}
+                                            {% set offering_tag = '' %}
+                                            {% if offering_category == 1 %}
+                                                {% set offering_tag = t('result', 'quarter_1') %}
+                                            {% elif offering_category == 2 %}
+                                                {% set offering_tag = t('result', 'quarter_2') %}
+                                            {% elif offering_category == 3 %}
+                                                {% set offering_tag = t('result', 'quarter_3') %}
+                                            {% elif offering_category == 4 %}
+                                                {% set offering_tag = t('result', 'quarter_4') %}
+                                            {% elif offering_category == 5 %}
+                                                {% set offering_tag = t('result', 'semester_first') %}
+                                            {% elif offering_category == 6 %}
+                                                {% set offering_tag = t('result', 'semester_second') %}
+                                            {% endif %}
 
                                             {% if major_type == 'major1' %}
                                                 {% set indicator = '【' + t('result', 'label_major1') + '】' %}
@@ -117,11 +134,15 @@
                                                 {% set color_class = 'text-warning' %}
                                             {% endif %}
 
-                                            <div class="font-semibold {{ color_class }}">
-                                                {{ indicator }}<br>{{ item['course_title'] }}
+                                            <div class="font-semibold {{ color_class }} flex items-center gap-1 flex-wrap">
+                                                <span>{{ indicator }}</span>
+                                                {% if offering_tag %}
+                                                <span class="badge badge-sm badge-neutral">{{ offering_tag }}</span>
+                                                {% endif %}
                                             </div>
+                                            <div class="mt-1">{{ item['course_title'] }}</div>
                                             {% if item['instructor_name'] %}
-                                            <div class="text-xs text-base-content/70">{{ item['instructor_name'] }}</div>
+                                            <div class="text-xs text-base-content/70 mt-1">{{ item['instructor_name'] }}</div>
                                             {% endif %}
                                         </div>
                                         {% endfor %}
