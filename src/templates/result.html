@@ -60,21 +60,21 @@
                 <input type="radio" name="quarter_tabs" role="tab" class="tab" aria-label="{{ t('result', 'quarter_' ~ quarter1) }}" checked />
                 <div role="tabpanel" class="tab-content pt-4">
                     <div class="overflow-x-auto">
-                        <table class="table w-full table-fixed">
+                        <table class="table w-full">
                             <thead>
                                 <tr class="bg-base-200">
-                                    <th class="text-center w-5 font-normal border border-base-300 px-0 py-1"></th>
-                                    <th class="text-center w-1/5 font-normal border border-base-300 px-2 py-1">{{ t('result', 'monday') }}</th>
-                                    <th class="text-center w-1/5 font-normal border border-base-300 px-2 py-1">{{ t('result', 'tuesday') }}</th>
-                                    <th class="text-center w-1/5 font-normal border border-base-300 px-2 py-1">{{ t('result', 'wednesday') }}</th>
-                                    <th class="text-center w-1/5 font-normal border border-base-300 px-2 py-1">{{ t('result', 'thursday') }}</th>
-                                    <th class="text-center w-1/5 font-normal border border-base-300 px-2 py-1">{{ t('result', 'friday') }}</th>
+                                    <th class="text-center w-5 font-normal border border-base-300 px-0  py-1"></th>
+                                    <th class="text-center w-1/5 font-normal border border-base-300 px-2  py-1 min-w-40">{{ t('result', 'monday') }}</th>
+                                    <th class="text-center w-1/5 font-normal border border-base-300 px-2  py-1 min-w-40">{{ t('result', 'tuesday') }}</th>
+                                    <th class="text-center w-1/5 font-normal border border-base-300 px-2  py-1 min-w-40">{{ t('result', 'wednesday') }}</th>
+                                    <th class="text-center w-1/5 font-normal border border-base-300 px-2  py-1 min-w-40">{{ t('result', 'thursday') }}</th>
+                                    <th class="text-center w-1/5 font-normal border border-base-300 px-2  py-1 min-w-40">{{ t('result', 'friday') }}</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {% for period in range(1, 6) %}
                                 <tr class="hover h-20">
-                                    <td class="text-center w-5 bg-base-200 border border-base-300 px-0">{{ period }}</td>
+                                    <td class="text-center w-5 bg-base-200 border border-base-300 px-1">{{ period }}</td>
                                     {% for day_id in range(1, 6) %}
                                     <td class="border border-base-300 px-2 py-2">
                                     {% set courses_in_slot = [] %}
@@ -131,21 +131,21 @@
                 <input type="radio" name="quarter_tabs" role="tab" class="tab" aria-label="{{ t('result', 'quarter_' ~ quarter2) }}" />
                 <div role="tabpanel" class="tab-content pt-4">
                     <div class="overflow-x-auto">
-                        <table class="table w-full table-fixed">
+                        <table class="table w-full">
                             <thead>
                                 <tr class="bg-base-200">
-                                    <th class="text-center w-5 font-normal border border-base-300 px-0 py-1"></th>
-                                    <th class="text-center w-1/5 font-normal border border-base-300 px-2 py-1">{{ t('result', 'monday') }}</th>
-                                    <th class="text-center w-1/5 font-normal border border-base-300 px-2 py-1">{{ t('result', 'tuesday') }}</th>
-                                    <th class="text-center w-1/5 font-normal border border-base-300 px-2 py-1">{{ t('result', 'wednesday') }}</th>
-                                    <th class="text-center w-1/5 font-normal border border-base-300 px-2 py-1">{{ t('result', 'thursday') }}</th>
-                                    <th class="text-center w-1/5 font-normal border border-base-300 px-2 py-1">{{ t('result', 'friday') }}</th>
+                                    <th class="text-center w-5 font-normal border border-base-300 px-0  py-1"></th>
+                                    <th class="text-center w-1/5 font-normal border border-base-300 px-2  py-1 min-w-40">{{ t('result', 'monday') }}</th>
+                                    <th class="text-center w-1/5 font-normal border border-base-300 px-2  py-1 min-w-40">{{ t('result', 'tuesday') }}</th>
+                                    <th class="text-center w-1/5 font-normal border border-base-300 px-2  py-1 min-w-40">{{ t('result', 'wednesday') }}</th>
+                                    <th class="text-center w-1/5 font-normal border border-base-300 px-2  py-1 min-w-40">{{ t('result', 'thursday') }}</th>
+                                    <th class="text-center w-1/5 font-normal border border-base-300 px-2  py-1 min-w-40">{{ t('result', 'friday') }}</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {% for period in range(1, 6) %}
                                 <tr class="hover h-20">
-                                    <td class="text-center w-5 bg-base-200 border border-base-300 px-0">{{ period }}</td>
+                                    <td class="text-center w-5 bg-base-200 border border-base-300 px-1">{{ period }}</td>
                                     {% for day_id in range(1, 6) %}
                                     <td class="border border-base-300 px-2 py-2">
                                     {% set courses_in_slot = [] %}
@@ -205,7 +205,7 @@
                     <div class="card-body p-4">
                         <h3 class="font-semibold text-lg mb-3">{{ t('result', 'credit_info') }}</h3>
 
-                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-4">
+                        <div class="grid grid-cols-1  lg:grid-cols-2 gap-4">
                             {% if (shared_credits['required'] + shared_credits['elective']) >= 1 %}
                             <div>
                                 <div class="text-sm font-medium text-primary mb-2">{{ t('result', 'shared_courses') }}</div>
