@@ -115,12 +115,12 @@
                                 <div class="stats stats-vertical shadow w-full">
                                     <div class="stat py-2 px-3">
                                         <div class="stat-title text-xs">{{ t('result', 'required') }}</div>
-                                        <div class="stat-value text-xl">12</div>
+                                        <div class="stat-value text-xl">{{ major1_credits['required'] }}</div>
                                         <div class="stat-desc text-xs">{{ t('result', 'credits') }}</div>
                                     </div>
                                     <div class="stat py-2 px-3">
                                         <div class="stat-title text-xs">{{ t('result', 'elective') }}</div>
-                                        <div class="stat-value text-xl">6</div>
+                                        <div class="stat-value text-xl">{{ major1_credits['elective'] }}</div>
                                         <div class="stat-desc text-xs">{{ t('result', 'credits') }}</div>
                                     </div>
                                 </div>
@@ -132,12 +132,12 @@
                                 <div class="stats stats-vertical shadow w-full">
                                     <div class="stat py-2 px-3">
                                         <div class="stat-title text-xs">{{ t('result', 'required') }}</div>
-                                        <div class="stat-value text-xl">8</div>
+                                        <div class="stat-value text-xl">{{ major2_credits['required'] }}</div>
                                         <div class="stat-desc text-xs">{{ t('result', 'credits') }}</div>
                                     </div>
                                     <div class="stat py-2 px-3">
                                         <div class="stat-title text-xs">{{ t('result', 'elective') }}</div>
-                                        <div class="stat-value text-xl">4</div>
+                                        <div class="stat-value text-xl">{{ major2_credits['elective'] }}</div>
                                         <div class="stat-desc text-xs">{{ t('result', 'credits') }}</div>
                                     </div>
                                 </div>
@@ -149,7 +149,7 @@
                             <div class="stats shadow w-full bg-accent/10">
                                 <div class="stat py-2 px-3">
                                     <div class="stat-title text-xs font-semibold">{{ t('result', 'total') }}</div>
-                                    <div class="stat-value text-2xl text-accent">30</div>
+                                    <div class="stat-value text-2xl text-accent">{{ total_credits }}</div>
                                     <div class="stat-desc text-xs font-medium">{{ t('result', 'credits') }}</div>
                                 </div>
                             </div>

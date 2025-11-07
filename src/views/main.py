@@ -107,6 +107,47 @@ def result():
                                 'instructor_name': instructor_name
                             }
 
+    # 単位数を計算
+    from src.translations.field_values import CourseCategoryEnum
+
+    # 第一メジャーの単位数を計算
+    major1_credits = {'required': 0, 'elective': 0}
+    for course in major1_courses:
+        # このメジャーにおける履修区分を取得
+        for affiliated in course.affiliated_majors:
+            if affiliated.major_id == major1_id:
+                category_id = affiliated.course_category_id
+                credits = course.credits
+                # 必修または必履修
+                if category_id in [CourseCategoryEnum.REQUIRED, CourseCategoryEnum.MANDATORY]:
+                    major1_credits['required'] += credits
+                # 選択または選択必修
+                elif category_id in [CourseCategoryEnum.ELECTIVE, CourseCategoryEnum.REQUIRED_ELECTIVE]:
+                    major1_credits['elective'] += credits
+                break
+
+    # 第二メジャーの単位数を計算
+    major2_credits = {'required': 0, 'elective': 0}
+    for course in major2_courses:
+        # このメジャーにおける履修区分を取得
+        for affiliated in course.affiliated_majors:
+            if affiliated.major_id == major2_id:
+                category_id = affiliated.course_category_id
+                credits = course.credits
+                # 必修または必履修
+                if category_id in [CourseCategoryEnum.REQUIRED, CourseCategoryEnum.MANDATORY]:
+                    major2_credits['required'] += credits
+                # 選択または選択必修
+                elif category_id in [CourseCategoryEnum.ELECTIVE, CourseCategoryEnum.REQUIRED_ELECTIVE]:
+                    major2_credits['elective'] += credits
+                break
+
+    # 合計単位数を計算
+    total_credits = (
+        major1_credits['required'] + major1_credits['elective'] +
+        major2_credits['required'] + major2_credits['elective']
+    )
+
     return render_template(
         'result.html',
         semester=semester,
@@ -116,5 +157,8 @@ def result():
         major2_id=major2_id,
         major2_name=major2_name,
         fiscal_year=fiscal_year,
-        timetable=timetable
+        timetable=timetable,
+        major1_credits=major1_credits,
+        major2_credits=major2_credits,
+        total_credits=total_credits
     )
