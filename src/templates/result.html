@@ -54,9 +54,21 @@
         <div class="card-body">
             <h2 class="card-title text-2xl mb-4">{{ t('result', 'timetable') }}</h2>
 
-            <!-- 時間割表 -->
-            <div class="overflow-x-auto mt-6">
-                <table class="table w-full">
+            <!-- クォーター切り替えタブ -->
+            {% if semester % 2 == 1 %}
+                {% set quarter1 = 1 %}
+                {% set quarter2 = 2 %}
+            {% else %}
+                {% set quarter1 = 3 %}
+                {% set quarter2 = 4 %}
+            {% endif %}
+
+            <div role="tablist" class="tabs tabs-boxed mt-4 justify-center">
+                <input type="radio" name="quarter_tabs" role="tab" class="tab" aria-label="{{ t('result', 'quarter_' ~ quarter1) }}" checked />
+                <div role="tabpanel" class="tab-content pt-4">
+                    <!-- 1Qまたは3Qの時間割 -->
+                    <div class="overflow-x-auto">
+                        <table class="table w-full">
                 <thead>
                     <tr class="bg-base-200">
                         <th class="text-center w-8 font-normal border border-base-300 px-2 py-1"></th>
@@ -75,9 +87,15 @@
                         <!-- 月曜〜金曜のセル -->
                         {% for day_id in range(1, 6) %}
                         <td class="border border-base-300 px-2 py-2">
-                        {% if timetable[day_id].get(period) %}
-                            <div class="text-sm">
-                                {% set item = timetable[day_id][period] %}
+                        {% set courses_in_slot = [] %}
+                        {% for item in timetable[day_id].get(period, []) %}
+                            {% if item['offering_category_id'] == quarter1 or (quarter1 in [1, 2] and item['offering_category_id'] == 5) or (quarter1 in [3, 4] and item['offering_category_id'] == 6) %}
+                                {% set _ = courses_in_slot.append(item) %}
+                            {% endif %}
+                        {% endfor %}
+                        {% if courses_in_slot %}
+                            {% for item in courses_in_slot %}
+                            <div class="text-sm {% if not loop.first %}mt-2 pt-2 border-t border-base-300{% endif %}">
                                 {% set major_type = item['major_type'] %}
 
                                 {% set indicator = '' %}
@@ -107,6 +125,7 @@
                                 <div class="text-xs text-base-content/70">{{ item['instructor_name'] }}</div>
                                 {% endif %}
                             </div>
+                            {% endfor %}
                             {% else %}
                             <div class="text-center text-base-content/40">-</div>
                             {% endif %}
@@ -115,7 +134,83 @@
                     </tr>
                     {% endfor %}
                 </tbody>
-            </table>
+                        </table>
+                    </div>
+                </div>
+
+                <input type="radio" name="quarter_tabs" role="tab" class="tab" aria-label="{{ t('result', 'quarter_' ~ quarter2) }}" />
+                <div role="tabpanel" class="tab-content pt-4">
+                    <!-- 2Qまたは4Qの時間割 -->
+                    <div class="overflow-x-auto">
+                        <table class="table w-full">
+                <thead>
+                    <tr class="bg-base-200">
+                        <th class="text-center w-8 font-normal border border-base-300 px-2 py-1"></th>
+                        <th class="text-center font-normal border border-base-300 px-2 py-1">{{ t('result', 'monday') }}</th>
+                        <th class="text-center font-normal border border-base-300 px-2 py-1">{{ t('result', 'tuesday') }}</th>
+                        <th class="text-center font-normal border border-base-300 px-2 py-1">{{ t('result', 'wednesday') }}</th>
+                        <th class="text-center font-normal border border-base-300 px-2 py-1">{{ t('result', 'thursday') }}</th>
+                        <th class="text-center font-normal border border-base-300 px-2 py-1">{{ t('result', 'friday') }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- 1〜5限を動的に表示 -->
+                    {% for period in range(1, 6) %}
+                    <tr class="hover">
+                        <td class="text-center bg-base-200 border border-base-300" style="padding: 0;">{{ period }}</td>
+                        <!-- 月曜〜金曜のセル -->
+                        {% for day_id in range(1, 6) %}
+                        <td class="border border-base-300 px-2 py-2">
+                        {% set courses_in_slot = [] %}
+                        {% for item in timetable[day_id].get(period, []) %}
+                            {% if item['offering_category_id'] == quarter2 or (quarter2 in [1, 2] and item['offering_category_id'] == 5) or (quarter2 in [3, 4] and item['offering_category_id'] == 6) %}
+                                {% set _ = courses_in_slot.append(item) %}
+                            {% endif %}
+                        {% endfor %}
+                        {% if courses_in_slot %}
+                            {% for item in courses_in_slot %}
+                            <div class="text-sm {% if not loop.first %}mt-2 pt-2 border-t border-base-300{% endif %}">
+                                {% set major_type = item['major_type'] %}
+
+                                {% set indicator = '' %}
+                                {% set color_class = 'text-base-content' %}
+
+                                {% if major_type == 'major1' %}
+                                    {% set indicator = '【' + t('result', 'label_major1') + '】' %}
+                                    {% set color_class = 'text-primary' %}
+                                {% elif major_type == 'shared' %}
+                                    {% set indicator = '【' + t('result', 'label_shared') + '】' %}
+                                    {% set color_class = 'text-primary' %}
+                                {% elif major_type == 'major2' %}
+                                    {% set indicator = '【' + t('result', 'label_major2') + '】' %}
+                                    {% set color_class = 'text-secondary' %}
+                                {% elif major_type == 'others' %}
+                                    {% set indicator = '【' + t('result', 'label_others') + '】' %}
+                                    {% set color_class = 'text-info' %}
+                                {% elif major_type == 'info_app' %}
+                                    {% set indicator = '【' + t('result', 'label_info_app') + '】' %}
+                                    {% set color_class = 'text-warning' %}
+                                {% endif %}
+
+                                <div class="font-semibold {{ color_class }}">
+                                    {{ indicator }}<br>{{ item['course_title'] }}
+                                </div>
+                                {% if item['instructor_name'] %}
+                                <div class="text-xs text-base-content/70">{{ item['instructor_name'] }}</div>
+                                {% endif %}
+                            </div>
+                            {% endfor %}
+                            {% else %}
+                            <div class="text-center text-base-content/40">-</div>
+                            {% endif %}
+                        </td>
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                        </table>
+                    </div>
+                </div>
             </div>
 
             <!-- 単位情報 -->

@@ -113,6 +113,10 @@ RESULT = {
     "label_major2": {"ja": "Ⅱ", "en": "2nd"},
     "label_others": {"ja": "他", "en": "Other"},
     "label_info_app": {"ja": "応", "en": "Info"},
+    "quarter_1": {"ja": "1Q", "en": "1Q"},
+    "quarter_2": {"ja": "2Q", "en": "2Q"},
+    "quarter_3": {"ja": "3Q", "en": "3Q"},
+    "quarter_4": {"ja": "4Q", "en": "4Q"},
 }
 
 # エラーページ

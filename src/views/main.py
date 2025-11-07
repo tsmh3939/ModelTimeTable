@@ -117,10 +117,12 @@ def result():
             all_courses.append(course)
 
     # 時間割を曜日・時限ごとに整理
-    # timetable[day_id][period] = {'course_title': ..., 'instructor_name': ..., 'major_type': ...}
+    # timetable[day_id][period] = [{'course_title': ..., 'instructor_name': ..., 'major_type': ...}, ...]
     timetable = {}
     for day_id in range(1, 6):  # 月曜(1)〜金曜(5)
         timetable[day_id] = {}
+        for period in range(1, 6):  # 1〜5限
+            timetable[day_id][period] = []  # リストで初期化
 
     for course in all_courses:
         # 各科目のスケジュールを取得
@@ -133,27 +135,33 @@ def result():
                 if day_id in range(1, 6):
                     # 時限が1〜5の範囲であることを確認
                     if period >= 1 and period <= 5:
-                        # まだ授業が入っていない場合のみ追加
-                        if period not in timetable[day_id]:
-                            instructor_name = course.main_instructor.instructor_name if course.main_instructor else ''
+                        instructor_name = course.main_instructor.instructor_name if course.main_instructor else ''
 
-                            # どのメジャーに属するかを判定（優先順位: 第一 > 第二 > その他 > 情報応用）
-                            if course in major1_courses:
-                                major_type = 'major1'
-                            elif course in major2_courses:
-                                major_type = 'major2'
-                            elif course in others_courses:
-                                major_type = 'others'
-                            elif course in info_app_courses:
-                                major_type = 'info_app'
-                            else:
-                                major_type = 'others'  # デフォルト
+                        # どのメジャーに属するかを判定（優先順位: 第一 > 第二 > その他 > 情報応用）
+                        if course in major1_courses:
+                            major_type = 'major1'
+                        elif course in major2_courses:
+                            major_type = 'major2'
+                        elif course in others_courses:
+                            major_type = 'others'
+                        elif course in info_app_courses:
+                            major_type = 'info_app'
+                        else:
+                            major_type = 'others'  # デフォルト
 
-                            timetable[day_id][period] = {
+                        # 同じ科目が既に登録されていないかチェック
+                        already_exists = any(
+                            item['course_title'] == course.course_title
+                            for item in timetable[day_id][period]
+                        )
+
+                        if not already_exists:
+                            timetable[day_id][period].append({
                                 'course_title': course.course_title,
                                 'instructor_name': instructor_name,
-                                'major_type': major_type
-                            }
+                                'major_type': major_type,
+                                'offering_category_id': course.offering_category_id
+                            })
 
     # 単位数を計算
     # 共有科目を検出（第一メジャーと第二メジャーの両方に属する科目）
@@ -162,12 +170,11 @@ def result():
     # 時間割の major_type を更新：共有科目を 'shared' に変更
     for day_id in range(1, 6):
         for period in range(1, 6):
-            if period in timetable[day_id]:
-                course_title = timetable[day_id][period]['course_title']
+            for course_item in timetable[day_id][period]:
                 # この科目が共有科目かチェック
                 for course in shared_courses:
-                    if course.course_title == course_title:
-                        timetable[day_id][period]['major_type'] = 'shared'
+                    if course.course_title == course_item['course_title']:
+                        course_item['major_type'] = 'shared'
                         break
 
     # --- 単位計算の関数化適用 ---
