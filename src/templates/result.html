@@ -16,7 +16,7 @@
 
     <!-- 選択内容の表示（Collapse） -->
     <div class="collapse collapse-arrow bg-base-100 shadow-xl mb-6">
-        <input type="checkbox" />
+        <input type="checkbox" checked />
         <div class="collapse-title text-xl font-medium">
             {{ t('result', 'selected_conditions') }}
         </div>
@@ -26,7 +26,7 @@
                 <div class="stats shadow">
                     <div class="stat">
                         <div class="stat-title">{{ t('index', 'semester') }}</div>
-                        <div class="stat-value text-2xl text-primary">{{ semester_name }}</div>
+                        <div class="stat-value text-2xl text-accent">{{ semester_name }}</div>
                     </div>
                 </div>
 
@@ -34,7 +34,7 @@
                 <div class="stats shadow">
                     <div class="stat">
                         <div class="stat-title">{{ t('index', 'major1') }}</div>
-                        <div class="stat-value text-2xl text-secondary">{{ major1_name }}</div>
+                        <div class="stat-value text-2xl text-primary">{{ major1_name }}</div>
                     </div>
                 </div>
 
@@ -42,7 +42,7 @@
                 <div class="stats shadow">
                     <div class="stat">
                         <div class="stat-title">{{ t('index', 'major2') }}</div>
-                        <div class="stat-value text-2xl text-accent">{{ major2_name }}</div>
+                        <div class="stat-value text-2xl text-secondary">{{ major2_name }}</div>
                     </div>
                 </div>
             </div>
@@ -54,103 +54,96 @@
         <div class="card-body">
             <h2 class="card-title text-2xl mb-4">{{ t('result', 'timetable') }}</h2>
 
-            <!-- 準備中メッセージ -->
-            <div class="alert alert-info">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                </svg>
-                <span>{{ t('result', 'generating_message') }}</span>
+            <!-- 時間割表 -->
+            <div class="overflow-x-auto mt-6">
+                <table class="table w-full">
+                <thead>
+                    <tr class="bg-base-200">
+                        <th class="text-center w-8 font-normal border border-base-300 px-2 py-1"></th>
+                        <th class="text-center font-normal border border-base-300 px-2 py-1">{{ t('result', 'monday') }}</th>
+                        <th class="text-center font-normal border border-base-300 px-2 py-1">{{ t('result', 'tuesday') }}</th>
+                        <th class="text-center font-normal border border-base-300 px-2 py-1">{{ t('result', 'wednesday') }}</th>
+                        <th class="text-center font-normal border border-base-300 px-2 py-1">{{ t('result', 'thursday') }}</th>
+                        <th class="text-center font-normal border border-base-300 px-2 py-1">{{ t('result', 'friday') }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- 1〜5限を動的に表示 -->
+                    {% for period in range(1, 6) %}
+                    <tr class="hover">
+                        <td class="text-center bg-base-200 border border-base-300" style="padding: 0;">{{ period }}</td>
+                        <!-- 月曜〜金曜のセル -->
+                        {% for day_id in range(1, 6) %}
+                        <td class="border border-base-300 px-2 py-2">
+                            {% if timetable[day_id].get(period) %}
+                            <div class="text-sm">
+                                {% set major_type = timetable[day_id][period]['major_type'] %}
+                                {% if major_type == 'major1' %}
+                                    <div class="font-semibold text-primary">{{ timetable[day_id][period]['course_title'] }}</div>
+                                {% else %}
+                                    <div class="font-semibold text-secondary">{{ timetable[day_id][period]['course_title'] }}</div>
+                                {% endif %}
+                                {% if timetable[day_id][period]['instructor_name'] %}
+                                <div class="text-xs text-base-content/70">{{ timetable[day_id][period]['instructor_name'] }}</div>
+                                {% endif %}
+                            </div>
+                            {% else %}
+                            <div class="text-center text-base-content/40">-</div>
+                            {% endif %}
+                        </td>
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
             </div>
 
-            <!-- 時間割表と単位情報 -->
-            <div class="flex flex-col lg:flex-row gap-4 mt-6">
-                <!-- 時間割表 -->
-                <div class="flex-1 overflow-x-auto">
-                    <table class="table w-full">
-                    <thead>
-                        <tr class="bg-base-200">
-                            <th class="text-center w-16">{{ t('result', 'period') }}</th>
-                            <th class="text-center">{{ t('result', 'monday') }}</th>
-                            <th class="text-center">{{ t('result', 'tuesday') }}</th>
-                            <th class="text-center">{{ t('result', 'wednesday') }}</th>
-                            <th class="text-center">{{ t('result', 'thursday') }}</th>
-                            <th class="text-center">{{ t('result', 'friday') }}</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- 1〜5限を動的に表示 -->
-                        {% for period in range(1, 6) %}
-                        <tr class="hover">
-                            <td class="text-center font-semibold bg-base-200">{{ period }}</td>
-                            <!-- 月曜〜金曜のセル -->
-                            {% for day_id in range(1, 6) %}
-                            <td class="p-2">
-                                {% if timetable[day_id].get(period) %}
-                                <div class="text-sm">
-                                    <div class="font-semibold text-primary">{{ timetable[day_id][period]['course_title'] }}</div>
-                                    {% if timetable[day_id][period]['instructor_name'] %}
-                                    <div class="text-xs text-base-content/70">{{ timetable[day_id][period]['instructor_name'] }}</div>
-                                    {% endif %}
-                                </div>
-                                {% else %}
-                                <div class="text-center text-base-content/40">-</div>
-                                {% endif %}
-                            </td>
-                            {% endfor %}
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-                </div>
+            <!-- 単位情報 -->
+            <div class="mt-6">
+                <div class="card bg-base-100 shadow-xl">
+                    <div class="card-body p-4">
+                        <h3 class="font-semibold text-lg mb-3">{{ t('result', 'credit_info') }}</h3>
 
-                <!-- 単位情報 -->
-                <div class="w-full lg:w-64">
-                    <div class="card bg-base-100 shadow-xl">
-                        <div class="card-body p-4">
-                            <h3 class="font-semibold text-lg mb-3">{{ t('result', 'credit_info') }}</h3>
-
+                        <div class="flex flex-col md:flex-row gap-4">
                             <!-- 第一メジャー単位 -->
-                            <div class="mb-4">
-                                <div class="text-sm font-medium text-primary mb-2">{{ major1_name }}</div>
+                            <div class="flex-1">
+                                <div class="text-sm font-medium text-primary mb-2">{{ t('result', 'major1_courses') }}</div>
                                 <div class="stats stats-vertical shadow w-full">
                                     <div class="stat py-2 px-3">
-                                        <div class="stat-title text-xs">{{ t('result', 'required') }}</div>
+                                        <div class="stat-title text-xs">{{ t('result', 'required_mandatory') }}</div>
                                         <div class="stat-value text-xl">{{ major1_credits['required'] }}</div>
-                                        <div class="stat-desc text-xs">{{ t('result', 'credits') }}</div>
                                     </div>
                                     <div class="stat py-2 px-3">
-                                        <div class="stat-title text-xs">{{ t('result', 'elective') }}</div>
+                                        <div class="stat-title text-xs">{{ t('result', 'elective_required_elective') }}</div>
                                         <div class="stat-value text-xl">{{ major1_credits['elective'] }}</div>
-                                        <div class="stat-desc text-xs">{{ t('result', 'credits') }}</div>
                                     </div>
                                 </div>
                             </div>
 
                             <!-- 第二メジャー単位 -->
-                            <div class="mb-4">
-                                <div class="text-sm font-medium text-secondary mb-2">{{ major2_name }}</div>
+                            <div class="flex-1">
+                                <div class="text-sm font-medium text-secondary mb-2">{{ t('result', 'major2_courses') }}</div>
                                 <div class="stats stats-vertical shadow w-full">
                                     <div class="stat py-2 px-3">
-                                        <div class="stat-title text-xs">{{ t('result', 'required') }}</div>
+                                        <div class="stat-title text-xs">{{ t('result', 'required_mandatory') }}</div>
                                         <div class="stat-value text-xl">{{ major2_credits['required'] }}</div>
-                                        <div class="stat-desc text-xs">{{ t('result', 'credits') }}</div>
                                     </div>
                                     <div class="stat py-2 px-3">
-                                        <div class="stat-title text-xs">{{ t('result', 'elective') }}</div>
+                                        <div class="stat-title text-xs">{{ t('result', 'elective_required_elective') }}</div>
                                         <div class="stat-value text-xl">{{ major2_credits['elective'] }}</div>
-                                        <div class="stat-desc text-xs">{{ t('result', 'credits') }}</div>
                                     </div>
                                 </div>
                             </div>
 
-                            <div class="divider my-2"></div>
-
                             <!-- 合計単位 -->
-                            <div class="stats shadow w-full bg-accent/10">
-                                <div class="stat py-2 px-3">
-                                    <div class="stat-title text-xs font-semibold">{{ t('result', 'total') }}</div>
-                                    <div class="stat-value text-2xl text-accent">{{ total_credits }}</div>
-                                    <div class="stat-desc text-xs font-medium">{{ t('result', 'credits') }}</div>
+                            <div class="flex-1">
+                                <div class="text-sm font-medium mb-2">&nbsp;</div>
+                                <div class="stats shadow w-full bg-accent/10">
+                                    <div class="stat py-2 px-3">
+                                        <div class="stat-title text-xs font-semibold">{{ t('result', 'total_simple') }}</div>
+                                        <div class="stat-value text-2xl text-accent">{{ total_credits }}</div>
+                                        <div class="stat-desc text-xs font-medium">{{ t('result', 'credits') }}</div>
+                                    </div>
                                 </div>
                             </div>
                         </div>

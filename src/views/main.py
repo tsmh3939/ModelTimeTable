@@ -83,7 +83,7 @@ def result():
             all_courses.append(course)
 
     # 時間割を曜日・時限ごとに整理
-    # timetable[day_id][period] = {'course_title': ..., 'instructor_name': ...}
+    # timetable[day_id][period] = {'course_title': ..., 'instructor_name': ..., 'major_type': ...}
     timetable = {}
     for day_id in range(1, 6):  # 月曜(1)〜金曜(5)
         timetable[day_id] = {}
@@ -102,9 +102,19 @@ def result():
                         # まだ授業が入っていない場合のみ追加
                         if period not in timetable[day_id]:
                             instructor_name = course.main_instructor.instructor_name if course.main_instructor else ''
+
+                            # どのメジャーに属するかを判定（第一メジャーを優先）
+                            is_in_major1 = course in major1_courses
+
+                            if is_in_major1:
+                                major_type = 'major1'  # 第一メジャー（両方に属する場合も含む）
+                            else:
+                                major_type = 'major2'  # 第二メジャーのみ
+
                             timetable[day_id][period] = {
                                 'course_title': course.course_title,
-                                'instructor_name': instructor_name
+                                'instructor_name': instructor_name,
+                                'major_type': major_type
                             }
 
     # 単位数を計算

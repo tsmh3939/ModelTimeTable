@@ -99,6 +99,12 @@ RESULT = {
     "elective": {"ja": "選択", "en": "Elective"},
     "credits": {"ja": "単位", "en": "credits"},
     "total": {"ja": "合計", "en": "Total"},
+    "major1_courses": {"ja": "第1メジャー科目", "en": "1st Major Courses"},
+    "major2_courses": {"ja": "第2メジャー科目", "en": "2nd Major Courses"},
+    "required_mandatory": {"ja": "必修/必履修", "en": "Required/Mandatory"},
+    "elective_required_elective": {"ja": "選択・選択必修", "en": "Elective/Required Elective"},
+    "credits_unit": {"ja": "単位数", "en": "Credits"},
+    "total_simple": {"ja": "合計", "en": "Total"},
 }
 
 # エラーページ
