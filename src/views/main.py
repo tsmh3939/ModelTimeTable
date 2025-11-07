@@ -6,6 +6,30 @@ Main Routes
 from flask import render_template, request, redirect, url_for
 from src import app
 
+# 単位計算に必要なEnumをインポート（トップレベルのインポートに追加）
+from src.translations.field_values import CourseCategoryEnum
+
+
+def calculate_credits(course_list, major_id):
+    """
+    指定された科目リストとメジャーIDに基づき、必修・選択単位を計算するヘルパー関数。
+    """
+    credits = {'required': 0, 'elective': 0}
+    for course in course_list:
+        # このメジャーにおける履修区分を取得
+        for affiliated in course.affiliated_majors:
+            if affiliated.major_id == major_id:
+                category_id = affiliated.course_category_id
+                credits_val = course.credits
+                # 必修または必履修
+                if category_id in [CourseCategoryEnum.REQUIRED, CourseCategoryEnum.MANDATORY]:
+                    credits['required'] += credits_val
+                # 選択または選択必修
+                elif category_id in [CourseCategoryEnum.ELECTIVE, CourseCategoryEnum.REQUIRED_ELECTIVE]:
+                    credits['elective'] += credits_val
+                break
+    return credits
+
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -42,7 +66,7 @@ def index():
 @app.route('/result')
 def result():
     """時間割結果ページ"""
-    from src.translations.field_values import get_semester_name, get_major_name
+    from src.translations.field_values import get_semester_name, get_major_name, MajorEnum
     from query_timetable import get_courses_by_semester_and_major
 
     # 現在の言語を取得（クエリパラメータから）
@@ -76,9 +100,19 @@ def result():
     major1_courses = get_courses_by_semester_and_major(semester, major1_id)
     major2_courses = get_courses_by_semester_and_major(semester, major2_id)
 
-    # 両メジャーの科目を統合（重複排除）
+    # その他メジャーと情報応用科目も取得
+    others_courses = get_courses_by_semester_and_major(semester, MajorEnum.OTHERS)
+    info_app_courses = get_courses_by_semester_and_major(semester, MajorEnum.INFO_APP)
+
+    # 全メジャーの科目を統合（重複排除）
     all_courses = major1_courses.copy()
     for course in major2_courses:
+        if course not in all_courses:
+            all_courses.append(course)
+    for course in others_courses:
+        if course not in all_courses:
+            all_courses.append(course)
+    for course in info_app_courses:
         if course not in all_courses:
             all_courses.append(course)
 
@@ -103,13 +137,17 @@ def result():
                         if period not in timetable[day_id]:
                             instructor_name = course.main_instructor.instructor_name if course.main_instructor else ''
 
-                            # どのメジャーに属するかを判定（第一メジャーを優先）
-                            is_in_major1 = course in major1_courses
-
-                            if is_in_major1:
-                                major_type = 'major1'  # 第一メジャー（両方に属する場合も含む）
+                            # どのメジャーに属するかを判定（優先順位: 第一 > 第二 > その他 > 情報応用）
+                            if course in major1_courses:
+                                major_type = 'major1'
+                            elif course in major2_courses:
+                                major_type = 'major2'
+                            elif course in others_courses:
+                                major_type = 'others'
+                            elif course in info_app_courses:
+                                major_type = 'info_app'
                             else:
-                                major_type = 'major2'  # 第二メジャーのみ
+                                major_type = 'others'  # デフォルト
 
                             timetable[day_id][period] = {
                                 'course_title': course.course_title,
@@ -118,44 +156,47 @@ def result():
                             }
 
     # 単位数を計算
-    from src.translations.field_values import CourseCategoryEnum
+    # 共有科目を検出（第一メジャーと第二メジャーの両方に属する科目）
+    shared_courses = [course for course in major1_courses if course in major2_courses]
 
-    # 第一メジャーの単位数を計算
-    major1_credits = {'required': 0, 'elective': 0}
-    for course in major1_courses:
-        # このメジャーにおける履修区分を取得
-        for affiliated in course.affiliated_majors:
-            if affiliated.major_id == major1_id:
-                category_id = affiliated.course_category_id
-                credits = course.credits
-                # 必修または必履修
-                if category_id in [CourseCategoryEnum.REQUIRED, CourseCategoryEnum.MANDATORY]:
-                    major1_credits['required'] += credits
-                # 選択または選択必修
-                elif category_id in [CourseCategoryEnum.ELECTIVE, CourseCategoryEnum.REQUIRED_ELECTIVE]:
-                    major1_credits['elective'] += credits
-                break
+    # 時間割の major_type を更新：共有科目を 'shared' に変更
+    for day_id in range(1, 6):
+        for period in range(1, 6):
+            if period in timetable[day_id]:
+                course_title = timetable[day_id][period]['course_title']
+                # この科目が共有科目かチェック
+                for course in shared_courses:
+                    if course.course_title == course_title:
+                        timetable[day_id][period]['major_type'] = 'shared'
+                        break
 
-    # 第二メジャーの単位数を計算
-    major2_credits = {'required': 0, 'elective': 0}
-    for course in major2_courses:
-        # このメジャーにおける履修区分を取得
-        for affiliated in course.affiliated_majors:
-            if affiliated.major_id == major2_id:
-                category_id = affiliated.course_category_id
-                credits = course.credits
-                # 必修または必履修
-                if category_id in [CourseCategoryEnum.REQUIRED, CourseCategoryEnum.MANDATORY]:
-                    major2_credits['required'] += credits
-                # 選択または選択必修
-                elif category_id in [CourseCategoryEnum.ELECTIVE, CourseCategoryEnum.REQUIRED_ELECTIVE]:
-                    major2_credits['elective'] += credits
-                break
+    # --- 単位計算の関数化適用 ---
 
-    # 合計単位数を計算
+    # 第一メジャーの単位数を計算（共有科目を除く）
+    major1_courses_exclusive = [course for course in major1_courses if course not in shared_courses]
+    major1_credits = calculate_credits(major1_courses_exclusive, major1_id)
+
+    # 情報学領域共有科目の単位数を計算
+    # 共有科目は、第一メジャーの履修区分で計算する（元のロジックを維持）
+    shared_credits = calculate_credits(shared_courses, major1_id)
+
+    # 第二メジャーの単位数を計算（共有科目を除く）
+    major2_courses_exclusive = [course for course in major2_courses if course not in shared_courses]
+    major2_credits = calculate_credits(major2_courses_exclusive, major2_id)
+
+    # その他メジャーの単位数を計算
+    others_credits = calculate_credits(others_courses, MajorEnum.OTHERS)
+
+    # 情報応用科目の単位数を計算
+    info_app_credits = calculate_credits(info_app_courses, MajorEnum.INFO_APP)
+
+    # --- 合計単位数を計算 ---
     total_credits = (
         major1_credits['required'] + major1_credits['elective'] +
-        major2_credits['required'] + major2_credits['elective']
+        shared_credits['required'] + shared_credits['elective'] +
+        major2_credits['required'] + major2_credits['elective'] +
+        others_credits['required'] + others_credits['elective'] +
+        info_app_credits['required'] + info_app_credits['elective']
     )
 
     return render_template(
@@ -169,6 +210,9 @@ def result():
         fiscal_year=fiscal_year,
         timetable=timetable,
         major1_credits=major1_credits,
+        shared_credits=shared_credits,
         major2_credits=major2_credits,
+        others_credits=others_credits,
+        info_app_credits=info_app_credits,
         total_credits=total_credits
     )

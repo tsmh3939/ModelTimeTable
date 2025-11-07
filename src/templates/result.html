@@ -75,16 +75,36 @@
                         <!-- 月曜〜金曜のセル -->
                         {% for day_id in range(1, 6) %}
                         <td class="border border-base-300 px-2 py-2">
-                            {% if timetable[day_id].get(period) %}
+                        {% if timetable[day_id].get(period) %}
                             <div class="text-sm">
-                                {% set major_type = timetable[day_id][period]['major_type'] %}
+                                {% set item = timetable[day_id][period] %}
+                                {% set major_type = item['major_type'] %}
+
+                                {% set indicator = '' %}
+                                {% set color_class = 'text-base-content' %}
+
                                 {% if major_type == 'major1' %}
-                                    <div class="font-semibold text-primary">{{ timetable[day_id][period]['course_title'] }}</div>
-                                {% else %}
-                                    <div class="font-semibold text-secondary">{{ timetable[day_id][period]['course_title'] }}</div>
+                                    {% set indicator = '【' + t('result', 'label_major1') + '】' %}
+                                    {% set color_class = 'text-primary' %}
+                                {% elif major_type == 'shared' %}
+                                    {% set indicator = '【' + t('result', 'label_shared') + '】' %}
+                                    {% set color_class = 'text-primary' %}
+                                {% elif major_type == 'major2' %}
+                                    {% set indicator = '【' + t('result', 'label_major2') + '】' %}
+                                    {% set color_class = 'text-secondary' %}
+                                {% elif major_type == 'others' %}
+                                    {% set indicator = '【' + t('result', 'label_others') + '】' %}
+                                    {% set color_class = 'text-info' %}
+                                {% elif major_type == 'info_app' %}
+                                    {% set indicator = '【' + t('result', 'label_info_app') + '】' %}
+                                    {% set color_class = 'text-warning' %}
                                 {% endif %}
-                                {% if timetable[day_id][period]['instructor_name'] %}
-                                <div class="text-xs text-base-content/70">{{ timetable[day_id][period]['instructor_name'] }}</div>
+
+                                <div class="font-semibold {{ color_class }}">
+                                    {{ indicator }}<br>{{ item['course_title'] }}
+                                </div>
+                                {% if item['instructor_name'] %}
+                                <div class="text-xs text-base-content/70">{{ item['instructor_name'] }}</div>
                                 {% endif %}
                             </div>
                             {% else %}
@@ -104,9 +124,9 @@
                     <div class="card-body p-4">
                         <h3 class="font-semibold text-lg mb-3">{{ t('result', 'credit_info') }}</h3>
 
-                        <div class="flex flex-col md:flex-row gap-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
                             <!-- 第一メジャー単位 -->
-                            <div class="flex-1">
+                            <div>
                                 <div class="text-sm font-medium text-primary mb-2">{{ t('result', 'major1_courses') }}</div>
                                 <div class="stats stats-vertical shadow w-full">
                                     <div class="stat py-2 px-3">
@@ -118,10 +138,24 @@
                                         <div class="stat-value text-xl">{{ major1_credits['elective'] }}</div>
                                     </div>
                                 </div>
+                                <!-- 情報学領域共有科目（1単位以上の場合のみ表示） -->
+                                {% if (shared_credits['required'] + shared_credits['elective']) >= 1 %}
+                                <div class="text-sm font-medium text-primary mb-2 mt-4">{{ t('result', 'shared_courses') }}</div>
+                                <div class="stats stats-vertical shadow w-full">
+                                    <div class="stat py-2 px-3">
+                                        <div class="stat-title text-xs">{{ t('result', 'required_mandatory') }}</div>
+                                        <div class="stat-value text-xl">{{ shared_credits['required'] }}</div>
+                                    </div>
+                                    <div class="stat py-2 px-3">
+                                        <div class="stat-title text-xs">{{ t('result', 'elective_required_elective') }}</div>
+                                        <div class="stat-value text-xl">{{ shared_credits['elective'] }}</div>
+                                    </div>
+                                </div>
+                                {% endif %}
                             </div>
 
                             <!-- 第二メジャー単位 -->
-                            <div class="flex-1">
+                            <div>
                                 <div class="text-sm font-medium text-secondary mb-2">{{ t('result', 'major2_courses') }}</div>
                                 <div class="stats stats-vertical shadow w-full">
                                     <div class="stat py-2 px-3">
@@ -135,8 +169,42 @@
                                 </div>
                             </div>
 
+                            <!-- その他メジャー単位（1単位以上の場合のみ表示） -->
+                            {% if (others_credits['required'] + others_credits['elective']) >= 1 %}
+                            <div>
+                                <div class="text-sm font-medium text-info mb-2">{{ t('result', 'others_courses') }}</div>
+                                <div class="stats stats-vertical shadow w-full">
+                                    <div class="stat py-2 px-3">
+                                        <div class="stat-title text-xs">{{ t('result', 'required_mandatory') }}</div>
+                                        <div class="stat-value text-xl">{{ others_credits['required'] }}</div>
+                                    </div>
+                                    <div class="stat py-2 px-3">
+                                        <div class="stat-title text-xs">{{ t('result', 'elective_required_elective') }}</div>
+                                        <div class="stat-value text-xl">{{ others_credits['elective'] }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endif %}
+
+                            <!-- 情報応用科目単位（1単位以上の場合のみ表示） -->
+                            {% if (info_app_credits['required'] + info_app_credits['elective']) >= 1 %}
+                            <div>
+                                <div class="text-sm font-medium text-warning mb-2">{{ t('result', 'info_app_courses') }}</div>
+                                <div class="stats stats-vertical shadow w-full">
+                                    <div class="stat py-2 px-3">
+                                        <div class="stat-title text-xs">{{ t('result', 'required_mandatory') }}</div>
+                                        <div class="stat-value text-xl">{{ info_app_credits['required'] }}</div>
+                                    </div>
+                                    <div class="stat py-2 px-3">
+                                        <div class="stat-title text-xs">{{ t('result', 'elective_required_elective') }}</div>
+                                        <div class="stat-value text-xl">{{ info_app_credits['elective'] }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endif %}
+
                             <!-- 合計単位 -->
-                            <div class="flex-1">
+                            <div>
                                 <div class="text-sm font-medium mb-2">&nbsp;</div>
                                 <div class="stats shadow w-full bg-accent/10">
                                     <div class="stat py-2 px-3">

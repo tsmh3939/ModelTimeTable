@@ -100,11 +100,19 @@ RESULT = {
     "credits": {"ja": "単位", "en": "credits"},
     "total": {"ja": "合計", "en": "Total"},
     "major1_courses": {"ja": "第1メジャー科目", "en": "1st Major Courses"},
+    "shared_courses": {"ja": "情報学領域共有科目", "en": "Shared Information Science Courses"},
     "major2_courses": {"ja": "第2メジャー科目", "en": "2nd Major Courses"},
+    "others_courses": {"ja": "その他メジャー科目", "en": "Other Major Courses"},
+    "info_app_courses": {"ja": "情報応用科目", "en": "Information Application Courses"},
     "required_mandatory": {"ja": "必修/必履修", "en": "Required/Mandatory"},
     "elective_required_elective": {"ja": "選択・選択必修", "en": "Elective/Required Elective"},
     "credits_unit": {"ja": "単位数", "en": "Credits"},
     "total_simple": {"ja": "合計", "en": "Total"},
+    "label_major1": {"ja": "Ⅰ", "en": "1st"},
+    "label_shared": {"ja": "共", "en": "Shared"},
+    "label_major2": {"ja": "Ⅱ", "en": "2nd"},
+    "label_others": {"ja": "他", "en": "Other"},
+    "label_info_app": {"ja": "応", "en": "Info"},
 }
 
 # エラーページ
