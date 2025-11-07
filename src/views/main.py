@@ -156,12 +156,20 @@ def result():
                         )
 
                         if not already_exists:
+                            # 教室名を取得（複数ある場合はカンマ区切り）
+                            classroom_names = ', '.join([
+                                cc.classroom.classroom_name
+                                for cc in course.course_classrooms
+                            ]) if course.course_classrooms else ''
+
                             timetable[day_id][period].append({
                                 'course_title': course.course_title,
                                 'instructor_name': instructor_name,
                                 'major_type': major_type,
                                 'offering_category_id': course.offering_category_id,
-                                'credits': course.credits
+                                'credits': course.credits,
+                                'classroom_name': classroom_names,
+                                'syllabus_url': course.syllabus_url or ''
                             })
 
     # 単位数を計算

@@ -120,6 +120,17 @@ RESULT = {
     "semester_first": {"ja": "前期", "en": "1st Sem"},
     "semester_second": {"ja": "後期", "en": "2nd Sem"},
     "credit_unit_badge": {"ja": "単位", "en": "cr"},
+    "course_details": {"ja": "科目詳細", "en": "Course Details"},
+    "course_name": {"ja": "科目名", "en": "Course Name"},
+    "instructor": {"ja": "担当教員", "en": "Instructor"},
+    "credits_label": {"ja": "単位数", "en": "Credits"},
+    "offering_period": {"ja": "開講区分", "en": "Offering Period"},
+    "major_category": {"ja": "メジャー区分", "en": "Major Category"},
+    "day_period": {"ja": "曜日・時限", "en": "Day & Period"},
+    "classroom": {"ja": "教室", "en": "Classroom"},
+    "syllabus_link": {"ja": "シラバスリンク", "en": "Syllabus Link"},
+    "open_syllabus": {"ja": "シラバスを開く", "en": "Open Syllabus"},
+    "close": {"ja": "閉じる", "en": "Close"},
 }
 
 # エラーページ

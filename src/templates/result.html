@@ -62,7 +62,7 @@
                 {'id': quarter2, 'checked': false}
             ] %}
 
-            <div role="tablist" class="tabs tabs-boxed mt-4 justify-center">
+            <div role="tablist" class="tabs tabs-border justify-center">
                 {% for q in quarters %}
                 {% set current_quarter = q.id %}
                 <input type="radio" name="quarter_tabs" role="tab" class="tab" aria-label="{{ t('result', 'quarter_' ~ current_quarter) }}" {% if q.checked %}checked{% endif %} />
@@ -72,11 +72,11 @@
                             <thead>
                                 <tr class="bg-base-200">
                                     <th class="text-center w-5 font-normal border border-base-300 px-0  py-1"></th>
-                                    <th class="text-center w-1/5 font-normal border border-base-300 px-2  py-1 min-w-40">{{ t('result', 'monday') }}</th>
-                                    <th class="text-center w-1/5 font-normal border border-base-300 px-2  py-1 min-w-40">{{ t('result', 'tuesday') }}</th>
-                                    <th class="text-center w-1/5 font-normal border border-base-300 px-2  py-1 min-w-40">{{ t('result', 'wednesday') }}</th>
-                                    <th class="text-center w-1/5 font-normal border border-base-300 px-2  py-1 min-w-40">{{ t('result', 'thursday') }}</th>
-                                    <th class="text-center w-1/5 font-normal border border-base-300 px-2  py-1 min-w-40">{{ t('result', 'friday') }}</th>
+                                    <th class="text-center w-1/5 font-normal border border-base-300 px-2  py-1 min-w-30">{{ t('result', 'monday') }}</th>
+                                    <th class="text-center w-1/5 font-normal border border-base-300 px-2  py-1 min-w-30">{{ t('result', 'tuesday') }}</th>
+                                    <th class="text-center w-1/5 font-normal border border-base-300 px-2  py-1 min-w-30">{{ t('result', 'wednesday') }}</th>
+                                    <th class="text-center w-1/5 font-normal border border-base-300 px-2  py-1 min-w-30">{{ t('result', 'thursday') }}</th>
+                                    <th class="text-center w-1/5 font-normal border border-base-300 px-2  py-1 min-w-30">{{ t('result', 'friday') }}</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -84,7 +84,7 @@
                                 <tr class="hover h-20">
                                     <td class="text-center w-5 bg-base-200 border border-base-300 px-1">{{ period }}</td>
                                     {% for day_id in range(1, 6) %}
-                                    <td class="border border-base-300 px-2 py-2">
+                                    <td class="border border-base-300 px-2 py-2 h-28">
                                     {% set courses_in_slot = [] %}
                                     {% for item in timetable[day_id].get(period, []) %}
                                         {# クォーターID (current_quarter) を使用してフィルタリングを共通化 #}
@@ -94,7 +94,18 @@
                                     {% endfor %}
                                     {% if courses_in_slot %}
                                         {% for item in courses_in_slot %}
-                                        <div class="text-sm {% if not loop.first %}mt-2 pt-2 border-t border-base-300{% endif %}">
+                                        <div class="text-sm cursor-pointer hover:bg-base-200 p-1 rounded {% if not loop.first %}mt-2 pt-2 border-t border-base-300{% endif %}"
+                                             onclick="showCourseDetails(
+                                                 '{{ item['course_title'] }}',
+                                                 '{{ item['instructor_name'] }}',
+                                                 {{ item['credits'] }},
+                                                 {{ item['offering_category_id'] }},
+                                                 '{{ item['major_type'] }}',
+                                                 {{ day_id }},
+                                                 {{ period }},
+                                                 '{{ item['classroom_name'] }}',
+                                                 '{{ item['syllabus_url'] }}'
+                                             )">
                                             {% set major_type = item['major_type'] %}
                                             {% set offering_category = item['offering_category_id'] %}
 
@@ -134,16 +145,22 @@
                                                 {% set color_class = 'text-warning' %}
                                             {% endif %}
 
-                                            <div class="font-semibold {{ color_class }} flex items-center gap-1 flex-wrap">
+                                            <div class="font-semibold {{ color_class }} flex items-center gap-1 flex-wrap justify-between">
                                                 <span>{{ indicator }}</span>
                                                 {% if offering_tag %}
-                                                <span class="badge badge-sm badge-neutral">{{ offering_tag }}</span>
+                                                <span class="badge badge-sm badge-soft">{{ offering_tag }}</span>
                                                 {% endif %}
                                             </div>
                                             <div class="mt-1">{{ item['course_title'] }}</div>
                                             {% if item['instructor_name'] %}
                                             <div class="text-xs text-base-content/70 mt-1">{{ item['instructor_name'] }}</div>
                                             {% endif %}
+                                            {# 科目名の下に情報アイコンを追加してクリック可能であることを示す #}
+                                            <div class="font-semibold {{ course_color_class }} mt-1 flex items-center justify-end">
+                                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 flex-shrink-0 opacity-50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                                </svg>
+                                            </div>
                                         </div>
                                         {% endfor %}
                                         {% else %}
@@ -219,13 +236,145 @@
             </svg>
             {{ t('result', 'back') }}
         </a>
-
-        <button class="btn btn-primary" disabled>
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
-            </svg>
-            {{ t('result', 'download') }}
-        </button>
     </div>
 </div>
+
+
+<!-- 科目詳細モーダル -->
+<dialog id="course_modal" class="modal">
+    <div class="modal-box max-w-3xl">
+        <h3 class="font-bold text-xl mb-2 text-base-content/60">{{ t('result', 'course_details') }}</h3>
+
+        <!-- 科目名 -->
+        <div class="mb-6 pb-4 border-b border-base-300">
+            <p id="modal_course_title" class="text-2xl font-bold text-base-content"></p>
+        </div>
+
+        <!-- その他の情報 -->
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 mb-6">
+            <!-- 担当教員 -->
+            <div>
+                <div class="text-xs font-semibold text-base-content/50 mb-1.5 uppercase tracking-wide">{{ t('result', 'instructor') }}</div>
+                <p id="modal_instructor" class="text-base font-medium text-base-content"></p>
+            </div>
+
+            <!-- 単位数 -->
+            <div>
+                <div class="text-xs font-semibold text-base-content/50 mb-1.5 uppercase tracking-wide">{{ t('result', 'credits_label') }}</div>
+                <p id="modal_credits" class="text-base font-medium text-base-content"></p>
+            </div>
+
+            <!-- 開講区分 -->
+            <div>
+                <div class="text-xs font-semibold text-base-content/50 mb-1.5 uppercase tracking-wide">{{ t('result', 'offering_period') }}</div>
+                <p id="modal_offering" class="text-base font-medium text-base-content"></p>
+            </div>
+
+            <!-- メジャー区分 -->
+            <div>
+                <div class="text-xs font-semibold text-base-content/50 mb-1.5 uppercase tracking-wide">{{ t('result', 'major_category') }}</div>
+                <p id="modal_major_type" class="text-base font-medium text-base-content"></p>
+            </div>
+
+            <!-- 曜日・時限 -->
+            <div>
+                <div class="text-xs font-semibold text-base-content/50 mb-1.5 uppercase tracking-wide">{{ t('result', 'day_period') }}</div>
+                <p id="modal_schedule" class="text-base font-medium text-base-content"></p>
+            </div>
+
+            <!-- 教室 -->
+            <div>
+                <div class="text-xs font-semibold text-base-content/50 mb-1.5 uppercase tracking-wide">{{ t('result', 'classroom') }}</div>
+                <p id="modal_classroom" class="text-base font-medium text-base-content"></p>
+            </div>
+
+            <!-- シラバスリンク -->
+            <div class="md:col-span-2 pt-2">
+                <div class="text-xs font-semibold text-base-content/50 mb-2 uppercase tracking-wide">{{ t('result', 'syllabus_link') }}</div>
+                <div id="modal_syllabus_container"></div>
+            </div>
+        </div>
+
+        <div class="modal-action mt-6">
+            <form method="dialog">
+                <button class="btn btn-neutral">{{ t('result', 'close') }}</button>
+            </form>
+        </div>
+    </div>
+    <form method="dialog" class="modal-backdrop">
+        <button>close</button>
+    </form>
+</dialog>
+
+<!-- 翻訳データとJavaScript -->
+<script>
+// 翻訳データをJavaScriptに渡す
+window.translations = {
+    days: {
+        1: "{{ t('result', 'monday') }}",
+        2: "{{ t('result', 'tuesday') }}",
+        3: "{{ t('result', 'wednesday') }}",
+        4: "{{ t('result', 'thursday') }}",
+        5: "{{ t('result', 'friday') }}"
+    },
+    offerings: {
+        1: "{{ t('result', 'quarter_1') }}",
+        2: "{{ t('result', 'quarter_2') }}",
+        3: "{{ t('result', 'quarter_3') }}",
+        4: "{{ t('result', 'quarter_4') }}",
+        5: "{{ t('result', 'semester_first') }}",
+        6: "{{ t('result', 'semester_second') }}"
+    },
+    majors: {
+        'major1': "{{ t('result', 'major1_courses') }}",
+        'major2': "{{ t('result', 'major2_courses') }}",
+        'shared': "{{ t('result', 'shared_courses') }}",
+        'others': "{{ t('result', 'others_courses') }}",
+        'info_app': "{{ t('result', 'info_app_courses') }}"
+    },
+    credits: "{{ t('result', 'credit_unit_badge') }}",
+    openSyllabus: "{{ t('result', 'open_syllabus') }}"
+};
+
+/**
+ * 科目詳細をモーダルで表示する
+ * @param {string} title - 科目名
+ * @param {string} instructor - 担当教員名
+ * @param {number} credits - 単位数
+ * @param {number} offeringCategory - 開講区分ID
+ * @param {string} majorType - メジャータイプ
+ * @param {number} dayId - 曜日ID (1-5)
+ * @param {number} period - 時限 (1-5)
+ * @param {string} classroom - 教室名
+ * @param {string} syllabusUrl - シラバスURL
+ */
+function showCourseDetails(title, instructor, credits, offeringCategory, majorType, dayId, period, classroom, syllabusUrl) {
+    // モーダルに情報を設定
+    document.getElementById('modal_course_title').textContent = title;
+    document.getElementById('modal_instructor').textContent = instructor || '-';
+    document.getElementById('modal_credits').textContent = credits + window.translations.credits;
+    document.getElementById('modal_offering').textContent = window.translations.offerings[offeringCategory] || '-';
+    document.getElementById('modal_major_type').textContent = window.translations.majors[majorType] || '-';
+    document.getElementById('modal_schedule').textContent = window.translations.days[dayId] + ' ' + period + '限';
+    document.getElementById('modal_classroom').textContent = classroom || '-';
+
+    // シラバスリンクを設定
+    const syllabusContainer = document.getElementById('modal_syllabus_container');
+    if (syllabusUrl && syllabusUrl.trim() !== '') {
+        syllabusContainer.innerHTML = `
+            <a href="${syllabusUrl}" target="_blank" rel="noopener noreferrer" class="btn btn-primary btn-sm">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14" />
+                </svg>
+                ${window.translations.openSyllabus}
+            </a>
+        `;
+    } else {
+        syllabusContainer.innerHTML = '<p class="text-base">-</p>';
+    }
+
+    // モーダルを表示
+    document.getElementById('course_modal').showModal();
+}
+</script>
 {% endblock %}
