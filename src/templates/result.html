@@ -210,6 +210,95 @@
                 {% endfor %}
             </div>
 
+            {# 集中講義・実験実習セクション #}
+            {% if intensive_courses %}
+            <div class="mt-6">
+                <div class="card bg-base-100 shadow-xl">
+                    <div class="card-body p-4">
+                        <h3 class="font-semibold text-lg mb-3">{{ t('result', 'intensive_courses') }}</h3>
+                        <p class="text-sm text-base-content/70 mb-4">{{ t('result', 'intensive_courses_note') }}</p>
+
+                        <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                            {% for item in intensive_courses %}
+                            <div class="border border-base-300 px-2 py-2 min-h-28">
+                                <div class="course-item text-sm p-1 rounded transition-all duration-200">
+                                    {% set major_type = item['major_type'] %}
+                                    {% set offering_category = item['offering_category_id'] %}
+
+                                    {% set indicator = '' %}
+                                    {% set color_class = 'text-base-content' %}
+
+                                    {# 開講区分のタグ設定 #}
+                                    {% set offering_tag = '' %}
+                                    {% if offering_category == 1 %}
+                                        {% set offering_tag = t('result', 'quarter_1') %}
+                                    {% elif offering_category == 2 %}
+                                        {% set offering_tag = t('result', 'quarter_2') %}
+                                    {% elif offering_category == 3 %}
+                                        {% set offering_tag = t('result', 'quarter_3') %}
+                                    {% elif offering_category == 4 %}
+                                        {% set offering_tag = t('result', 'quarter_4') %}
+                                    {% elif offering_category == 5 %}
+                                        {% set offering_tag = t('result', 'semester_first') %}
+                                    {% elif offering_category == 6 %}
+                                        {% set offering_tag = t('result', 'semester_second') %}
+                                    {% endif %}
+
+                                    {% if major_type == 'major1' %}
+                                        {% set indicator = '【' + t('result', 'label_major1') + '】' %}
+                                        {% set color_class = 'text-primary' %}
+                                    {% elif major_type == 'shared' %}
+                                        {% set indicator = '【' + t('result', 'label_shared') + '】' %}
+                                        {% set color_class = 'text-primary' %}
+                                    {% elif major_type == 'major2' %}
+                                        {% set indicator = '【' + t('result', 'label_major2') + '】' %}
+                                        {% set color_class = 'text-secondary' %}
+                                    {% elif major_type == 'others' %}
+                                        {% set indicator = '【' + t('result', 'label_others') + '】' %}
+                                        {% set color_class = 'text-info' %}
+                                    {% elif major_type == 'info_app' %}
+                                        {% set indicator = '【' + t('result', 'label_info_app') + '】' %}
+                                        {% set color_class = 'text-warning' %}
+                                    {% endif %}
+
+                                    <div class="course-content cursor-pointer hover:bg-base-200 rounded p-1"
+                                         onclick="showCourseDetails(
+                                             '{{ item['course_title'] }}',
+                                             '{{ item['instructor_name'] }}',
+                                             {{ item['credits'] }},
+                                             {{ item['offering_category_id'] }},
+                                             '{{ item['major_type'] }}',
+                                             0,
+                                             0,
+                                             '{{ item['classroom_name'] }}',
+                                             '{{ item['syllabus_url'] }}'
+                                         )">
+                                        <div class="font-semibold {{ color_class }} flex items-center gap-1 flex-wrap justify-between">
+                                            <span>{{ indicator }}</span>
+                                            {% if offering_tag %}
+                                            <span class="badge badge-sm badge-soft">{{ offering_tag }}</span>
+                                            {% endif %}
+                                        </div>
+                                        <div class="mt-1">{{ item['course_title'] }}</div>
+                                        {% if item['instructor_name'] %}
+                                        <div class="text-xs text-base-content/70 mt-1">{{ item['instructor_name'] }}</div>
+                                        {% endif %}
+                                        {# 科目名の下に情報アイコンを追加してクリック可能であることを示す #}
+                                        <div class="font-semibold mt-1 flex items-center justify-end">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 flex-shrink-0 opacity-50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                            </svg>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+
             <div class="mt-6">
                 <div class="card bg-base-100 shadow-xl">
                     <div class="card-body p-4">
@@ -388,7 +477,14 @@ function showCourseDetails(title, instructor, credits, offeringCategory, majorTy
     document.getElementById('modal_credits').textContent = credits + window.translations.credits;
     document.getElementById('modal_offering').textContent = window.translations.offerings[offeringCategory] || '-';
     document.getElementById('modal_major_type').textContent = window.translations.majors[majorType] || '-';
-    document.getElementById('modal_schedule').textContent = window.translations.days[dayId] + ' ' + period + '限';
+
+    // 曜日・時限（集中講義の場合は「-」を表示）
+    if (dayId > 0 && period > 0) {
+        document.getElementById('modal_schedule').textContent = window.translations.days[dayId] + ' ' + period + '限';
+    } else {
+        document.getElementById('modal_schedule').textContent = '-';
+    }
+
     document.getElementById('modal_classroom').textContent = classroom || '-';
 
     // シラバスリンクを設定

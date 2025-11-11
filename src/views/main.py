@@ -124,9 +124,13 @@ def result():
         for period in range(1, 6):  # 1〜5限
             timetable[day_id][period] = []  # リストで初期化
 
+    # 集中講義・実験実習などのスケジュールがない科目を別途管理
+    intensive_courses = []
+
     for course in all_courses:
         # 各科目のスケジュールを取得
         if course.schedules:
+            has_regular_schedule = False
             for schedule in course.schedules:
                 day_id = schedule.day_id
                 period = schedule.period
@@ -135,6 +139,7 @@ def result():
                 if day_id in range(1, 6):
                     # 時限が1〜5の範囲であることを確認
                     if period >= 1 and period <= 5:
+                        has_regular_schedule = True
                         instructor_name = course.main_instructor.instructor_name if course.main_instructor else ''
 
                         # どのメジャーに属するかを判定（優先順位: 第一 > 第二 > その他 > 情報応用）
@@ -172,6 +177,71 @@ def result():
                                 'syllabus_url': course.syllabus_url or ''
                             })
 
+            # スケジュールはあるが、通常の時間割に含まれない科目
+            if not has_regular_schedule:
+                instructor_name = course.main_instructor.instructor_name if course.main_instructor else ''
+
+                # どのメジャーに属するかを判定
+                if course in major1_courses:
+                    major_type = 'major1'
+                elif course in major2_courses:
+                    major_type = 'major2'
+                elif course in others_courses:
+                    major_type = 'others'
+                elif course in info_app_courses:
+                    major_type = 'info_app'
+                else:
+                    major_type = 'others'
+
+                classroom_names = ', '.join([
+                    cc.classroom.classroom_name
+                    for cc in course.course_classrooms
+                ]) if course.course_classrooms else ''
+
+                intensive_courses.append({
+                    'course_title': course.course_title,
+                    'instructor_name': instructor_name,
+                    'major_type': major_type,
+                    'offering_category_id': course.offering_category_id,
+                    'credits': course.credits,
+                    'classroom_name': classroom_names,
+                    'syllabus_url': course.syllabus_url or '',
+                    'class_format_name': course.class_format.class_format_name if course.class_format else '',
+                    'course_type_name': course.course_type.course_type_name if course.course_type else ''
+                })
+        else:
+            # スケジュールがない科目（集中講義など）
+            instructor_name = course.main_instructor.instructor_name if course.main_instructor else ''
+
+            # どのメジャーに属するかを判定
+            if course in major1_courses:
+                major_type = 'major1'
+            elif course in major2_courses:
+                major_type = 'major2'
+            elif course in others_courses:
+                major_type = 'others'
+            elif course in info_app_courses:
+                major_type = 'info_app'
+            else:
+                major_type = 'others'
+
+            classroom_names = ', '.join([
+                cc.classroom.classroom_name
+                for cc in course.course_classrooms
+            ]) if course.course_classrooms else ''
+
+            intensive_courses.append({
+                'course_title': course.course_title,
+                'instructor_name': instructor_name,
+                'major_type': major_type,
+                'offering_category_id': course.offering_category_id,
+                'credits': course.credits,
+                'classroom_name': classroom_names,
+                'syllabus_url': course.syllabus_url or '',
+                'class_format_name': course.class_format.class_format_name if course.class_format else '',
+                'course_type_name': course.course_type.course_type_name if course.course_type else ''
+            })
+
     # 単位数を計算
     # 共有科目を検出（第一メジャーと第二メジャーの両方に属する科目）
     shared_courses = [course for course in major1_courses if course in major2_courses]
@@ -185,6 +255,13 @@ def result():
                     if course.course_title == course_item['course_title']:
                         course_item['major_type'] = 'shared'
                         break
+
+    # 集中講義の major_type も更新
+    for course_item in intensive_courses:
+        for course in shared_courses:
+            if course.course_title == course_item['course_title']:
+                course_item['major_type'] = 'shared'
+                break
 
     # --- 単位計算の関数化適用 ---
 
@@ -225,6 +302,7 @@ def result():
         major2_name=major2_name,
         fiscal_year=fiscal_year,
         timetable=timetable,
+        intensive_courses=intensive_courses,
         major1_credits=major1_credits,
         shared_credits=shared_credits,
         major2_credits=major2_credits,

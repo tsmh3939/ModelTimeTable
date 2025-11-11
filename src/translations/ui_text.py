@@ -133,6 +133,10 @@ RESULT = {
     "close": {"ja": "閉じる", "en": "Close"},
     "select_priority": {"ja": "優先", "en": "Priority"},
     "multiple_courses_hint": {"ja": "複数の授業があります。優先する授業を選択してください。", "en": "Multiple courses available. Select priority course."},
+    "intensive_courses": {"ja": "集中講義・実験実習", "en": "Intensive Courses & Labs"},
+    "intensive_courses_note": {"ja": "※ 以下の科目は集中講義、実験・実習など、通常の時間割に含まれない科目です。", "en": "* The following courses are intensive courses, laboratory work, etc., which are not included in the regular timetable."},
+    "class_format": {"ja": "授業形態", "en": "Class Format"},
+    "course_type": {"ja": "授業種別", "en": "Course Type"},
 }
 
 # エラーページ
