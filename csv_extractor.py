@@ -97,6 +97,10 @@ def extract_offering_history(input_csv_path: str, output_csv_path: str) -> None:
             days_str = row['曜日'].strip()
             periods_str = row['時限'].strip()
 
+            # 「その他」の場合はスキップ（集中講義など、時間割表に表示しない）
+            if days_str == 'その他' or periods_str == 'その他':
+                continue
+
             # 曜日を1文字ずつ分割
             days = list(days_str)
             # 時限を1文字ずつ分割

@@ -169,7 +169,13 @@ def convert_course_schedules(input_csv: str, output_csv: str,
         for row in reader:
             timetable_code = row['時間割コード'].strip()
             day_str = row['曜日'].strip()
-            period = int(row['時限'])
+            period_str = row['時限'].strip()
+
+            # 「その他」の場合はスキップ（集中講義など、時間割表に表示しない）
+            if day_str == 'その他' or period_str == 'その他':
+                continue
+
+            period = int(period_str)
 
             # 曜日を曜日IDに変換
             day_id = mappings['day'].get(day_str)

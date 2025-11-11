@@ -131,6 +131,8 @@ RESULT = {
     "syllabus_link": {"ja": "シラバスリンク", "en": "Syllabus Link"},
     "open_syllabus": {"ja": "シラバスを開く", "en": "Open Syllabus"},
     "close": {"ja": "閉じる", "en": "Close"},
+    "select_priority": {"ja": "優先", "en": "Priority"},
+    "multiple_courses_hint": {"ja": "複数の授業があります。優先する授業を選択してください。", "en": "Multiple courses available. Select priority course."},
 }
 
 # エラーページ
