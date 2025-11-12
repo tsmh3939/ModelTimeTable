@@ -121,7 +121,8 @@ def import_course_schedules(csv_path: str) -> None:
 
             existing = CourseSchedule.query.filter_by(
                 timetable_code=timetable_code,
-                day_id=day_id
+                day_id=day_id,
+                period=period
             ).first()
 
             if not existing:
