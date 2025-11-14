@@ -344,7 +344,7 @@ def extract_course_classrooms(input_csv_path: str, output_csv_path: str) -> None
     print(f"科目教室データを抽出しました: {len(records)}件 → {output_csv_path}")
 
 
-if __name__ == '__main__':
+def extractor():
     """
     実行例：
     python src/csv_extractor.py
@@ -352,7 +352,7 @@ if __name__ == '__main__':
     import os
 
     # 入力ファイル
-    input_file = 'docs/DB2-1.csv'
+    input_file = 'docs/raw_data.csv'
 
     # 出力ディレクトリを作成
     output_dir = 'docs/extracted'
@@ -401,3 +401,7 @@ if __name__ == '__main__':
     print("=" * 60)
     print("すべての抽出処理が完了しました")
     print("=" * 60)
+
+
+if __name__ == "__main__":
+    extractor()

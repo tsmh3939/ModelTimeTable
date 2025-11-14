@@ -5,18 +5,10 @@ echo "Waiting for database initialization..."
 
 python cleanup.py
 
-# マイグレーションディレクトリが存在しない場合は初期化
-if [ ! -d "migrations" ]; then
-    echo "Initializing database migrations..."
-    flask db init
-    flask db migrate -m "Initial migration"
-fi
-
+flask db init
+flask db migrate -m "Initial migration"
 flask db upgrade
 
-python seed_master_data.py
-python csv_extractor.py
-python csv_converter.py
-python import_csv_data.py
+python setup.py
 
 exec python app.py

@@ -276,7 +276,7 @@ def convert_course_classrooms(input_csv: str, output_csv: str,
     print(f"科目教室データを変換しました: {len(converted_records)}件 → {output_csv}")
 
 
-if __name__ == '__main__':
+def convert():
     """
     実行例：
     python src/csv_converter.py
@@ -356,3 +356,7 @@ if __name__ == '__main__':
     print("=" * 60)
     print("すべての変換処理が完了しました")
     print("=" * 60)
+
+
+if __name__ == "__main__":
+    convert()

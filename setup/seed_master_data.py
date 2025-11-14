@@ -124,7 +124,7 @@ def seed_course_type_master():
             print(f"  スキップ: {type_id} - {names['ja']} (既存)")
 
 
-def main():
+def seed():
     """メイン処理"""
     with app.app_context():
         print("=" * 60)
@@ -162,5 +162,5 @@ def main():
             sys.exit(1)
 
 
-if __name__ == '__main__':
-    main()
+if __name__ == "__main__":
+    seed()

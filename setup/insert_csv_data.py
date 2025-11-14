@@ -231,7 +231,7 @@ def import_course_classrooms(csv_path: str) -> None:
     print(f"科目教室: {count}件追加")
 
 
-def main():
+def insert():
     """メイン処理"""
     with app.app_context():
         print("=" * 60)
@@ -279,5 +279,5 @@ def main():
             sys.exit(1)
 
 
-if __name__ == '__main__':
-    main()
+if __name__ == "__main__":
+    insert()
