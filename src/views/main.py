@@ -67,7 +67,7 @@ def index():
 def result():
     """時間割結果ページ"""
     from src.translations.field_values import get_semester_name, get_major_name, MajorEnum
-    from query_timetable import get_courses_by_semester_and_major
+    from src.query import get_courses_by_semester_and_major
 
     # 現在の言語を取得（クエリパラメータから）
     current_lang = request.args.get('lang', app.config.get('DEFAULT_LANGUAGE', 'ja'))

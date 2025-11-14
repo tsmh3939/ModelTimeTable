@@ -1,0 +1,67 @@
+﻿時間割コード,シラバスURL,開講科目名,単位数,履修区分ID,開講区分ID,授業形態ID,授業種別ID,主担当教員ID,学年 ,曜日,時限,メジャー,教室名
+S1300520_S1,https://web.wakayama-u.ac.jp/syllabus/S1/S1_S1300520_S1_ja_JP_81.html,情報応用１A,1,必修,1Q,演習,普通,吉廣　卓哉,234,火,34,その他,A-601 A-702
+S1300550_S1,https://web.wakayama-u.ac.jp/syllabus/S1/S1_S1300550_S1_ja_JP_119.html,情報応用１B,1,必修,2Q,演習,普通,吉廣　卓哉,234,火,34,その他,A-601 A-702
+S1407400_S1,https://web.wakayama-u.ac.jp/syllabus/S1/S1_S1407400_S1_ja_JP_95.html,ウェブデザイン演習A,1,選択必修,1Q,演習,普通,陳　金輝,234,木,12,IS,A-101
+S1407400_S1,https://web.wakayama-u.ac.jp/syllabus/S1/S1_S1407400_S1_ja_JP_95.html,ウェブデザイン演習A,1,選択,1Q,演習,普通,陳　金輝,234,木,12,XD,A-101
+S1407410_S1,https://web.wakayama-u.ac.jp/syllabus/S1/S1_S1407410_S1_ja_JP_133.html,ウェブデザイン演習B,1,選択必修,2Q,演習,普通,陳　金輝,234,木,12,IS,A-101
+S1407410_S1,https://web.wakayama-u.ac.jp/syllabus/S1/S1_S1407410_S1_ja_JP_133.html,ウェブデザイン演習B,1,選択,2Q,演習,普通,陳　金輝,234,木,12,XD,A-101
+S1408230_S1,https://web.wakayama-u.ac.jp/syllabus/S1/S1_S1408230_S1_ja_JP_70.html,HCI基礎,1,必修,1Q,講義,普通,曽我　真人,234,月,1,ISNCXD,E1-102
+S1408240_S1,https://web.wakayama-u.ac.jp/syllabus/S1/S1_S1408240_S1_ja_JP_111.html,HCI応用,1,選択,2Q,講義,普通,曽我　真人,234,月,1,IS,E1-205
+S1407610_S1,https://web.wakayama-u.ac.jp/syllabus/S1/S1_S1407610_S1_ja_JP_89.html,データサイエンス概論１,1,必修,1Q,講義,普通,伊原　彰紀,234,水,2,ISNCXD,A-101 A-103
+S1407620_S1,https://web.wakayama-u.ac.jp/syllabus/S1/S1_S1407620_S1_ja_JP_128.html,データサイエンス概論２,1,必修,2Q,講義,普通,伊原　彰紀,234,水,2,ISNCXD,A-101 A-103
+S1408250_S1,https://web.wakayama-u.ac.jp/syllabus/S1/S1_S1408250_S1_ja_JP_109.html,情報ネットワーク１,1,必修,1Q,講義,普通,吉廣　卓哉,234,金,4,ISNCXD,A-101
+S1408450_S1,https://web.wakayama-u.ac.jp/syllabus/S1/S1_S1408450_S1_ja_JP_145.html,情報ネットワーク２,1,必修,2Q,講義,普通,吉廣　卓哉,234,金,4,NC,A-101
+S1405850_S1,https://web.wakayama-u.ac.jp/syllabus/S1/S1_S1405850_S1_ja_JP_12.html,データ構造とアルゴリズム,2,必修,前期,講義,普通,菅間　幸司,234,火,1,ISNCXD,A-101
+S1408260_S1,https://web.wakayama-u.ac.jp/syllabus/S1/S1_S1408260_S1_ja_JP_4.html,計算機システム・OS,2,必修,前期,講義,普通,菅間　幸司,234,月,2,ISNCXD,A-101
+S1401870_S1,https://web.wakayama-u.ac.jp/syllabus/S1/S1_S1401870_S1_ja_JP_85.html,情報理論,2,選択,1Q,講義,普通,葛岡　成晃,234,水金,11,NC,A-104
+S1408480_S1,https://web.wakayama-u.ac.jp/syllabus/S1/S1_S1408480_S1_ja_JP_8.html,情報デザイン,2,選択,前期,講義,普通,原田　利宣,234,月,3,XD,A-202 学術情報センター第3演習室
+
+S1300580_S1,https://web.wakayama-u.ac.jp/syllabus/S1/S1_S1300580_S1_ja_JP_208.html,情報応用２A,1,必修,3Q,演習,普通,大平　雅雄,234,水,12,その他,A-101
+S1300610_S1,https://web.wakayama-u.ac.jp/syllabus/S1/S1_S1300610_S1_ja_JP_250.html,情報応用２B,1,必修,4Q,演習,普通,大平　雅雄,234,水,12,その他,A-101
+S1408270_S1,https://web.wakayama-u.ac.jp/syllabus/S1/S1_S1408270_S1_ja_JP_158.html,ネットワークシステム開発演習,2,選択必修,後期,演習,普通,吉野　孝,234,火,34,IS,A-803
+S1400910_S1,https://web.wakayama-u.ac.jp/syllabus/S1/S1_S1400910_S1_ja_JP_148.html,データベース,2,必修,後期,講義,普通,風間　一洋,234,月,2,ISNCXD,E1-103
+S1407460_S1,https://web.wakayama-u.ac.jp/syllabus/S1/S1_S1407460_S1_ja_JP_259.html,発想法,1,選択,4Q,講義,普通,伊藤　淳子,234,木,3,IS,A-802
+S1408280_S1,https://web.wakayama-u.ac.jp/syllabus/S1/S1_S1408280_S1_ja_JP_225.html,HCI評価法,1,選択,3Q,講義,普通,曽我　真人,234,金,2,IS,A-202
+S1408290_S1,https://web.wakayama-u.ac.jp/syllabus/S1/S1_S1408290_S1_ja_JP_239.html,HCI演習,1,選択,4Q,演習,普通,曽我　真人,234,月金,55,IS,A-601 A-602
+S1408300_S1,https://web.wakayama-u.ac.jp/syllabus/S1/S1_S1408300_S1_ja_JP_161.html,機械学習基礎,2,必修,後期,講義,普通,八谷　大岳,234,水,3,ISNCXD,A-101
+S1407210_S1,https://web.wakayama-u.ac.jp/syllabus/S1/S1_S1407210_S1_ja_JP_217.html,データマイニング１,1,選択,3Q,講義,普通,陳　金輝,234,木,2,ISNCXD,A-101
+S1407220_S1,https://web.wakayama-u.ac.jp/syllabus/S1/S1_S1407220_S1_ja_JP_255.html,データマイニング２,1,選択,4Q,講義,普通,陳　金輝,234,木,2,ISNCXD,A-101
+S1408310_S1,https://web.wakayama-u.ac.jp/syllabus/S1/S1_S1408310_S1_ja_JP_152.html,数値計算演習,2,選択,後期,演習,普通,吉廣　卓哉,234,火,12,ISNCXD,A-601
+S1408320_S1,https://web.wakayama-u.ac.jp/syllabus/S1/S1_S1408320_S1_ja_JP_224.html,情報数理１,1,選択,3Q,講義,普通,今井　敏行,234,金,1,ISNCXD,A-101
+S1408330_S1,https://web.wakayama-u.ac.jp/syllabus/S1/S1_S1408330_S1_ja_JP_264.html,情報数理２,1,選択,4Q,講義,普通,今井　敏行,234,金,1,ISNCXD,A-101
+S1401370_S1,https://web.wakayama-u.ac.jp/syllabus/S1/S1_S1401370_S1_ja_JP_147.html,プログラミング言語,2,必修,後期,講義,普通,伊原　彰紀,234,月,1,ISNCXD,A-202 A-203
+S1401580_S1,https://web.wakayama-u.ac.jp/syllabus/S1/S1_S1401580_S1_ja_JP_168.html,論理回路,2,選択,後期,講義,普通,中村　恭之,234,木,2,ISNCXD,A-104
+S1408460_S1,https://web.wakayama-u.ac.jp/syllabus/S1/S1_S1408460_S1_ja_JP_199.html,情報ネットワーク演習１,1,必修,3Q,演習,普通,村川　猛彦,234,月,34,NC,A-601
+S1408470_S1,https://web.wakayama-u.ac.jp/syllabus/S1/S1_S1408470_S1_ja_JP_237.html,情報ネットワーク演習２,1,必修,4Q,演習,普通,塚田　晃司,234,月,34,NC,A-601
+S1408490_S1,https://web.wakayama-u.ac.jp/syllabus/S1/S1_S1408490_S1_ja_JP_228.html,拡張現実感Ａ,1,選択,3Q,講義,普通,天野　敏之,234,金,3,XD,A-202
+S1408500_S1,https://web.wakayama-u.ac.jp/syllabus/S1/S1_S1408500_S1_ja_JP_266.html,拡張現実感Ｂ,1,選択,4Q,講義,普通,天野　敏之,234,金,3,XD,A-202
+S1401120_S1,https://web.wakayama-u.ac.jp/syllabus/S1/S1_S1401120_S1_ja_JP_219.html,人間工学,2,選択,3Q,講義,普通,阪本　清美,234,木,34,XD,A-101
+
+S1403290_S1,https://web.wakayama-u.ac.jp/syllabus/S1/S1_S1403290_S1_ja_JP_98.html,ソフトウェア工学,1,必修,1Q,講義,普通,伊原　彰紀,34,木,3,IS,A-103
+S1408340_S1,https://web.wakayama-u.ac.jp/syllabus/S1/S1_S1408340_S1_ja_JP_135.html,ソフトウェア工学工学演習Ａ,1,必修,2Q,演習,普通,満田　成紀,34,木,3,IS,A-103
+S1408350_S1,https://web.wakayama-u.ac.jp/syllabus/S1/S1_S1408350_S1_ja_JP_22.html,アプリデザイン総合演習,2,選択必修,前期,演習,普通,西村　竜一,34,水,34,IS,A-601 A-602 A-803
+S1408350_S1,https://web.wakayama-u.ac.jp/syllabus/S1/S1_S1408350_S1_ja_JP_22.html,アプリデザイン総合演習,2,選択,前期,演習,普通,西村　竜一,34,水,34,XD,A-601 A-602 A-803
+S1400580_S1,https://web.wakayama-u.ac.jp/syllabus/S1/S1_S1400580_S1_ja_JP_19.html,人工知能,2,選択,前期,講義,普通,松田　憲幸,34,水,1,ISNCXD,A-101
+S1408360_S1,https://web.wakayama-u.ac.jp/syllabus/S1/S1_S1408360_S1_ja_JP_96.html,メディアプログラミング,2,選択,1Q,講義,普通,西村　竜一,34,木,12,ISNCXD,A-803
+S1405860_S1,https://web.wakayama-u.ac.jp/syllabus/S1/S1_S1405860_S1_ja_JP_6.html,情報システム実験,2,選択,前期,実験,普通,吉廣　卓哉,34,月,34,ISNCXD,A-702
+S1408390_S1,https://web.wakayama-u.ac.jp/syllabus/S1/S1_S1408390_S1_ja_JP_10.html,情報学セミナー１,2,必修,前期,演習,普通,天野　敏之,34,月水,34,ISNCXD,A-101
+S1405190_S1,https://web.wakayama-u.ac.jp/syllabus/S1/S1_S1405190_S1_ja_JP_24.html,信号とシステム,2,選択,前期,講義,普通,宮本　伸一,34,木,4,NC,A-101
+S1405150_S1,https://web.wakayama-u.ac.jp/syllabus/S1/S1_S1405150_S1_ja_JP_124.html,ネットワークセキュリティ,2,選択,2Q,講義,普通,村川　猛彦,34,水金,11,NC,A-104
+S1408510_S1,https://web.wakayama-u.ac.jp/syllabus/S1/S1_S1408510_S1_ja_JP_29.html,CGプログラミング演習,2,選択必修,前期,演習,普通,天野　敏之,34,金,12,XD,A-601
+S1402320_S1,https://web.wakayama-u.ac.jp/syllabus/S1/S1_S1402320_S1_ja_JP_123.html,画像処理,1,選択,2Q,講義,普通,中村　恭之,34,火,5,XD,A-101
+S1407250_S1,https://web.wakayama-u.ac.jp/syllabus/S1/S1_S1407250_S1_ja_JP_80.html,デザイン企画論Ａ,1,選択必修,1Q,講義,普通,原田　利宣,34,火,2,XD,A-202 A-802 A-803
+S1407260_S1,https://web.wakayama-u.ac.jp/syllabus/S1/S1_S1407260_S1_ja_JP_118.html,デザイン企画論Ｂ,1,選択必修,2Q,講義,普通,原田　利宣,34,火,2,XD,A-202 A-802 A-803
+S1408520_S1,https://web.wakayama-u.ac.jp/syllabus/S1/S1_S1408520_S1_ja_JP_101.html,知能ロボット概論１,1,選択,1Q,講義,普通,中村　恭之,34,木,3,XD,A-101
+S1406210_S1,https://web.wakayama-u.ac.jp/syllabus/S1/S1_S1406210_S1_ja_JP_40.html,インシデントレスポンス演習,1,選択,前期,演習,集中,川橋　裕,34,その他,その他,その他,なし
+
+S1408400_S1,https://web.wakayama-u.ac.jp/syllabus/S1/S1_S1408400_S1_ja_JP_222.html,ソフトウェア工学演習Ｂ,1,選択,3Q,演習,普通,満田　成紀,34,木,4,IS,A-601 A-602
+S1408410_S1,https://web.wakayama-u.ac.jp/syllabus/S1/S1_S1408410_S1_ja_JP_261.html,ソフトウェア工学演習Ｃ,1,選択,4Q,演習,普通,満田　成紀,34,木,4,IS,A-601 A-602
+S1407700_S1,https://web.wakayama-u.ac.jp/syllabus/S1/S1_S1407700_S1_ja_JP_164.html,人工知能演習,2,選択,後期,演習,普通,松田　憲幸,34,木,12,ISNCXD,A-601
+S1408420_S1,https://web.wakayama-u.ac.jp/syllabus/S1/S1_S1408420_S1_ja_JP_221.html,ビジネスインテリジェンスＡ,1,選択,3Q,講義,普通,満田　成紀,34,木,3,ISNCXD,学術情報センター第3演習室
+S1408430_S1,https://web.wakayama-u.ac.jp/syllabus/S1/S1_S1408430_S1_ja_JP_260.html,ビジネスインテリジェンスＢ,1,選択,4Q,講義,普通,満田　成紀,34,木,3,ISNCXD,学術情報センター第3演習室
+S1408440_S1,https://web.wakayama-u.ac.jp/syllabus/S1/S1_S1408440_S1_ja_JP_186.html,情報学セミナー２,2,必修,後期,演習,実験・実習,天野　敏之,34,その他,その他,ISNCXD,なし
+S1405740_S1,https://web.wakayama-u.ac.jp/syllabus/S1/S1_S1405740_S1_ja_JP_162.html,モバイルシステム技術論,2,選択,後期,講義,普通,"	吉野　孝",34,水,4,NC,A-202
+S1405160_S1,https://web.wakayama-u.ac.jp/syllabus/S1/S1_S1405160_S1_ja_JP_163.html,無線通信システム,2,選択,後期,講義,普通,宮本　伸一,34,水,5,NC,A-103
+S1408530_S1,https://web.wakayama-u.ac.jp/syllabus/S1/S1_S1408530_S1_ja_JP_247.html,画像処理演習,1,選択,4Q,演習,普通,中村　恭之,34,火,45,XD,A-101
+S1406860_S1,https://web.wakayama-u.ac.jp/syllabus/S1/S1_S1406860_S1_ja_JP_196.html,UXデザイン演習,1,選択,3Q,演習,普通,原田　利宣,34,月,34,XD,A-802 A-803
+S1408540_S1,https://web.wakayama-u.ac.jp/syllabus/S1/S1_S1408540_S1_ja_JP_252.html,知能ロボット概論２,1,選択,4Q,講義,普通,中村　恭之,34,水,4,XD,A-101
