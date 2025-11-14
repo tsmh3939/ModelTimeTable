@@ -344,15 +344,26 @@ def extract_course_classrooms(input_csv_path: str, output_csv_path: str) -> None
     print(f"科目教室データを抽出しました: {len(records)}件 → {output_csv_path}")
 
 
-def extractor():
+def extractor(input_file=None):
     """
+    CSVデータの抽出処理
+
+    Args:
+        input_file: 入力CSVファイルのパス（Noneの場合はデフォルトを使用）
+
     実行例：
-    python src/csv_extractor.py
+        python setup/csv_extractor.py
+        python setup/csv_extractor.py docs/2026.csv
     """
     import os
 
-    # 入力ファイル
-    input_file = 'docs/raw_data.csv'
+    # 入力ファイルのデフォルト値を設定
+    if input_file is None:
+        try:
+            from src.config import CSV_FILE
+            input_file = CSV_FILE
+        except ImportError:
+            input_file = 'docs/raw_data.csv'
 
     # 出力ディレクトリを作成
     output_dir = 'docs/extracted'
@@ -361,6 +372,7 @@ def extractor():
     # 各関数を実行
     print("=" * 60)
     print("CSV抽出処理を開始します")
+    print(f"入力ファイル: {input_file}")
     print("=" * 60)
 
     extract_courses(
@@ -404,4 +416,7 @@ def extractor():
 
 
 if __name__ == "__main__":
-    extractor()
+    import sys
+    # コマンドライン引数からCSVファイルを受け取る
+    csv_file = sys.argv[1] if len(sys.argv) > 1 else None
+    extractor(csv_file)
