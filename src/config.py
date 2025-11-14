@@ -29,7 +29,7 @@ def get_latest_csv_file():
     Returns:
         str: 最新のCSVファイルパス (例: 'docs/2026.csv')
     """
-    csv_files = glob.glob('docs/[0-9][0-9][0-9][0-9].csv')
+    csv_files = glob.glob('docs/data/[0-9][0-9][0-9][0-9].csv')
     if not csv_files:
         # フォールバック: raw_data.csvを使用
         return 'docs/raw_data.csv'
