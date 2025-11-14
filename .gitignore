@@ -56,3 +56,4 @@ tests/
 migrations
 docs/extracted/
 docs/converted/
+docs/query_results/
