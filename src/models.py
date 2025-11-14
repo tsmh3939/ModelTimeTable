@@ -182,7 +182,7 @@ class CourseSchedule(db.Model):
 
     timetable_code: Mapped[str] = mapped_column(String(20), ForeignKey('course.timetable_code'), primary_key=True)
     day_id: Mapped[int] = mapped_column(Integer, ForeignKey('day_master.day_id'), primary_key=True)
-    period: Mapped[int] = mapped_column(Integer)
+    period: Mapped[int] = mapped_column(Integer, primary_key=True)
 
     # リレーション
     course: Mapped["Course"] = relationship(back_populates='schedules')
