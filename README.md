@@ -7,7 +7,7 @@ Flaskを使用したWebアプリケーションプロジェクトです。
 アプリケーション起動後、以下のURLにアクセスすることで、全ての時間割をMarkdownファイルとして出力できます：
 
 ```
-http://localhost:5000/export-timetables
+http://localhost:8080/export-timetables
 ```
 
 出力先: `docs/timetables/`（24ファイルが生成されます）
