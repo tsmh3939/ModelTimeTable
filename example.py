@@ -35,7 +35,7 @@ def query1_sql(major_name='IS', grade='3', semester='後期'):
     """
     課題1：SQLによる直接クエリ
 
-    第1メジャー科目（科目名，曜日時限，主担当教員，主でない教員，必修・選択必修・選択の別）を全て出力
+    第1メジャー科目（科目名，曜日時限，主担当教員，必修・選択必修・選択の別）を全て出力
 
     Args:
         major_name: メジャー名（デフォルト: 'IS'）
@@ -63,24 +63,24 @@ def query1_sql(major_name='IS', grade='3', semester='後期'):
             d.day_name AS 曜日名,
             cs.period AS 時限,
             main_inst.instructor_name AS 主担当教員,
-            GROUP_CONCAT(DISTINCT sub_inst.instructor_name) AS 主でない教員,
             cc.course_category_name AS 履修区分
         FROM course c
         INNER JOIN course_schedule cs ON c.timetable_code = cs.timetable_code
         INNER JOIN day_master d ON cs.day_id = d.day_id
         INNER JOIN instructor_master main_inst ON c.main_instructor_id = main_inst.instructor_id
-        LEFT JOIN course_instructor ci ON c.timetable_code = ci.timetable_code
-        LEFT JOIN instructor_master sub_inst ON ci.instructor_id = sub_inst.instructor_id
-            AND sub_inst.instructor_id != c.main_instructor_id
         INNER JOIN affiliated_major am ON c.timetable_code = am.timetable_code
         INNER JOIN major_master mm ON am.major_id = mm.major_id
         LEFT JOIN course_category_master cc ON am.course_category_id = cc.course_category_id
-        INNER JOIN grade_year gy ON c.timetable_code = gy.timetable_code
         INNER JOIN offering_category_master oc ON c.offering_category_id = oc.offering_category_id
         WHERE mm.major_name = :major_name
-        AND gy.grade_name = :grade
         AND oc.offering_category_name IN ({placeholders})
-        GROUP BY c.timetable_code, cs.day_id, cs.period
+        AND c.timetable_code IN (
+            SELECT gy2.timetable_code
+            FROM grade_year gy2
+            WHERE gy2.timetable_code = c.timetable_code
+            GROUP BY gy2.timetable_code
+            HAVING MIN(gy2.grade_name) = :grade
+        )
         ORDER BY d.day_id, cs.period, c.course_title
     """)
 
@@ -111,14 +111,13 @@ def query1_sql(major_name='IS', grade='3', semester='後期'):
         output_lines.append("")
 
         # マークダウンテーブルのヘッダー
-        output_lines.append("| 科目名 | 曜日 | 時限 | 主担当教員 | 主でない教員 | 履修区分 |")
-        output_lines.append("|--------|------|------|------------|--------------|----------|")
+        output_lines.append("| 科目名 | 曜日 | 時限 | 主担当教員 | 履修区分 |")
+        output_lines.append("|--------|------|------|------------|----------|")
 
         # データ行
         for row in rows:
-            sub_instructors = row.主でない教員 or '(なし)'
             course_category = row.履修区分 or '(未設定)'
-            line = f"| {row.科目名} | {row.曜日名} | {row.時限} | {row.主担当教員} | {sub_instructors} | {course_category} |"
+            line = f"| {row.科目名} | {row.曜日名} | {row.時限} | {row.主担当教員} | {course_category} |"
             output_lines.append(line)
 
         output_lines.append("")
@@ -160,7 +159,18 @@ def query1_sqlalchemy(major_name='IS', grade='3', semester='後期'):
         offering_categories = ['通年']
 
     with app.app_context():
-        # サブクエリ：主でない教員を取得
+        from sqlalchemy import func
+
+        # 学年の最小値を持つ科目のサブクエリ
+        min_grade_subquery = db.session.query(
+            GradeYear.timetable_code
+        ).group_by(
+            GradeYear.timetable_code
+        ).having(
+            func.min(GradeYear.grade_name) == grade
+        ).subquery()
+
+        # メインクエリ
         query = db.session.query(
             Course.course_title,
             DayMaster.day_name,
@@ -180,12 +190,10 @@ def query1_sqlalchemy(major_name='IS', grade='3', semester='後期'):
         ).outerjoin(
             CourseCategoryMaster, AffiliatedMajor.course_category_id == CourseCategoryMaster.course_category_id
         ).join(
-            GradeYear, Course.timetable_code == GradeYear.timetable_code
-        ).join(
             OfferingCategoryMaster, Course.offering_category_id == OfferingCategoryMaster.offering_category_id
         ).filter(
             MajorMaster.major_name == major_name,
-            GradeYear.grade_name == grade,
+            Course.timetable_code.in_(min_grade_subquery),
             OfferingCategoryMaster.offering_category_name.in_(offering_categories)
         ).order_by(
             DayMaster.day_id,
@@ -236,7 +244,7 @@ def query2_sql(major1_name='IS', major2_name='NC', grade='3', semester='後期')
     """
     課題2：SQLによる直接クエリ
 
-    第2メジャー科目（科目名，曜日時限，主担当教員，主でない教員，必修・選択必修・選択の別）を全て出力
+    第2メジャー科目（科目名，曜日時限，主担当教員，必修・選択必修・選択の別）を全て出力
     第1メジャー・第2メジャー共通科目は除外
 
     Args:
@@ -266,30 +274,30 @@ def query2_sql(major1_name='IS', major2_name='NC', grade='3', semester='後期')
             d.day_name AS 曜日名,
             cs.period AS 時限,
             main_inst.instructor_name AS 主担当教員,
-            GROUP_CONCAT(DISTINCT sub_inst.instructor_name) AS 主でない教員,
             cc.course_category_name AS 履修区分
         FROM course c
         INNER JOIN course_schedule cs ON c.timetable_code = cs.timetable_code
         INNER JOIN day_master d ON cs.day_id = d.day_id
         INNER JOIN instructor_master main_inst ON c.main_instructor_id = main_inst.instructor_id
-        LEFT JOIN course_instructor ci ON c.timetable_code = ci.timetable_code
-        LEFT JOIN instructor_master sub_inst ON ci.instructor_id = sub_inst.instructor_id
-            AND sub_inst.instructor_id != c.main_instructor_id
         INNER JOIN affiliated_major am ON c.timetable_code = am.timetable_code
         INNER JOIN major_master mm ON am.major_id = mm.major_id
         LEFT JOIN course_category_master cc ON am.course_category_id = cc.course_category_id
-        INNER JOIN grade_year gy ON c.timetable_code = gy.timetable_code
         INNER JOIN offering_category_master oc ON c.offering_category_id = oc.offering_category_id
         WHERE mm.major_name = :major2_name
-        AND gy.grade_name = :grade
         AND oc.offering_category_name IN ({placeholders})
+        AND c.timetable_code IN (
+            SELECT gy2.timetable_code
+            FROM grade_year gy2
+            WHERE gy2.timetable_code = c.timetable_code
+            GROUP BY gy2.timetable_code
+            HAVING MIN(gy2.grade_name) = :grade
+        )
         AND c.timetable_code NOT IN (
             SELECT am2.timetable_code
             FROM affiliated_major am2
             INNER JOIN major_master mm2 ON am2.major_id = mm2.major_id
             WHERE mm2.major_name = :major1_name
         )
-        GROUP BY c.timetable_code, cs.day_id, cs.period
         ORDER BY d.day_id, cs.period, c.course_title
     """)
 
@@ -322,14 +330,13 @@ def query2_sql(major1_name='IS', major2_name='NC', grade='3', semester='後期')
         output_lines.append("")
 
         # マークダウンテーブルのヘッダー
-        output_lines.append("| 科目名 | 曜日 | 時限 | 主担当教員 | 主でない教員 | 履修区分 |")
-        output_lines.append("|--------|------|------|------------|--------------|----------|")
+        output_lines.append("| 科目名 | 曜日 | 時限 | 主担当教員 | 履修区分 |")
+        output_lines.append("|--------|------|------|------------|----------|")
 
         # データ行
         for row in rows:
-            sub_instructors = row.主でない教員 or '(なし)'
             course_category = row.履修区分 or '(未設定)'
-            line = f"| {row.科目名} | {row.曜日名} | {row.時限} | {row.主担当教員} | {sub_instructors} | {course_category} |"
+            line = f"| {row.科目名} | {row.曜日名} | {row.時限} | {row.主担当教員} | {course_category} |"
             output_lines.append(line)
 
         output_lines.append("")
@@ -351,7 +358,7 @@ def query2_sqlalchemy(major1_name='IS', major2_name='NC', grade='3', semester='�
     """
     課題2：SQLAlchemyによるクエリ
 
-    第2メジャー科目（科目名，曜日時限，主担当教員，主でない教員，必修・選択必修・選択の別）を全て出力
+    第2メジャー科目（科目名，曜日時限，主担当教員，必修・選択必修・選択の別）を全て出力
     第1メジャー・第2メジャー共通科目は除外
 
     Args:
@@ -373,9 +380,20 @@ def query2_sqlalchemy(major1_name='IS', major2_name='NC', grade='3', semester='�
         offering_categories = ['通年']
 
     with app.app_context():
+        from sqlalchemy import func
+
         # エイリアスを作成（第1メジャーの科目を除外するため）
         AffiliatedMajor2 = aliased(AffiliatedMajor)
         MajorMaster2 = aliased(MajorMaster)
+
+        # 学年の最小値を持つ科目のサブクエリ
+        min_grade_subquery = db.session.query(
+            GradeYear.timetable_code
+        ).group_by(
+            GradeYear.timetable_code
+        ).having(
+            func.min(GradeYear.grade_name) == grade
+        ).subquery()
 
         # 第1メジャーの科目を取得するサブクエリ
         major1_courses_subquery = db.session.query(
@@ -406,12 +424,10 @@ def query2_sqlalchemy(major1_name='IS', major2_name='NC', grade='3', semester='�
         ).outerjoin(
             CourseCategoryMaster, AffiliatedMajor.course_category_id == CourseCategoryMaster.course_category_id
         ).join(
-            GradeYear, Course.timetable_code == GradeYear.timetable_code
-        ).join(
             OfferingCategoryMaster, Course.offering_category_id == OfferingCategoryMaster.offering_category_id
         ).filter(
             MajorMaster.major_name == major2_name,
-            GradeYear.grade_name == grade,
+            Course.timetable_code.in_(min_grade_subquery),
             OfferingCategoryMaster.offering_category_name.in_(offering_categories),
             ~Course.timetable_code.in_(major1_courses_subquery)
         ).order_by(
