@@ -11,8 +11,7 @@ Imports all routes and context processors.
 from src.views import context_processors
 
 # ルートを登録
-from src.views import main
-from src.views import errors
+from src.views import main, errors
 
 __all__ = [
     'context_processors',

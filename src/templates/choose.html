@@ -4,48 +4,67 @@
 
 {% block content %}
 <div class="max-w-5xl mx-auto">
-    <div class="card bg-base-100 shadow-xl mb-6">
-        <div class="card-body">
-            <h2 class="card-title text-2xl mb-4 text-warning">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                </svg>
-                {{ t('choose', 'schedule_conflicts') }}
-            </h2>
-            <p class="mb-4">{{ t('choose', 'conflicts_detected') }}</p>
+    
+    <form method="POST" action="{{ url_for('result', lang=request.args.get('lang', 'ja')) }}">
+        {# 時間割の再構築に必要なパラメータを隠しフィールドとして送信 #}
+        <input type="hidden" name="semester" value="{{ semester }}">
+        <input type="hidden" name="major1_id" value="{{ major1_id }}">
+        <input type="hidden" name="major2_id" value="{{ major2_id }}">
 
-            <div class="space-y-4">
-                {% for conflict in conflicts %}
-                <div class="border border-warning rounded-lg p-4 bg-warning/5">
-                    <div class="font-semibold mb-3 flex items-center gap-2">
-                        <span class="badge badge-warning">{{ conflict.day_name_ja }} {{ conflict.period }}限</span>
-                    </div>
+        <div class="card bg-base-100 shadow-xl mb-6">
+            <div class="card-body">
+                <h2 class="card-title text-2xl mb-4 text-warning">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                    </svg>
+                    {{ t('choose', 'schedule_conflicts') }}
+                </h2>
+                <p class="mb-4">{{ t('choose', 'conflicts_detected') }}</p>
 
-                    <div class="space-y-2">
-                        {% for course in conflict.courses %}
-                        <label class="flex items-start gap-3 p-3 border border-base-300 rounded hover:bg-base-200 cursor-pointer transition-colors">
-                            <input type="radio"
-                                   name="conflict_{{ conflict.day_id }}_{{ conflict.period }}"
-                                   value="{{ course.timetable_code }}"
-                                   class="radio radio-warning mt-1"
-                                   {% if loop.first %}checked{% endif %}>
-                            <div class="flex-1">
-                                <div class="font-medium">{{ course.course_title }}</div>
-                                <div class="text-sm text-base-content/70 mt-1">
-                                    <span class="badge badge-sm badge-outline mr-2">{{ course.timetable_code }}</span>
-                                    {% if course.instructor_name %}
-                                    <span>{{ course.instructor_name }}</span>
-                                    {% endif %}
-                                    <span class="ml-2">{{ course.credits }}{{ t('result', 'credit_unit_badge') }}</span>
+                <div class="space-y-4">
+                    {% for conflict in conflicts %}
+                    <div class="border border-warning rounded-lg p-4 bg-warning/5">
+                        <div class="font-semibold mb-3 flex items-center gap-2">
+                            <span class="badge badge-warning">{{ conflict.day_name_ja }} {{ conflict.period }}限</span>
+                        </div>
+
+                        <div class="space-y-2">
+                            {% for course in conflict.courses %}
+                            <label class="flex items-start gap-3 p-3 border border-base-300 rounded hover:bg-base-200 cursor-pointer transition-colors">
+                                <input type="radio"
+                                       {# フォームで送信するキーを 'conflict_dayId_period' の形式にする #}
+                                       name="conflict_{{ conflict.day_id }}_{{ conflict.period }}"
+                                       {# フォームで送信する値を timetable_code にする #}
+                                       value="{{ course.timetable_code }}"
+                                       class="radio radio-warning mt-1"
+                                       {% if loop.first %}checked{% endif %}>
+                                <div class="flex-1">
+                                    <div class="font-medium">{{ course.course_title }}</div>
+                                    <div class="text-sm text-base-content/70 mt-1">
+                                        <span class="badge badge-sm badge-outline mr-2">{{ course.timetable_code }}</span>
+                                        {% if course.instructor_name %}
+                                        <span>{{ course.instructor_name }}</span>
+                                        {% endif %}
+                                        <span class="ml-2">{{ course.credits }}{{ t('result', 'credit_unit_badge') }}</span>
+                                    </div>
                                 </div>
-                            </div>
-                        </label>
-                        {% endfor %}
+                            </label>
+                            {% endfor %}
+                        </div>
                     </div>
+                    {% endfor %}
                 </div>
-                {% endfor %}
+
+                <div class="card-actions justify-end mt-6">
+                    <button type="submit" id="submit_button" class="btn btn-primary btn-lg">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4" />
+                        </svg>
+                        {{ t('index', 'generate_timetable') }}
+                    </button>
+                </div>
             </div>
         </div>
-    </div>
+    </form>
 </div>
 {% endblock %}
