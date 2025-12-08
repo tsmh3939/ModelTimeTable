@@ -504,7 +504,7 @@ def index():
         )
 
 
-@app.route('/result', methods=['GET', 'POST'])
+@app.route('/result')
 def result():
     """時間割結果ページ"""
     from src.translations.field_values import get_semester_name, get_major_name, MajorEnum
@@ -516,25 +516,10 @@ def result():
     # 型チェック: current_langは常にstrであることを保証
     assert isinstance(current_lang, str)
 
-    # リクエストメソッドに応じてパラメータを取得
-    if request.method == 'POST':
-        # POST処理: 選択された優先科目を取得
-        semester = request.form.get('semester', type=int)
-        major1_id = request.form.get('major1_id', type=int)
-        major2_id = request.form.get('major2_id', type=int)
-        
-        # 優先科目コードを取得（キーは conflict_dayId_period, 値は timetable_code）
-        # 例: {'conflict_1_3': 'ABC1001'}
-        priority_codes = {k: v for k, v in request.form.items() if k.startswith('conflict_')}
-        
-    else:
-        # GET処理: 初回表示
-        semester = request.args.get('semester', type=int)
-        major1_id = request.args.get('major1_id', type=int)
-        major2_id = request.args.get('major2_id', type=int)
-        
-        # GETリクエストでは優先科目の選択はない
-        priority_codes = {}
+    # クエリパラメータから選択内容を取得
+    semester = request.args.get('semester', type=int)
+    major1_id = request.args.get('major1_id', type=int)
+    major2_id = request.args.get('major2_id', type=int)
 
     # データがない場合はホーム画面にリダイレクト
     if not all([semester, major1_id, major2_id]):
@@ -701,53 +686,6 @@ def result():
                 'course_type_name': course.course_type.course_type_name if course.course_type else ''
             })
 
-    # --- 時間割の重複チェック ---
-    conflicts = detect_and_resolve_conflicts(timetable)
-
-    # 重複情報をJSONファイルに保存（検証用）
-    save_conflicts_to_json(
-        conflicts, semester, semester_name,
-        major1_id, major1_name, major2_id, major2_name,
-        fiscal_year
-    )
-
-    # 競合があり、かつGETリクエストの場合のみ、選択画面へ遷移 👈 条件を変更
-    if conflicts and request.method == 'GET':
-        return render_template(
-            'choose.html',
-            conflicts=conflicts,
-            # フォームで送信するために必要なパラメータを追加 👈 ここを追加
-            semester=semester,
-            major1_id=major1_id,
-            major2_id=major2_id
-        )
-
-    # POSTリクエスト（choose.htmlからの送信）の場合、または競合がない場合
-    # 選択された優先科目コードに基づいて時間割をフィルタリングするロジック
-    if priority_codes:
-        # 新しい時間割データを作成
-        filtered_timetable = {}
-        for day_id in range(1, 6):
-            filtered_timetable[day_id] = {}
-            for period in range(1, 7):
-                courses_in_slot = timetable[day_id][period]
-                
-                # スロットのキーを生成 (例: 'conflict_1_3')
-                slot_key = f'conflict_{day_id}_{period}'
-                priority_code_for_slot = priority_codes.get(slot_key)
-                
-                if priority_code_for_slot:
-                    # 優先科目コードに一致する科目だけを残す
-                    filtered_timetable[day_id][period] = [
-                        course for course in courses_in_slot
-                        if course['timetable_code'] == priority_code_for_slot
-                    ]
-                else:
-                    # 優先選択がない場合は、そのまま残す（または、競合がないスロットとして全科目残す）
-                    filtered_timetable[day_id][period] = courses_in_slot
-        
-        timetable = filtered_timetable # フィルタリングされた時間割で上書き
-
     # 単位数を計算
     # 共有科目を検出（第一メジャーと第二メジャーの両方に属する科目）
     shared_courses = [course for course in major1_courses if course in major2_courses]
@@ -798,6 +736,21 @@ def result():
         info_app_credits['required'] + info_app_credits['elective']
     )
 
+    # --- 時間割の重複チェック ---
+    conflicts = detect_and_resolve_conflicts(timetable)
+
+    # 重複情報をJSONファイルに保存（検証用）
+    save_conflicts_to_json(
+        conflicts, semester, semester_name,
+        major1_id, major1_name, major2_id, major2_name,
+        fiscal_year
+    )
+
+    if conflicts:
+        return render_template(
+            'choose.html',
+            conflicts=conflicts
+        )
 
     return render_template(
         'result.html',
