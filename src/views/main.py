@@ -746,6 +746,12 @@ def result():
         fiscal_year
     )
 
+    if conflicts:
+        return render_template(
+            'choose.html',
+            conflicts=conflicts
+        )
+
     return render_template(
         'result.html',
         semester=semester,
@@ -762,5 +768,5 @@ def result():
         major2_credits=major2_credits,
         others_credits=others_credits,
         info_app_credits=info_app_credits,
-        total_credits=total_credits
+        total_credits=total_credits,
     )

@@ -140,6 +140,15 @@ RESULT = {
     "course_type": {"ja": "授業種別", "en": "Course Type"},
 }
 
+CHOOSE = {
+    "title": {"ja": "優先する科目の選択", "en": "Choosing Priority Subjects"},
+    "schedule_conflicts": {"ja": "時間割の重複", "en": "Schedule Conflicts"},
+    "conflicts_detected": {"ja": "以下の曜日・時限で複数の科目が重複しています。優先する科目を選択してください。", "en": "Multiple courses overlap at the following times. Please select the priority course."},
+    "no_conflicts": {"ja": "時間割の重複はありません。", "en": "No schedule conflicts detected."},
+    "select_priority_course": {"ja": "優先する科目を選択", "en": "Select Priority Course"},
+    "apply_selections": {"ja": "選択を適用", "en": "Apply Selections"},
+}
+
 # エラーページ
 ERROR = {
     "404_title": {"ja": "ページが見つかりません", "en": "Page Not Found"},
