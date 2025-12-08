@@ -59,24 +59,6 @@ INDEX = {
     "help_generate": {"ja": "選択後、「時間割を生成」ボタンをクリックすると、条件に合った時間割が作成されます。", "en": "After selecting, click the 'Generate Timetable' button to create a timetable that matches your criteria."},
 }
 
-# SQLツールページ
-SQL = {
-    "title": {"ja": "SQL クエリツール", "en": "SQL Query Tool"},
-    "warning": {"ja": "注意:", "en": "Warning:"},
-    "dev_only": {"ja": "このツールは開発環境専用です。本番環境では無効化されます。", "en": "This tool is for development environments only. It will be disabled in production."},
-    "enter_query": {"ja": "SQLクエリを入力", "en": "Enter SQL Query"},
-    "query": {"ja": "クエリ", "en": "Query"},
-    "execute": {"ja": "実行", "en": "Execute"},
-    "sample_queries": {"ja": "サンプルクエリ", "en": "Sample Queries"},
-    "show_all_tables": {"ja": "全テーブル一覧を表示", "en": "Show All Tables"},
-    "show_table_structure": {"ja": "テーブル構造を表示", "en": "Show Table Structure"},
-    "get_all_records": {"ja": "全レコードを取得", "en": "Get All Records"},
-    "error_occurred": {"ja": "エラーが発生しました", "en": "Error Occurred"},
-    "query_success": {"ja": "クエリが正常に実行されました。", "en": "Query executed successfully."},
-    "query_results": {"ja": "クエリ結果", "en": "Query Results"},
-    "no_results": {"ja": "結果が0件です。", "en": "No results found."},
-}
-
 # リザルトページ
 RESULT = {
     "title": {"ja": "モデル時間割", "en": "ModelTimetable"},
