@@ -59,7 +59,7 @@ def export_timetable_to_markdown(semester, major1_id, major2_id, timetable,
     # 各曜日・時限の行を作成
     for day_id in range(1, 6):
         day_name = DAY_MASTER[day_id][lang]
-        for period in range(1, 6):
+        for period in range(1, 7):
             courses = timetable[day_id][period]
             if courses:
                 # 複数の科目がある場合はカンマで区切る
@@ -145,7 +145,7 @@ def export_all_timetables():
                     timetable = {}
                     for day_id in range(1, 6):
                         timetable[day_id] = {}
-                        for period in range(1, 6):
+                        for period in range(1, 7):
                             timetable[day_id][period] = []
 
                     # 集中講義・実験実習などのスケジュールがない科目を別途管理
@@ -158,7 +158,7 @@ def export_all_timetables():
                                 day_id = schedule.day_id
                                 period = schedule.period
 
-                                if day_id in range(1, 6) and period >= 1 and period <= 5:
+                                if day_id in range(1, 6) and period >= 1 and period <= 6:
                                     has_regular_schedule = True
                                     instructor_name = course.main_instructor.instructor_name if course.main_instructor else ''
 
@@ -417,7 +417,7 @@ def result():
     timetable = {}
     for day_id in range(1, 6):  # 月曜(1)〜金曜(5)
         timetable[day_id] = {}
-        for period in range(1, 6):  # 1〜5限
+        for period in range(1, 7):  # 1〜6限
             timetable[day_id][period] = []  # リストで初期化
 
     # 集中講義・実験実習などのスケジュールがない科目を別途管理
@@ -433,8 +433,8 @@ def result():
 
                 # 月〜金のみ
                 if day_id in range(1, 6):
-                    # 時限が1〜5の範囲であることを確認
-                    if period >= 1 and period <= 5:
+                    # 時限が1〜6の範囲であることを確認
+                    if period >= 1 and period <= 6:
                         has_regular_schedule = True
                         instructor_name = course.main_instructor.instructor_name if course.main_instructor else ''
 
