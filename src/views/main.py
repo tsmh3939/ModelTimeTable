@@ -310,6 +310,151 @@ def calculate_credits(course_list, major_id):
     return credits
 
 
+def detect_and_resolve_conflicts(timetable):
+    """
+    時間割の重複（同時履修不可）をチェックする関数
+    重複の判断基準: 開講曜限が重なっており、かつクォーターも重なっているとき
+
+    Args:
+        timetable: 時間割データ（辞書形式）
+
+    Returns:
+        list: 重複情報のリスト
+    """
+    from src.translations.field_values import DAY_MASTER, OfferingCategoryEnum
+
+    conflicts = []
+
+    # クォーターの重複を判定するヘルパー関数
+    def quarters_overlap(offering_cat1, offering_cat2):
+        """2つの開講区分のクォーターが重複するかチェック"""
+        # 各開講区分が含むクォーターを定義
+        quarters_map = {
+            OfferingCategoryEnum.FIRST_QUARTER: [1],       # 1Q
+            OfferingCategoryEnum.SECOND_QUARTER: [2],      # 2Q
+            OfferingCategoryEnum.THIRD_QUARTER: [3],       # 3Q
+            OfferingCategoryEnum.FOURTH_QUARTER: [4],      # 4Q
+            OfferingCategoryEnum.FIRST_SEMESTER: [1, 2],   # 前期 (1Q + 2Q)
+            OfferingCategoryEnum.SECOND_SEMESTER: [3, 4],  # 後期 (3Q + 4Q)
+            OfferingCategoryEnum.FULL_YEAR: [1, 2, 3, 4]   # 通年
+        }
+
+        quarters1 = quarters_map.get(offering_cat1, [])
+        quarters2 = quarters_map.get(offering_cat2, [])
+
+        # 共通のクォーターがあれば重複
+        return bool(set(quarters1) & set(quarters2))
+
+    # 各曜日・時限をチェック
+    for day_id in range(1, 6):
+        for period in range(1, 7):
+            courses_in_slot = timetable.get(day_id, {}).get(period, [])
+
+            # 2つ以上の科目がある場合、クォーターの重複をチェック
+            if len(courses_in_slot) > 1:
+                # クォーターが重複する科目のペアを検出
+                conflicting_courses = []
+
+                for i, course1 in enumerate(courses_in_slot):
+                    for j, course2 in enumerate(courses_in_slot):
+                        if i < j:  # 重複チェックを避けるため
+                            offering_cat1 = course1.get('offering_category_id')
+                            offering_cat2 = course2.get('offering_category_id')
+
+                            # クォーターが重複している場合
+                            if quarters_overlap(offering_cat1, offering_cat2):
+                                # まだ追加されていない科目を追加
+                                if course1 not in conflicting_courses:
+                                    conflicting_courses.append(course1)
+                                if course2 not in conflicting_courses:
+                                    conflicting_courses.append(course2)
+
+                # クォーターが重複する科目が2つ以上ある場合のみ記録
+                if len(conflicting_courses) >= 2:
+                    conflict_entry = {
+                        'day_id': day_id,
+                        'day_name_ja': DAY_MASTER[day_id]['ja'],
+                        'day_name_en': DAY_MASTER[day_id]['en'],
+                        'period': period,
+                        'courses': [
+                            {
+                                'timetable_code': course['timetable_code'],
+                                'course_title': course['course_title'],
+                                'instructor_name': course['instructor_name'],
+                                'major_type': course['major_type'],
+                                'credits': course['credits'],
+                                'offering_category_id': course['offering_category_id']
+                            }
+                            for course in conflicting_courses
+                        ]
+                    }
+                    conflicts.append(conflict_entry)
+
+    return conflicts
+
+
+def save_conflicts_to_json(conflicts, semester, semester_name, major1_id, major1_name,
+                           major2_id, major2_name, fiscal_year):
+    """
+    重複情報をJSONファイルに保存する関数
+
+    Args:
+        conflicts: 重複情報のリスト
+        semester: セメスタID
+        semester_name: セメスタ名
+        major1_id: 第一メジャーID
+        major1_name: 第一メジャー名
+        major2_id: 第二メジャーID
+        major2_name: 第二メジャー名
+        fiscal_year: 年度
+
+    Returns:
+        str: 保存されたファイルパス（重複がない場合はNone）
+    """
+    if not conflicts:
+        return None
+
+    import json
+    from pathlib import Path
+
+    # 出力ディレクトリを作成
+    base_dir = Path(__file__).resolve().parent.parent.parent
+    conflicts_dir = base_dir / "docs" / "conflicts"
+    conflicts_dir.mkdir(exist_ok=True)
+
+    # ファイル名を生成
+    conflict_filename = f"conflicts_sem{semester}_major1-{major1_id}_major2-{major2_id}.json"
+    conflict_filepath = conflicts_dir / conflict_filename
+
+    # 重複する時間割コードのリストを作成
+    conflict_codes = set()
+    for conflict in conflicts:
+        for course in conflict['courses']:
+            conflict_codes.add(course['timetable_code'])
+
+    # JSON形式で保存
+    conflict_data = {
+        'semester': semester,
+        'semester_name': semester_name,
+        'major1_id': major1_id,
+        'major1_name': major1_name,
+        'major2_id': major2_id,
+        'major2_name': major2_name,
+        'fiscal_year': fiscal_year,
+        'conflict_summary': {
+            'total_conflicts': len(conflicts),
+            'total_conflict_courses': len(conflict_codes),
+            'conflict_codes_list': sorted(list(conflict_codes))
+        },
+        'conflicts': conflicts
+    }
+
+    with open(conflict_filepath, 'w', encoding='utf-8') as f:
+        json.dump(conflict_data, f, ensure_ascii=False, indent=2)
+
+    return str(conflict_filepath)
+
+
 @app.route('/export-timetables')
 def export_timetables_route():
     """時間割を全てMarkdownファイルとして出力するルート"""
@@ -589,6 +734,16 @@ def result():
         major2_credits['required'] + major2_credits['elective'] +
         others_credits['required'] + others_credits['elective'] +
         info_app_credits['required'] + info_app_credits['elective']
+    )
+
+    # --- 時間割の重複チェック ---
+    conflicts = detect_and_resolve_conflicts(timetable)
+
+    # 重複情報をJSONファイルに保存（検証用）
+    save_conflicts_to_json(
+        conflicts, semester, semester_name,
+        major1_id, major1_name, major2_id, major2_name,
+        fiscal_year
     )
 
     return render_template(
