@@ -7,7 +7,6 @@ UI Text Translations
 # ナビゲーション
 NAV = {
     "home": {"ja": "ホーム", "en": "Home"},
-    "sql_tool": {"ja": "SQLツール", "en": "SQL Tool"},
 }
 
 # 共通
@@ -159,7 +158,7 @@ def get_text(category: str, key: str, lang: str = 'ja') -> str:
         'footer': FOOTER,
         'index': INDEX,
         'result': RESULT,
-        'sql': SQL,
+        'choose': CHOOSE,
         'error': ERROR,
     }
 
