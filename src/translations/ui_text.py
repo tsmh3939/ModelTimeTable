@@ -122,6 +122,7 @@ RESULT = {
     "credit_unit_badge": {"ja": "単位", "en": "cr"},
     "course_details": {"ja": "科目詳細", "en": "Course Details"},
     "course_name": {"ja": "科目名", "en": "Course Name"},
+    "timetable_code": {"ja": "時間割コード", "en": "Timetable Code"},
     "instructor": {"ja": "担当教員", "en": "Instructor"},
     "credits_label": {"ja": "単位数", "en": "Credits"},
     "offering_period": {"ja": "開講区分", "en": "Offering Period"},

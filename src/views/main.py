@@ -185,6 +185,7 @@ def export_all_timetables():
                                         ]) if course.course_classrooms else ''
 
                                         timetable[day_id][period].append({
+                                            'timetable_code': course.timetable_code,
                                             'course_title': course.course_title,
                                             'instructor_name': instructor_name,
                                             'major_type': major_type,
@@ -214,6 +215,7 @@ def export_all_timetables():
                                 ]) if course.course_classrooms else ''
 
                                 intensive_courses.append({
+                                    'timetable_code': course.timetable_code,
                                     'course_title': course.course_title,
                                     'instructor_name': instructor_name,
                                     'major_type': major_type,
@@ -244,6 +246,7 @@ def export_all_timetables():
                             ]) if course.course_classrooms else ''
 
                             intensive_courses.append({
+                                'timetable_code': course.timetable_code,
                                 'course_title': course.course_title,
                                 'instructor_name': instructor_name,
                                 'major_type': major_type,
@@ -461,6 +464,7 @@ def result():
                             ]) if course.course_classrooms else ''
 
                             timetable[day_id][period].append({
+                                'timetable_code': course.timetable_code,
                                 'course_title': course.course_title,
                                 'instructor_name': instructor_name,
                                 'major_type': major_type,
@@ -492,6 +496,7 @@ def result():
                 ]) if course.course_classrooms else ''
 
                 intensive_courses.append({
+                    'timetable_code': course.timetable_code,
                     'course_title': course.course_title,
                     'instructor_name': instructor_name,
                     'major_type': major_type,
@@ -524,6 +529,7 @@ def result():
             ]) if course.course_classrooms else ''
 
             intensive_courses.append({
+                'timetable_code': course.timetable_code,
                 'course_title': course.course_title,
                 'instructor_name': instructor_name,
                 'major_type': major_type,

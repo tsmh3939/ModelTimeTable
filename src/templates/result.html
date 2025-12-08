@@ -159,6 +159,7 @@
                                             {% endif %}
                                             <div class="course-content cursor-pointer hover:bg-base-200 rounded p-1"
                                                  onclick="showCourseDetails(
+                                                     '{{ item['timetable_code'] }}',
                                                      '{{ item['course_title'] }}',
                                                      '{{ item['instructor_name'] }}',
                                                      {{ item['credits'] }},
@@ -255,6 +256,7 @@
 
                                     <div class="course-content cursor-pointer hover:bg-base-200 rounded p-1"
                                          onclick="showCourseDetails(
+                                             '{{ item['timetable_code'] }}',
                                              '{{ item['course_title'] }}',
                                              '{{ item['instructor_name'] }}',
                                              {{ item['credits'] }},
@@ -366,6 +368,12 @@
 
         <!-- その他の情報 -->
         <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 mb-6">
+            <!-- 時間割コード -->
+            <div>
+                <div class="text-xs font-semibold text-base-content/50 mb-1.5 uppercase tracking-wide">{{ t('result', 'timetable_code') }}</div>
+                <p id="modal_timetable_code" class="text-base font-medium text-base-content font-mono"></p>
+            </div>
+
             <!-- 担当教員 -->
             <div>
                 <div class="text-xs font-semibold text-base-content/50 mb-1.5 uppercase tracking-wide">{{ t('result', 'instructor') }}</div>
@@ -452,6 +460,7 @@ window.translations = {
 
 /**
  * 科目詳細をモーダルで表示する
+ * @param {string} timetableCode - 時間割コード
  * @param {string} title - 科目名
  * @param {string} instructor - 担当教員名
  * @param {number} credits - 単位数
@@ -462,8 +471,9 @@ window.translations = {
  * @param {string} classroom - 教室名
  * @param {string} syllabusUrl - シラバスURL
  */
-function showCourseDetails(title, instructor, credits, offeringCategory, majorType, dayId, period, classroom, syllabusUrl) {
+function showCourseDetails(timetableCode, title, instructor, credits, offeringCategory, majorType, dayId, period, classroom, syllabusUrl) {
     // モーダルに情報を設定
+    document.getElementById('modal_timetable_code').textContent = timetableCode || '-';
     document.getElementById('modal_course_title').textContent = title;
     document.getElementById('modal_instructor').textContent = instructor || '-';
     document.getElementById('modal_credits').textContent = credits + window.translations.credits;
