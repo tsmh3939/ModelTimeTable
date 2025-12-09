@@ -19,8 +19,7 @@
                     {% for conflict in conflicts %}
                     {% set conflict_index = loop.index0 %}
                     <div class="border border-warning rounded-lg p-4 bg-warning/5">
-                        <div class="font-semibold mb-3">
-                            <div class="text-base mb-2">{{ t('choose', 'conflicting_courses') }}</div>
+                        <div class="font-semibold">
                             <div class="flex items-center gap-2 flex-wrap">
                                 {% for slot in conflict.conflict_slots %}
                                 <span class="badge badge-warning">{{ slot.day_name_ja }} {{ slot.period }}限</span>
@@ -38,17 +37,10 @@
                                 <div class="flex-1">
                                     <div class="font-medium">{{ course.course_title }}</div>
                                     <div class="text-sm text-base-content/70 mt-1">
-                                        <span class="badge badge-sm badge-outline mr-2">{{ course.timetable_code }}</span>
                                         {% if course.instructor_name %}
                                         <span>{{ course.instructor_name }}</span>
                                         {% endif %}
                                         <span class="ml-2">{{ course.credits }}{{ t('result', 'credit_unit_badge') }}</span>
-                                    </div>
-                                    <div class="text-xs text-base-content/60 mt-2">
-                                        {{ t('choose', 'schedule') }}:
-                                        {% for schedule in course.schedules %}
-                                        <span class="badge badge-xs badge-ghost">{{ schedule.day_name_ja }}{{ schedule.period }}</span>{% if not loop.last %}, {% endif %}
-                                        {% endfor %}
                                     </div>
                                 </div>
                             </label>
