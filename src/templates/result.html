@@ -62,7 +62,7 @@
                 {'id': quarter2, 'checked': false}
             ] %}
 
-            <div role="tablist" class="tabs tabs-border justify-center">
+            <div role="tablist" class="tabs tabs-border tabs-lg justify-center">
                 {% for q in quarters %}
                 {% set current_quarter = q.id %}
                 <input type="radio" name="quarter_tabs" role="tab" class="tab" aria-label="{{ t('result', 'quarter_' ~ current_quarter) }}" {% if q.checked %}checked{% endif %} />
