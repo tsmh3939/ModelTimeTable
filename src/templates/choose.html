@@ -4,48 +4,164 @@
 
 {% block content %}
 <div class="max-w-5xl mx-auto">
-    <div class="card bg-base-100 shadow-xl mb-6">
-        <div class="card-body">
-            <h2 class="card-title text-2xl mb-4 text-warning">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
-                </svg>
-                {{ t('choose', 'schedule_conflicts') }}
-            </h2>
-            <p class="mb-4">{{ t('choose', 'conflicts_detected') }}</p>
+    <form method="POST" action="{{ url_for('choose') }}">
+        <div class="card bg-base-100 shadow-xl mb-6">
+            <div class="card-body">
+                <h2 class="card-title text-2xl mb-4 text-warning">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                    </svg>
+                    {{ t('choose', 'schedule_conflicts') }}
+                </h2>
+                <p class="mb-4">{{ t('choose', 'conflicts_detected') }}</p>
 
-            <div class="space-y-4">
-                {% for conflict in conflicts %}
-                <div class="border border-warning rounded-lg p-4 bg-warning/5">
-                    <div class="font-semibold mb-3 flex items-center gap-2">
-                        <span class="badge badge-warning">{{ conflict.day_name_ja }} {{ conflict.period }}限</span>
-                    </div>
-
-                    <div class="space-y-2">
-                        {% for course in conflict.courses %}
-                        <label class="flex items-start gap-3 p-3 border border-base-300 rounded hover:bg-base-200 cursor-pointer transition-colors">
-                            <input type="radio"
-                                   name="conflict_{{ conflict.day_id }}_{{ conflict.period }}"
-                                   value="{{ course.timetable_code }}"
-                                   class="radio radio-warning mt-1"
-                                   {% if loop.first %}checked{% endif %}>
-                            <div class="flex-1">
-                                <div class="font-medium">{{ course.course_title }}</div>
-                                <div class="text-sm text-base-content/70 mt-1">
-                                    <span class="badge badge-sm badge-outline mr-2">{{ course.timetable_code }}</span>
-                                    {% if course.instructor_name %}
-                                    <span>{{ course.instructor_name }}</span>
-                                    {% endif %}
-                                    <span class="ml-2">{{ course.credits }}{{ t('result', 'credit_unit_badge') }}</span>
-                                </div>
+                <div class="space-y-4">
+                    {% for conflict in conflicts %}
+                    {% set conflict_index = loop.index0 %}
+                    <div class="border border-warning rounded-lg p-4 bg-warning/5">
+                        <div class="font-semibold mb-3">
+                            <div class="text-base mb-2">{{ t('choose', 'conflicting_courses') }}</div>
+                            <div class="flex items-center gap-2 flex-wrap">
+                                {% for slot in conflict.conflict_slots %}
+                                <span class="badge badge-warning">{{ slot.day_name_ja }} {{ slot.period }}限</span>
+                                {% endfor %}
                             </div>
-                        </label>
-                        {% endfor %}
+                        </div>
+
+                        <div class="space-y-2">
+                            {% for course in conflict.courses %}
+                            <label class="flex items-start gap-3 p-3 border border-base-300 rounded hover:bg-base-200 cursor-pointer transition-colors">
+                                <input type="radio"
+                                        name="conflict_{{ conflict_index }}" value="{{ course.timetable_code }}"
+                                        class="radio radio-warning mt-1 timetable-selector"
+                                        data-timetable-code="{{ course.timetable_code }}"
+                                        {% if loop.first %}checked{% endif %}>
+                                <div class="flex-1">
+                                    <div class="font-medium">{{ course.course_title }}</div>
+                                    <div class="text-sm text-base-content/70 mt-1">
+                                        <span class="badge badge-sm badge-outline mr-2">{{ course.timetable_code }}</span>
+                                        {% if course.instructor_name %}
+                                        <span>{{ course.instructor_name }}</span>
+                                        {% endif %}
+                                        <span class="ml-2">{{ course.credits }}{{ t('result', 'credit_unit_badge') }}</span>
+                                    </div>
+                                    <div class="text-xs text-base-content/60 mt-2">
+                                        {{ t('choose', 'schedule') }}:
+                                        {% for schedule in course.schedules %}
+                                        <span class="badge badge-xs badge-ghost">{{ schedule.day_name_ja }}{{ schedule.period }}</span>{% if not loop.last %}, {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </label>
+                            {% endfor %}
+                        </div>
                     </div>
+                    {% endfor %}
                 </div>
-                {% endfor %}
+
+                <div class="card-actions justify-end mt-6 pt-4 border-t border-base-300">
+                    <a href="{{ url_for('index') }}" class="btn btn-ghost">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                        </svg>
+                        {{ t('result', 'back') }}
+                    </a>
+                    <button type="submit" class="btn btn-primary">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                        </svg>
+                        {{ t('choose', 'apply_selections') }}
+                    </button>
+                </div>
             </div>
         </div>
-    </div>
+
+        <input type="hidden" name="semester" value="{{ semester }}">
+        <input type="hidden" name="major1_id" value="{{ major1_id }}">
+        <input type="hidden" name="major2_id" value="{{ major2_id }}">
+    </form>
 </div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const radioButtons = document.querySelectorAll('.timetable-selector');
+
+        radioButtons.forEach(radio => {
+            radio.addEventListener('change', function() {
+                const selectedTimetableCode = this.dataset.timetableCode;
+                const currentConflictName = this.name;
+                
+                // -----------------------------------------------------
+                // Step 1: 選択された科目コードのグローバル同期 (ON)
+                // -----------------------------------------------------
+                // この科目コードを持つ全てのラジオボタンをONにする
+                if (this.checked) {
+                    document.querySelectorAll(`[data-timetable-code="${selectedTimetableCode}"]`).forEach(otherRadio => {
+                        otherRadio.checked = true;
+                    });
+                }
+
+                // -----------------------------------------------------
+                // Step 2: OFFになった科目コードのグローバル非同期 (OFF)
+                // -----------------------------------------------------
+                // (重要) 現在のグループ内で、ブラウザの排他動作によりOFFになったものを追跡し、全体でOFFにする。
+                
+                // 現在のグループ内のすべてのラジオボタンをループ
+                document.querySelectorAll(`input[name="${currentConflictName}"]`).forEach(siblingRadio => {
+                    
+                    // ONにならなかった（OFFになった）ラジオボタンを処理
+                    if (!siblingRadio.checked) {
+                        const uncheckedTimetableCode = siblingRadio.dataset.timetableCode;
+                        
+                        // OFFになった科目コードを持つ、他のすべてのグループのラジオボタンを OFF にする
+                        document.querySelectorAll(`[data-timetable-code="${uncheckedTimetableCode}"]`).forEach(otherGroupRadio => {
+                            
+                            // ただし、現在のグループ内のもの（これはブラウザがOFFにしたばかり）は除く
+                            if (otherGroupRadio.name !== currentConflictName) {
+                                otherGroupRadio.checked = false;
+                            }
+                        });
+                    }
+                });
+
+                // -----------------------------------------------------
+                // Step 3: 選択数がゼロになったグループの強制選択（矛盾解消）
+                // -----------------------------------------------------
+                // 上記のON/OFF同期処理の結果、どのグループも選択数ゼロにならないことを保証する。
+
+                const allConflictNames = new Set();
+                radioButtons.forEach(r => allConflictNames.add(r.name));
+
+                allConflictNames.forEach(conflictName => {
+                    const groupRadios = document.querySelectorAll(`input[name="${conflictName}"]`);
+                    let checkedCount = 0;
+                    let uncheckedRadio = null; 
+
+                    groupRadios.forEach(r => {
+                        if (r.checked) {
+                            checkedCount++;
+                        } else {
+                            uncheckedRadio = r; // チェックが外れているラジオボタンを記憶
+                        }
+                    });
+
+                    // 選択数が 0 になってしまった場合
+                    if (checkedCount === 0 && uncheckedRadio) {
+                        
+                        // 残りの一つを強制的にONにする
+                        uncheckedRadio.checked = true;
+                        
+                        // 強制選択によりONになった科目コードを、再度すべてのグループで同期させる
+                        // (これにより、他のグループでこの科目コードがOFFになっていた場合にONに戻す)
+                        const newlySelectedCode = uncheckedRadio.dataset.timetableCode;
+                        document.querySelectorAll(`[data-timetable-code="${newlySelectedCode}"]`).forEach(r => {
+                            r.checked = true;
+                        });
+                    }
+                });
+            });
+        });
+    });
+</script>
+
 {% endblock %}

@@ -124,10 +124,12 @@ RESULT = {
 CHOOSE = {
     "title": {"ja": "優先する科目の選択", "en": "Choosing Priority Subjects"},
     "schedule_conflicts": {"ja": "時間割の重複", "en": "Schedule Conflicts"},
-    "conflicts_detected": {"ja": "以下の曜日・時限で複数の科目が重複しています。優先する科目を選択してください。", "en": "Multiple courses overlap at the following times. Please select the priority course."},
+    "conflicts_detected": {"ja": "以下の科目ペアで時間割が重複しています。優先する科目を選択してください。", "en": "The following course pairs have schedule conflicts. Please select the priority course."},
     "no_conflicts": {"ja": "時間割の重複はありません。", "en": "No schedule conflicts detected."},
     "select_priority_course": {"ja": "優先する科目を選択", "en": "Select Priority Course"},
     "apply_selections": {"ja": "選択を適用", "en": "Apply Selections"},
+    "conflicting_courses": {"ja": "重複する科目ペア", "en": "Conflicting Course Pair"},
+    "schedule": {"ja": "開講曜限", "en": "Schedule"},
 }
 
 # エラーページ
