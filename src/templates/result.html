@@ -141,22 +141,6 @@
                                                 {% set color_class = 'text-warning' %}
                                             {% endif %}
 
-                                            {% if courses_in_slot|length > 1 %}
-                                            <div class="flex items-center justify-start mb-1">
-                                                <label class="flex items-center gap-1 cursor-pointer">
-                                                    <input type="checkbox"
-                                                           class="checkbox checkbox-xs priority-checkbox"
-                                                           data-day="{{ day_id }}"
-                                                           data-period="{{ period }}"
-                                                           data-index="{{ loop.index0 }}"
-                                                           data-offering-category="{{ item['offering_category_id'] }}"
-                                                           data-course-title="{{ item['course_title'] }}"
-                                                           data-instructor="{{ item['instructor_name'] }}"
-                                                           onchange="toggleCoursePriority({{ day_id }}, {{ period }}, '{{ item['course_title'] }}', '{{ item['instructor_name'] }}')">
-                                                    <span class="text-xs">{{ t('result', 'select_priority') }}</span>
-                                                </label>
-                                            </div>
-                                            {% endif %}
                                             <div class="course-content cursor-pointer hover:bg-base-200 rounded p-1"
                                                  onclick="showCourseDetails(
                                                      '{{ item['timetable_code'] }}',
@@ -507,91 +491,5 @@ function showCourseDetails(timetableCode, title, instructor, credits, offeringCa
     // モーダルを表示
     document.getElementById('course_modal').showModal();
 }
-
-// 優先授業の状態を保持するオブジェクト
-const coursePriorities = {};
-
-/**
- * 科目の優先度を切り替える
- * @param {number} day - 曜日ID
- * @param {number} period - 時限
- * @param {string} courseTitle - 科目名
- * @param {string} instructor - 担当教員名
- */
-function toggleCoursePriority(day, period, courseTitle, instructor) {
-    const key = `${day}_${period}`;
-    const courseId = `${courseTitle}_${instructor}`;
-    const checkbox = document.querySelector(`.priority-checkbox[data-day="${day}"][data-period="${period}"][data-course-title="${courseTitle}"][data-instructor="${instructor}"]`);
-
-    if (checkbox.checked) {
-        // この授業を優先に設定
-        coursePriorities[key] = courseId;
-
-        // 同じセルの他のチェックボックスを外す
-        const otherCheckboxes = document.querySelectorAll(`.priority-checkbox[data-day="${day}"][data-period="${period}"]`);
-        otherCheckboxes.forEach(cb => {
-            if (cb !== checkbox) {
-                cb.checked = false;
-            }
-        });
-    } else {
-        // 優先設定を解除
-        delete coursePriorities[key];
-    }
-
-    // 表示を更新
-    updateCourseVisibility(day, period);
-}
-
-/**
- * 特定のセルの科目の表示を更新
- * @param {number} day - 曜日ID
- * @param {number} period - 時限
- */
-function updateCourseVisibility(day, period) {
-    const key = `${day}_${period}`;
-    const priorityCourseId = coursePriorities[key];
-
-    // このセルのすべての授業を取得
-    const courseItems = document.querySelectorAll(`.course-item[data-day="${day}"][data-period="${period}"]`);
-
-    let firstVisibleFound = false;
-
-    if (priorityCourseId !== undefined) {
-        // 優先授業が設定されている場合
-        courseItems.forEach(item => {
-            const courseTitle = item.getAttribute('data-course-title');
-            const instructor = item.getAttribute('data-instructor');
-            const itemCourseId = `${courseTitle}_${instructor}`;
-
-            if (itemCourseId === priorityCourseId) {
-                // 優先授業のみ表示
-                item.style.display = '';
-                // 表示される最初の要素なのでボーダーとマージンを削除
-                item.classList.remove('mt-2', 'pt-2', 'border-t', 'border-base-300');
-            } else {
-                // その他は非表示
-                item.style.display = 'none';
-            }
-        });
-    } else {
-        // 優先授業が設定されていない場合はすべて通常表示
-        courseItems.forEach(item => {
-            item.style.display = '';
-
-            // 表示されている最初の要素かチェック
-            if (!firstVisibleFound) {
-                // 最初の要素はボーダーとマージンを削除
-                item.classList.remove('mt-2', 'pt-2', 'border-t', 'border-base-300');
-                firstVisibleFound = true;
-            } else {
-                // 2番目以降の要素はボーダーとマージンを追加
-                item.classList.add('mt-2', 'pt-2', 'border-t', 'border-base-300');
-            }
-        });
-    }
-}
-
-
 </script>
 {% endblock %}
