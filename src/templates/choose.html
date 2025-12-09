@@ -34,8 +34,7 @@
                                 <input type="radio"
                                         name="conflict_{{ conflict_index }}" value="{{ course.timetable_code }}"
                                         class="radio radio-warning mt-1 timetable-selector"
-                                        data-timetable-code="{{ course.timetable_code }}"
-                                        {% if loop.first %}checked{% endif %}>
+                                        data-timetable-code="{{ course.timetable_code }}">
                                 <div class="flex-1">
                                     <div class="font-medium">{{ course.course_title }}</div>
                                     <div class="text-sm text-base-content/70 mt-1">
