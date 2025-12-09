@@ -8,7 +8,7 @@
         <div class="flex items-center justify-center gap-4 mb-2">
             <h1 class="text-4xl font-bold">{{ t('result', 'title') }}</h1>
             {% if fiscal_year %}
-            <span class="text-xl text-base-content/60">{{ fiscal_year }}</span>
+            <span class="text-xl text-base-content/80">{{ fiscal_year }}</span>
             {% endif %}
         </div>
     </div>
@@ -178,7 +178,7 @@
                                                 </div>
                                                 <div class="mt-1">{{ item['course_title'] }}</div>
                                                 {% if item['instructor_name'] %}
-                                                <div class="text-xs text-base-content/70 mt-1">{{ item['instructor_name'] }}</div>
+                                                <div class="text-xs text-base-content/90 mt-1">{{ item['instructor_name'] }}</div>
                                                 {% endif %}
                                                 {# 科目名の下に情報アイコンを追加してクリック可能であることを示す #}
                                                 <div class="font-semibold {{ course_color_class }} mt-1 flex items-center justify-end">
@@ -190,7 +190,7 @@
                                         </div>
                                         {% endfor %}
                                         {% else %}
-                                        <div class="text-center text-base-content/40">-</div>
+                                        <div class="text-center text-base-content/60">-</div>
                                         {% endif %}
                                     </td>
                                     {% endfor %}
@@ -209,7 +209,7 @@
                 <div class="card bg-base-100 shadow-xl">
                     <div class="card-body p-4">
                         <h3 class="font-semibold text-lg mb-3">{{ t('result', 'intensive_courses') }}</h3>
-                        <p class="text-sm text-base-content/70 mb-4">{{ t('result', 'intensive_courses_note') }}</p>
+                        <p class="text-sm text-base-content/90 mb-4">{{ t('result', 'intensive_courses_note') }}</p>
 
                         <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
                             {% for item in intensive_courses %}
@@ -275,7 +275,7 @@
                                         </div>
                                         <div class="mt-1">{{ item['course_title'] }}</div>
                                         {% if item['instructor_name'] %}
-                                        <div class="text-xs text-base-content/70 mt-1">{{ item['instructor_name'] }}</div>
+                                        <div class="text-xs text-base-content/90 mt-1">{{ item['instructor_name'] }}</div>
                                         {% endif %}
                                         {# 科目名の下に情報アイコンを追加してクリック可能であることを示す #}
                                         <div class="font-semibold mt-1 flex items-center justify-end">
@@ -359,7 +359,7 @@
 <!-- 科目詳細モーダル -->
 <dialog id="course_modal" class="modal">
     <div class="modal-box max-w-3xl">
-        <h3 class="font-bold text-xl mb-2 text-base-content/60">{{ t('result', 'course_details') }}</h3>
+        <h3 class="font-bold text-xl mb-2 text-base-content/80">{{ t('result', 'course_details') }}</h3>
 
         <!-- 科目名 -->
         <div class="mb-6 pb-4 border-b border-base-300">
@@ -370,49 +370,49 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-x-6 gap-y-4 mb-6">
             <!-- 時間割コード -->
             <div>
-                <div class="text-xs font-semibold text-base-content/50 mb-1.5 uppercase tracking-wide">{{ t('result', 'timetable_code') }}</div>
+                <div class="text-xs font-semibold text-base-content/70 mb-1.5 uppercase tracking-wide">{{ t('result', 'timetable_code') }}</div>
                 <p id="modal_timetable_code" class="text-base font-medium text-base-content font-mono"></p>
             </div>
 
             <!-- 担当教員 -->
             <div>
-                <div class="text-xs font-semibold text-base-content/50 mb-1.5 uppercase tracking-wide">{{ t('result', 'instructor') }}</div>
+                <div class="text-xs font-semibold text-base-content/70 mb-1.5 uppercase tracking-wide">{{ t('result', 'instructor') }}</div>
                 <p id="modal_instructor" class="text-base font-medium text-base-content"></p>
             </div>
 
             <!-- 単位数 -->
             <div>
-                <div class="text-xs font-semibold text-base-content/50 mb-1.5 uppercase tracking-wide">{{ t('result', 'credits_label') }}</div>
+                <div class="text-xs font-semibold text-base-content/70 mb-1.5 uppercase tracking-wide">{{ t('result', 'credits_label') }}</div>
                 <p id="modal_credits" class="text-base font-medium text-base-content"></p>
             </div>
 
             <!-- 開講区分 -->
             <div>
-                <div class="text-xs font-semibold text-base-content/50 mb-1.5 uppercase tracking-wide">{{ t('result', 'offering_period') }}</div>
+                <div class="text-xs font-semibold text-base-content/70 mb-1.5 uppercase tracking-wide">{{ t('result', 'offering_period') }}</div>
                 <p id="modal_offering" class="text-base font-medium text-base-content"></p>
             </div>
 
             <!-- メジャー区分 -->
             <div>
-                <div class="text-xs font-semibold text-base-content/50 mb-1.5 uppercase tracking-wide">{{ t('result', 'major_category') }}</div>
+                <div class="text-xs font-semibold text-base-content/70 mb-1.5 uppercase tracking-wide">{{ t('result', 'major_category') }}</div>
                 <p id="modal_major_type" class="text-base font-medium text-base-content"></p>
             </div>
 
             <!-- 曜日・時限 -->
             <div>
-                <div class="text-xs font-semibold text-base-content/50 mb-1.5 uppercase tracking-wide">{{ t('result', 'day_period') }}</div>
+                <div class="text-xs font-semibold text-base-content/70 mb-1.5 uppercase tracking-wide">{{ t('result', 'day_period') }}</div>
                 <p id="modal_schedule" class="text-base font-medium text-base-content"></p>
             </div>
 
             <!-- 教室 -->
             <div>
-                <div class="text-xs font-semibold text-base-content/50 mb-1.5 uppercase tracking-wide">{{ t('result', 'classroom') }}</div>
+                <div class="text-xs font-semibold text-base-content/70 mb-1.5 uppercase tracking-wide">{{ t('result', 'classroom') }}</div>
                 <p id="modal_classroom" class="text-base font-medium text-base-content"></p>
             </div>
 
             <!-- シラバスリンク -->
             <div class="md:col-span-2 pt-2">
-                <div class="text-xs font-semibold text-base-content/50 mb-2 uppercase tracking-wide">{{ t('result', 'syllabus_link') }}</div>
+                <div class="text-xs font-semibold text-base-content/70 mb-2 uppercase tracking-wide">{{ t('result', 'syllabus_link') }}</div>
                 <div id="modal_syllabus_container"></div>
             </div>
         </div>
