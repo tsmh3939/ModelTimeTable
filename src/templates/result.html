@@ -295,6 +295,25 @@
         </div>
     </div>
 
+    {# 除外された科目セクション #}
+    {% if excluded_course_names %}
+    <div class="mb-6">
+        <div class="collapse collapse-arrow bg-base-100 shadow-xl">
+            <input type="checkbox" />
+            <div class="collapse-title text-lg font-semibold">
+                {{ t('result', 'excluded_courses') }}
+            </div>
+            <div class="collapse-content">
+                <p class="text-sm text-base-content/90 mb-4">{{ t('result', 'excluded_courses_note') }}</p>
+                <ul class="list-disc list-inside space-y-2">
+                    {% for course_name in excluded_course_names %}
+                    <li class="text-sm">{{ course_name }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+    {% endif %}
 
     <div class="mb-6" id="credit-info-section">
         <div class="collapse collapse-arrow bg-base-100 shadow-xl">

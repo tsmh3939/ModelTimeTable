@@ -125,6 +125,8 @@ RESULT = {
     "intensive_courses_note": {"ja": "※ 以下の科目は集中講義、実験・実習など、通常の時間割に含まれない科目です。", "en": "* The following courses are intensive courses, laboratory work, etc., which are not included in the regular timetable."},
     "class_format": {"ja": "授業形態", "en": "Class Format"},
     "course_type": {"ja": "授業種別", "en": "Course Type"},
+    "excluded_courses": {"ja": "除外された科目", "en": "Excluded Courses"},
+    "excluded_courses_note": {"ja": "※ 以下の科目は重複により除外されています。", "en": "* The following courses were excluded due to conflicts."},
 }
 
 CHOOSE = {

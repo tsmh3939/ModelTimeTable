@@ -879,6 +879,16 @@ def result():
             if result_data['timetable'][day_id][period]:  # 授業がある場合
                 max_period = max(max_period, period)
 
+    # 除外された科目の情報を取得
+    excluded_course_names = []
+    if excluded_courses:
+        from src.models import Course
+        from src import db
+        for timetable_code in excluded_courses:
+            course = db.session.query(Course).filter_by(timetable_code=timetable_code).first()
+            if course:
+                excluded_course_names.append(course.course_title)
+
     return render_template(
         'result.html',
         semester=semester,
@@ -897,6 +907,7 @@ def result():
         info_app_credits=result_data['info_app_credits'],
         total_credits=result_data['total_credits'],
         max_period=max_period,
+        excluded_course_names=excluded_course_names,
     )
 
 
