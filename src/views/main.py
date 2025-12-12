@@ -821,6 +821,13 @@ def result():
             major2_id=major2_id
         )
 
+    # 時間割に存在する最大時限を計算（最低5時限までは表示）
+    max_period = 5  # デフォルトは5時限まで表示
+    for day_id in range(1, 6):
+        for period in range(1, 7):  # 1-6限まで確認
+            if result_data['timetable'][day_id][period]:  # 授業がある場合
+                max_period = max(max_period, period)
+
     return render_template(
         'result.html',
         semester=semester,
@@ -838,6 +845,7 @@ def result():
         others_credits=result_data['others_credits'],
         info_app_credits=result_data['info_app_credits'],
         total_credits=result_data['total_credits'],
+        max_period=max_period,
     )
 
 
