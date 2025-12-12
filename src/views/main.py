@@ -53,8 +53,43 @@ def get_major_type(course, major1_courses, major2_courses, others_courses, info_
         return 'others'
 
 
+def get_course_category_id(course, major_type, major1_id, major2_id):
+    """
+    科目の履修区分IDを取得する
+
+    Args:
+        course: 科目オブジェクト
+        major_type: メジャータイプ ('major1', 'major2', 'shared', 'others', 'info_app')
+        major1_id: 第一メジャーID
+        major2_id: 第二メジャーID
+
+    Returns:
+        int: 履修区分ID (None if not found)
+    """
+    from src.translations.field_values import MajorEnum
+
+    # major_typeに応じて適切なメジャーIDを選択
+    if major_type == 'major1' or major_type == 'shared':
+        target_major_id = major1_id
+    elif major_type == 'major2':
+        target_major_id = major2_id
+    elif major_type == 'others':
+        target_major_id = MajorEnum.OTHERS
+    elif major_type == 'info_app':
+        target_major_id = MajorEnum.INFO_APP
+    else:
+        return None
+
+    # 所属メジャーから履修区分IDを取得
+    for affiliated in course.affiliated_majors:
+        if affiliated.major_id == target_major_id:
+            return affiliated.course_category_id
+
+    return None
+
+
 def build_timetable_from_courses(courses, major1_courses, major2_courses,
-                                   others_courses, info_app_courses):
+                                   others_courses, info_app_courses, major1_id, major2_id):
     """
     科目リストから時間割データを構築する
 
@@ -64,6 +99,8 @@ def build_timetable_from_courses(courses, major1_courses, major2_courses,
         major2_courses: 第二メジャーの科目リスト
         others_courses: その他メジャーの科目リスト
         info_app_courses: 情報応用科目リスト
+        major1_id: 第一メジャーID
+        major2_id: 第二メジャーID
 
     Returns:
         tuple: (timetable, intensive_courses)
@@ -105,6 +142,8 @@ def build_timetable_from_courses(courses, major1_courses, major2_courses,
                                 for cc in course.course_classrooms
                             ]) if course.course_classrooms else ''
 
+                            course_category_id = get_course_category_id(course, major_type, major1_id, major2_id)
+
                             timetable[day_id][period].append({
                                 'timetable_code': course.timetable_code,
                                 'course_title': course.course_title,
@@ -113,7 +152,8 @@ def build_timetable_from_courses(courses, major1_courses, major2_courses,
                                 'offering_category_id': course.offering_category_id,
                                 'credits': course.credits,
                                 'classroom_name': classroom_names,
-                                'syllabus_url': course.syllabus_url or ''
+                                'syllabus_url': course.syllabus_url or '',
+                                'course_category_id': course_category_id
                             })
 
             if not has_regular_schedule:
@@ -126,6 +166,8 @@ def build_timetable_from_courses(courses, major1_courses, major2_courses,
                     for cc in course.course_classrooms
                 ]) if course.course_classrooms else ''
 
+                course_category_id = get_course_category_id(course, major_type, major1_id, major2_id)
+
                 intensive_courses.append({
                     'timetable_code': course.timetable_code,
                     'course_title': course.course_title,
@@ -136,7 +178,8 @@ def build_timetable_from_courses(courses, major1_courses, major2_courses,
                     'classroom_name': classroom_names,
                     'syllabus_url': course.syllabus_url or '',
                     'class_format_name': course.class_format.class_format_name if course.class_format else '',
-                    'course_type_name': course.course_type.course_type_name if course.course_type else ''
+                    'course_type_name': course.course_type.course_type_name if course.course_type else '',
+                    'course_category_id': course_category_id
                 })
         else:
             instructor_name = get_instructor_name(course)
@@ -148,6 +191,8 @@ def build_timetable_from_courses(courses, major1_courses, major2_courses,
                 for cc in course.course_classrooms
             ]) if course.course_classrooms else ''
 
+            course_category_id = get_course_category_id(course, major_type, major1_id, major2_id)
+
             intensive_courses.append({
                 'timetable_code': course.timetable_code,
                 'course_title': course.course_title,
@@ -158,7 +203,8 @@ def build_timetable_from_courses(courses, major1_courses, major2_courses,
                 'classroom_name': classroom_names,
                 'syllabus_url': course.syllabus_url or '',
                 'class_format_name': course.class_format.class_format_name if course.class_format else '',
-                'course_type_name': course.course_type.course_type_name if course.course_type else ''
+                'course_type_name': course.course_type.course_type_name if course.course_type else '',
+                'course_category_id': course_category_id
             })
 
     return timetable, intensive_courses
@@ -504,7 +550,8 @@ def build_timetable_result(semester, major1_id, major2_id, excluded_course_codes
 
     # 時間割を構築
     timetable, intensive_courses = build_timetable_from_courses(
-        filtered_courses, major1_courses, major2_courses, others_courses, info_app_courses
+        filtered_courses, major1_courses, major2_courses, others_courses, info_app_courses,
+        major1_id, major2_id
     )
 
     # 共有科目を検出
@@ -517,6 +564,8 @@ def build_timetable_result(semester, major1_id, major2_id, excluded_course_codes
                 for course in shared_courses:
                     if course.course_title == course_item['course_title']:
                         course_item['major_type'] = 'shared'
+                        # course_category_idも更新（sharedの場合はmajor1の履修区分を使用）
+                        course_item['course_category_id'] = get_course_category_id(course, 'shared', major1_id, major2_id)
                         break
 
     # 集中講義の major_type も更新
@@ -524,6 +573,8 @@ def build_timetable_result(semester, major1_id, major2_id, excluded_course_codes
         for course in shared_courses:
             if course.course_title == course_item['course_title']:
                 course_item['major_type'] = 'shared'
+                # course_category_idも更新（sharedの場合はmajor1の履修区分を使用）
+                course_item['course_category_id'] = get_course_category_id(course, 'shared', major1_id, major2_id)
                 break
 
     # 単位数を計算

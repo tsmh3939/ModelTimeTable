@@ -152,7 +152,8 @@
                                                      {{ day_id }},
                                                      {{ period }},
                                                      '{{ item['classroom_name'] }}',
-                                                     '{{ item['syllabus_url'] }}'
+                                                     '{{ item['syllabus_url'] }}',
+                                                     {{ item['course_category_id'] if item['course_category_id'] is not none else 'null' }}
                                                  )">
                                                 <div class="font-semibold flex items-center gap-1 flex-wrap justify-between">
                                                     <span class="{{ color_class }}">{{ indicator }}</span>
@@ -160,7 +161,13 @@
                                                     <span class="text-xs text-base-content">{{ offering_tag }}</span>
                                                     {% endif %}
                                                 </div>
-                                                <div class="mt-1">{{ item['course_title'] }}</div>
+                                                <div class="mt-1">
+                                                    {% if item['course_category_id'] == 1 or item['course_category_id'] == 4 %}
+                                                    ★
+                                                    {% elif item['course_category_id'] == 2 %}
+                                                    ☆
+                                                    {% endif %}{{ item['course_title'] }}
+                                                </div>
                                                 {% if item['instructor_name'] %}
                                                 <div class="text-xs text-base-content/90 mt-1">{{ item['instructor_name'] }}</div>
                                                 {% endif %}
@@ -249,7 +256,8 @@
                                              0,
                                              0,
                                              '{{ item['classroom_name'] }}',
-                                             '{{ item['syllabus_url'] }}'
+                                             '{{ item['syllabus_url'] }}',
+                                             {{ item['course_category_id'] if item['course_category_id'] is not none else 'null' }}
                                          )">
                                         <div class="font-semibold flex items-center gap-1 flex-wrap justify-between">
                                             <span class="{{ color_class }}">{{ indicator }}</span>
@@ -257,7 +265,13 @@
                                             <span class="text-xs text-base-content">{{ offering_tag }}</span>
                                             {% endif %}
                                         </div>
-                                        <div class="mt-1">{{ item['course_title'] }}</div>
+                                        <div class="mt-1">
+                                            {% if item['course_category_id'] == 1 or item['course_category_id'] == 4 %}
+                                            ★
+                                            {% elif item['course_category_id'] == 2 %}
+                                            ☆
+                                            {% endif %}{{ item['course_title'] }}
+                                        </div>
                                         {% if item['instructor_name'] %}
                                         <div class="text-xs text-base-content/90 mt-1">{{ item['instructor_name'] }}</div>
                                         {% endif %}
@@ -302,6 +316,14 @@
                             <div class="flex items-center gap-2">
                                 <span class="font-bold text-warning">【{{ t('result', 'label_info_app') }}】</span>
                                 <span class="text-sm">{{ t('result', 'info_app_courses') }}</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="font-bold">★</span>
+                                <span class="text-sm">{{ t('result', 'course_category_required') }} / {{ t('result', 'course_category_mandatory') }}</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="font-bold">☆</span>
+                                <span class="text-sm">{{ t('result', 'course_category_required_elective') }}</span>
                             </div>
                         </div>
                     </div>
@@ -413,6 +435,12 @@
                 <p id="modal_major_type" class="text-base font-medium text-base-content"></p>
             </div>
 
+            <!-- 履修区分 -->
+            <div>
+                <div class="text-xs font-semibold text-base-content/70 mb-1.5 uppercase tracking-wide">{{ t('result', 'course_category') }}</div>
+                <p id="modal_course_category" class="text-base font-medium text-base-content"></p>
+            </div>
+
             <!-- 曜日・時限 -->
             <div>
                 <div class="text-xs font-semibold text-base-content/70 mb-1.5 uppercase tracking-wide">{{ t('result', 'day_period') }}</div>
@@ -469,6 +497,12 @@ window.translations = {
         'others': "{{ t('result', 'others_courses') }}",
         'info_app': "{{ t('result', 'info_app_courses') }}"
     },
+    courseCategories: {
+        1: "{{ t('result', 'course_category_required') }}",
+        2: "{{ t('result', 'course_category_required_elective') }}",
+        3: "{{ t('result', 'course_category_elective') }}",
+        4: "{{ t('result', 'course_category_mandatory') }}"
+    },
     credits: "{{ t('result', 'credit_unit_badge') }}",
     openSyllabus: "{{ t('result', 'open_syllabus') }}"
 };
@@ -485,8 +519,9 @@ window.translations = {
  * @param {number} period - 時限 (1-5)
  * @param {string} classroom - 教室名
  * @param {string} syllabusUrl - シラバスURL
+ * @param {number} courseCategoryId - 履修区分ID
  */
-function showCourseDetails(timetableCode, title, instructor, credits, offeringCategory, majorType, dayId, period, classroom, syllabusUrl) {
+function showCourseDetails(timetableCode, title, instructor, credits, offeringCategory, majorType, dayId, period, classroom, syllabusUrl, courseCategoryId) {
     // モーダルに情報を設定
     document.getElementById('modal_timetable_code').textContent = timetableCode || '-';
     document.getElementById('modal_course_title').textContent = title;
@@ -494,6 +529,7 @@ function showCourseDetails(timetableCode, title, instructor, credits, offeringCa
     document.getElementById('modal_credits').textContent = credits + window.translations.credits;
     document.getElementById('modal_offering').textContent = window.translations.offerings[offeringCategory] || '-';
     document.getElementById('modal_major_type').textContent = window.translations.majors[majorType] || '-';
+    document.getElementById('modal_course_category').textContent = window.translations.courseCategories[courseCategoryId] || '-';
 
     // 曜日・時限（集中講義の場合は「-」を表示）
     if (dayId > 0 && period > 0) {
