@@ -126,6 +126,7 @@ def convert_courses(input_csv: str, output_csv: str,
             class_format_id = mappings['class_format'].get(row['授業形態ID'].strip())
             course_type_id = mappings['course_type'].get(row['授業種別ID'].strip())
             instructor_id = instructor_map.get(row['主担当教員ID'].strip())
+            has_multiple_instructors = int(row.get('複数担当教員', 0))
 
             converted_records.append({
                 'timetable_code': timetable_code,
@@ -136,6 +137,7 @@ def convert_courses(input_csv: str, output_csv: str,
                 'class_format_id': class_format_id,
                 'course_type_id': course_type_id,
                 'main_instructor_id': instructor_id,
+                'has_multiple_instructors': has_multiple_instructors,
             })
 
     # CSV出力
@@ -143,7 +145,7 @@ def convert_courses(input_csv: str, output_csv: str,
         writer = csv.DictWriter(f, fieldnames=[
             'timetable_code', 'syllabus_url', 'course_title', 'credits',
             'offering_category_id', 'class_format_id', 'course_type_id',
-            'main_instructor_id'
+            'main_instructor_id', 'has_multiple_instructors'
         ])
         writer.writeheader()
         writer.writerows(converted_records)

@@ -96,6 +96,7 @@ def import_courses(csv_path: str) -> None:
                     class_format_id=int(row['class_format_id']) if row['class_format_id'] else None,  # pyright: ignore[reportCallIssue]
                     course_type_id=int(row['course_type_id']) if row['course_type_id'] else None,  # pyright: ignore[reportCallIssue]
                     main_instructor_id=int(row['main_instructor_id']) if row['main_instructor_id'] else None,  # pyright: ignore[reportCallIssue]
+                    has_multiple_instructors=int(row['has_multiple_instructors']) if row['has_multiple_instructors'] else 0,  # pyright: ignore[reportCallIssue]
                 )
                 db.session.add(course)
                 count += 1

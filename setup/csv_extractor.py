@@ -20,7 +20,7 @@ def extract_courses(input_csv_path: str, output_csv_path: str) -> None:
         output_csv_path: 出力CSVファイルのパス
     """
     # 時間割コードで重複を避ける
-    courses: Dict[str, Tuple[str, str, str, str, str, str, str, str]] = {}
+    courses: Dict[str, Tuple[str, str, str, str, str, str, str, str, str]] = {}
 
     with open(input_csv_path, 'r', encoding='utf-8-sig') as f:
         reader = csv.DictReader(f)
@@ -39,6 +39,7 @@ def extract_courses(input_csv_path: str, output_csv_path: str) -> None:
             class_format = row['授業形態ID'].strip()
             course_type = row['授業種別ID'].strip()
             main_instructor = row['主担当教員ID'].strip()
+            has_multiple_instructors = row.get('複数担当教員', '0').strip()
 
             courses[timetable_code] = (
                 timetable_code,
@@ -48,7 +49,8 @@ def extract_courses(input_csv_path: str, output_csv_path: str) -> None:
                 offering_category,
                 class_format,
                 course_type,
-                main_instructor
+                main_instructor,
+                has_multiple_instructors
             )
 
     # CSVに書き出し
@@ -62,7 +64,8 @@ def extract_courses(input_csv_path: str, output_csv_path: str) -> None:
             '開講区分ID',
             '授業形態ID',
             '授業種別ID',
-            '主担当教員ID'
+            '主担当教員ID',
+            '複数担当教員'
         ])
 
         # ソートして書き出し

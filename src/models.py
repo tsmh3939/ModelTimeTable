@@ -158,6 +158,7 @@ class Course(db.Model):
     class_format_id: Mapped[Optional[int]] = mapped_column(Integer, ForeignKey('class_format_master.class_format_id'))
     course_type_id: Mapped[Optional[int]] = mapped_column(Integer, ForeignKey('course_type_master.course_type_id'))
     main_instructor_id: Mapped[Optional[int]] = mapped_column(Integer, ForeignKey('instructor_master.instructor_id'))
+    has_multiple_instructors: Mapped[int] = mapped_column(Integer, default=0)
 
     # リレーション
     course_category: Mapped[Optional["CourseCategoryMaster"]] = relationship(back_populates='courses')

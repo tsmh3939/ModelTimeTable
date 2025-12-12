@@ -11,6 +11,22 @@ from pathlib import Path
 from src.translations.field_values import CourseCategoryEnum
 
 
+def get_instructor_name(course):
+    """
+    科目の担当教員名を取得する（複数担当教員の場合は「他」を返す）
+
+    Args:
+        course: 科目オブジェクト
+
+    Returns:
+        str: 担当教員名または「他」
+    """
+    name = course.main_instructor.instructor_name
+    if course.has_multiple_instructors == 1:
+        name += ' 他'
+    return name if course.main_instructor else ''
+
+
 def get_major_type(course, major1_courses, major2_courses, others_courses, info_app_courses):
     """
     科目がどのメジャーに属するかを判定する
@@ -74,7 +90,7 @@ def build_timetable_from_courses(courses, major1_courses, major2_courses,
                 if day_id in range(1, 6):
                     if period >= 1 and period <= 6:
                         has_regular_schedule = True
-                        instructor_name = course.main_instructor.instructor_name if course.main_instructor else ''
+                        instructor_name = get_instructor_name(course)
                         major_type = get_major_type(course, major1_courses, major2_courses,
                                                     others_courses, info_app_courses)
 
@@ -101,7 +117,7 @@ def build_timetable_from_courses(courses, major1_courses, major2_courses,
                             })
 
             if not has_regular_schedule:
-                instructor_name = course.main_instructor.instructor_name if course.main_instructor else ''
+                instructor_name = get_instructor_name(course)
                 major_type = get_major_type(course, major1_courses, major2_courses,
                                             others_courses, info_app_courses)
 
@@ -123,7 +139,7 @@ def build_timetable_from_courses(courses, major1_courses, major2_courses,
                     'course_type_name': course.course_type.course_type_name if course.course_type else ''
                 })
         else:
-            instructor_name = course.main_instructor.instructor_name if course.main_instructor else ''
+            instructor_name = get_instructor_name(course)
             major_type = get_major_type(course, major1_courses, major2_courses,
                                         others_courses, info_app_courses)
 
@@ -296,7 +312,7 @@ def export_all_timetables():
 
                                 if day_id in range(1, 6) and period >= 1 and period <= 6:
                                     has_regular_schedule = True
-                                    instructor_name = course.main_instructor.instructor_name if course.main_instructor else ''
+                                    instructor_name = get_instructor_name(course)
 
                                     if course in major1_courses:
                                         major_type = 'major1'
@@ -332,7 +348,7 @@ def export_all_timetables():
                                         })
 
                             if not has_regular_schedule:
-                                instructor_name = course.main_instructor.instructor_name if course.main_instructor else ''
+                                instructor_name = get_instructor_name(course)
 
                                 if course in major1_courses:
                                     major_type = 'major1'
@@ -363,7 +379,7 @@ def export_all_timetables():
                                     'course_type_name': course.course_type.course_type_name if course.course_type else ''
                                 })
                         else:
-                            instructor_name = course.main_instructor.instructor_name if course.main_instructor else ''
+                            instructor_name = get_instructor_name(course)
 
                             if course in major1_courses:
                                 major_type = 'major1'
