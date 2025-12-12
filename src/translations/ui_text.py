@@ -82,7 +82,7 @@ RESULT = {
     "credits": {"ja": "単位", "en": "credits"},
     "total": {"ja": "合計", "en": "Total"},
     "major1_courses": {"ja": "第1メジャー科目", "en": "1st Major Courses"},
-    "shared_courses": {"ja": "情報学領域共有科目", "en": "Shared Information Science Courses"},
+    "shared_courses": {"ja": "第一メジャー第二メジャー共有科目", "en": "First & Second Major Shared Courses"},
     "major2_courses": {"ja": "第2メジャー科目", "en": "2nd Major Courses"},
     "others_courses": {"ja": "その他メジャー科目", "en": "Other Major Courses"},
     "info_app_courses": {"ja": "情報応用科目", "en": "Information Application Courses"},
