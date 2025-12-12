@@ -277,7 +277,38 @@
             </div>
             {% endif %}
 
+            {# 凡例セクション #}
             <div class="mt-6">
+                <div class="card bg-base-100 shadow-xl">
+                    <div class="card-body p-4">
+                        <h3 class="font-semibold text-lg mb-3">{{ t('result', 'legend_title') }}</h3>
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                            <div class="flex items-center gap-2">
+                                <span class="font-bold text-primary">【{{ t('result', 'label_shared') }}】</span>
+                                <span class="text-sm">{{ t('result', 'shared_courses') }}</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="font-bold text-primary">【{{ t('result', 'label_major1') }}】</span>
+                                <span class="text-sm">{{ t('result', 'major1_courses') }}</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="font-bold text-secondary">【{{ t('result', 'label_major2') }}】</span>
+                                <span class="text-sm">{{ t('result', 'major2_courses') }}</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="font-bold text-info">【{{ t('result', 'label_others') }}】</span>
+                                <span class="text-sm">{{ t('result', 'others_courses') }}</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="font-bold text-warning">【{{ t('result', 'label_info_app') }}】</span>
+                                <span class="text-sm">{{ t('result', 'info_app_courses') }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="mt-6" id="credit-info-section">
                 <div class="card bg-base-100 shadow-xl">
                     <div class="card-body p-4">
                         <h3 class="font-semibold text-lg mb-3">{{ t('result', 'credit_info') }}</h3>
