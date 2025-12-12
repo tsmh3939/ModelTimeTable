@@ -154,10 +154,10 @@
                                                      '{{ item['classroom_name'] }}',
                                                      '{{ item['syllabus_url'] }}'
                                                  )">
-                                                <div class="font-semibold {{ color_class }} flex items-center gap-1 flex-wrap justify-between">
-                                                    <span>{{ indicator }}</span>
+                                                <div class="font-semibold flex items-center gap-1 flex-wrap justify-between">
+                                                    <span class="{{ color_class }}">{{ indicator }}</span>
                                                     {% if offering_tag %}
-                                                    <span class="badge badge-sm badge-soft">{{ offering_tag }}</span>
+                                                    <span class="text-xs text-base-content">{{ offering_tag }}</span>
                                                     {% endif %}
                                                 </div>
                                                 <div class="mt-1">{{ item['course_title'] }}</div>
@@ -251,10 +251,10 @@
                                              '{{ item['classroom_name'] }}',
                                              '{{ item['syllabus_url'] }}'
                                          )">
-                                        <div class="font-semibold {{ color_class }} flex items-center gap-1 flex-wrap justify-between">
-                                            <span>{{ indicator }}</span>
+                                        <div class="font-semibold flex items-center gap-1 flex-wrap justify-between">
+                                            <span class="{{ color_class }}">{{ indicator }}</span>
                                             {% if offering_tag %}
-                                            <span class="badge badge-sm badge-soft">{{ offering_tag }}</span>
+                                            <span class="text-xs text-base-content">{{ offering_tag }}</span>
                                             {% endif %}
                                         </div>
                                         <div class="mt-1">{{ item['course_title'] }}</div>
