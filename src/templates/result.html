@@ -14,7 +14,7 @@
     </div>
 
     <div class="collapse collapse-arrow bg-base-100 shadow-xl mb-6">
-        <input type="checkbox" checked />
+        <input type="checkbox" />
         <div class="collapse-title text-xl font-medium">
             {{ t('result', 'selected_conditions') }}
         </div>
@@ -41,6 +41,27 @@
                     </div>
                 </div>
             </div>
+
+            {# 除外された科目セクション #}
+            {% if excluded_course_names %}
+            <div class="mt-6 px-4">
+                <div class="mb-2">
+                    <h3 class="text-lg font-semibold text-base-content">
+                        {{ t('result', 'excluded_courses') }}
+                    </h3>
+                </div>
+                <p class="text-sm text-base-content/80 mb-3">{{ t('result', 'excluded_courses_note') }}</p>
+                <div class="bg-base-200 rounded-lg p-4">
+                    <ul class="space-y-2">
+                        {% for course_name in excluded_course_names %}
+                        <li class="flex items-start gap-3 text-sm">
+                            <span class="leading-relaxed">{{ course_name }}</span>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+            {% endif %}
         </div>
     </div>
 
@@ -198,7 +219,7 @@
 
             {# 集中講義・実験実習セクション #}
             {% if intensive_courses %}
-            <div class="mt-6">
+            <div class="mb-6 mt-6">
                 <div class="card bg-base-100 shadow-xl">
                     <div class="card-body p-4">
                         <h3 class="font-semibold text-lg mb-3">{{ t('result', 'intensive_courses') }}</h3>
@@ -292,28 +313,50 @@
                 </div>
             </div>
             {% endif %}
-        </div>
-    </div>
 
-    {# 除外された科目セクション #}
-    {% if excluded_course_names %}
-    <div class="mb-6">
-        <div class="collapse collapse-arrow bg-base-100 shadow-xl">
-            <input type="checkbox" />
-            <div class="collapse-title text-lg font-semibold">
-                {{ t('result', 'excluded_courses') }}
-            </div>
-            <div class="collapse-content">
-                <p class="text-sm text-base-content/90 mb-4">{{ t('result', 'excluded_courses_note') }}</p>
-                <ul class="list-disc list-inside space-y-2">
-                    {% for course_name in excluded_course_names %}
-                    <li class="text-sm">{{ course_name }}</li>
-                    {% endfor %}
-                </ul>
+            {# 凡例セクション #}
+            <div class="mb-6 mt-6">
+                <div class="collapse collapse-arrow bg-base-100 shadow-xl">
+                    <input type="checkbox" />
+                    <div class="collapse-title text-lg font-semibold">
+                        {{ t('result', 'legend_title') }}
+                    </div>
+                    <div class="collapse-content">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                            <div class="flex items-center gap-2">
+                                <span class="font-bold text-primary">【{{ t('result', 'label_shared') }}】</span>
+                                <span class="text-sm">{{ t('result', 'shared_courses') }}</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="font-bold text-primary">【{{ t('result', 'label_major1') }}】</span>
+                                <span class="text-sm">{{ t('result', 'major1_courses') }}</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="font-bold text-secondary">【{{ t('result', 'label_major2') }}】</span>
+                                <span class="text-sm">{{ t('result', 'major2_courses') }}</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="font-bold text-info">【{{ t('result', 'label_others') }}】</span>
+                                <span class="text-sm">{{ t('result', 'others_courses') }}</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="font-bold text-warning">【{{ t('result', 'label_info_app') }}】</span>
+                                <span class="text-sm">{{ t('result', 'info_app_courses') }}</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="font-bold">★</span>
+                                <span class="text-sm">{{ t('result', 'course_category_required') }} / {{ t('result', 'course_category_mandatory') }}</span>
+                            </div>
+                            <div class="flex items-center gap-2">
+                                <span class="font-bold">☆</span>
+                                <span class="text-sm">{{ t('result', 'course_category_required_elective') }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-    {% endif %}
 
     <div class="mb-6" id="credit-info-section">
         <div class="collapse collapse-arrow bg-base-100 shadow-xl">
@@ -366,49 +409,6 @@
             </div>
         </div>
     </div>
-
-    {# 凡例セクション #}
-    <div class="mb-6">
-        <div class="collapse collapse-arrow bg-base-100 shadow-xl">
-            <input type="checkbox" checked="checked" />
-            <div class="collapse-title text-lg font-semibold">
-                {{ t('result', 'legend_title') }}
-            </div>
-            <div class="collapse-content">
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
-                    <div class="flex items-center gap-2">
-                        <span class="font-bold text-primary">【{{ t('result', 'label_shared') }}】</span>
-                        <span class="text-sm">{{ t('result', 'shared_courses') }}</span>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <span class="font-bold text-primary">【{{ t('result', 'label_major1') }}】</span>
-                        <span class="text-sm">{{ t('result', 'major1_courses') }}</span>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <span class="font-bold text-secondary">【{{ t('result', 'label_major2') }}】</span>
-                        <span class="text-sm">{{ t('result', 'major2_courses') }}</span>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <span class="font-bold text-info">【{{ t('result', 'label_others') }}】</span>
-                        <span class="text-sm">{{ t('result', 'others_courses') }}</span>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <span class="font-bold text-warning">【{{ t('result', 'label_info_app') }}】</span>
-                        <span class="text-sm">{{ t('result', 'info_app_courses') }}</span>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <span class="font-bold">★</span>
-                        <span class="text-sm">{{ t('result', 'course_category_required') }} / {{ t('result', 'course_category_mandatory') }}</span>
-                    </div>
-                    <div class="flex items-center gap-2">
-                        <span class="font-bold">☆</span>
-                        <span class="text-sm">{{ t('result', 'course_category_required_elective') }}</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
 
     <div class="flex justify-center gap-4 mb-8">
         <a href="{{ url_for('index') }}" class="btn btn-outline btn-primary">
