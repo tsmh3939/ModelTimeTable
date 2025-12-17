@@ -9,6 +9,4 @@ flask db upgrade
 
 python setup.py
 
-python example.py
-
 exec python app.py
