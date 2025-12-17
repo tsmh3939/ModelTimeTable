@@ -10,6 +10,34 @@ from src import app
 from src.translations.field_values import CourseCategoryEnum
 
 
+def format_schedule_string(course, lang='ja'):
+    """
+    科目の開講曜限を文字列として整形する
+
+    Args:
+        course: 科目オブジェクト
+        lang: 言語コード ('ja' または 'en')
+
+    Returns:
+        str: 開講曜限の文字列（例: "月 1限, 水 3限" または "Mon Period 1, Wed Period 3"）
+    """
+    from src.translations.field_values import DAY_MASTER
+
+    if not course.schedules:
+        return ''
+
+    schedule_texts = []
+    for schedule in course.schedules:
+        if schedule.day_id > 0 and schedule.period > 0:
+            day_name = DAY_MASTER[schedule.day_id][lang]
+            if lang == 'ja':
+                schedule_texts.append(f"{day_name} {schedule.period}限")
+            else:
+                schedule_texts.append(f"{day_name} Period {schedule.period}")
+
+    return ', '.join(schedule_texts) if schedule_texts else ''
+
+
 def get_instructor_name(course):
     """
     科目の担当教員名を取得する（複数担当教員の場合は「他」を返す）
@@ -88,7 +116,7 @@ def get_course_category_id(course, major_type, major1_id, major2_id):
 
 
 def build_timetable_from_courses(courses, major1_courses, major2_courses,
-                                   others_courses, info_app_courses, major1_id, major2_id):
+                                   others_courses, info_app_courses, major1_id, major2_id, lang='ja'):
     """
     科目リストから時間割データを構築する
 
@@ -100,6 +128,7 @@ def build_timetable_from_courses(courses, major1_courses, major2_courses,
         info_app_courses: 情報応用科目リスト
         major1_id: 第一メジャーID
         major2_id: 第二メジャーID
+        lang: 言語コード ('ja' または 'en')
 
     Returns:
         tuple: (timetable, intensive_courses)
@@ -143,6 +172,9 @@ def build_timetable_from_courses(courses, major1_courses, major2_courses,
 
                             course_category_id = get_course_category_id(course, major_type, major1_id, major2_id)
 
+                            # スケジュール情報を文字列として取得
+                            schedule_string = format_schedule_string(course, lang)
+
                             timetable[day_id][period].append({
                                 'timetable_code': course.timetable_code,
                                 'course_title': course.course_title,
@@ -152,7 +184,8 @@ def build_timetable_from_courses(courses, major1_courses, major2_courses,
                                 'credits': course.credits,
                                 'classroom_name': classroom_names,
                                 'syllabus_url': course.syllabus_url or '',
-                                'course_category_id': course_category_id
+                                'course_category_id': course_category_id,
+                                'schedule_string': schedule_string
                             })
 
             if not has_regular_schedule:
@@ -167,6 +200,9 @@ def build_timetable_from_courses(courses, major1_courses, major2_courses,
 
                 course_category_id = get_course_category_id(course, major_type, major1_id, major2_id)
 
+                # スケジュール情報を文字列として取得
+                schedule_string = format_schedule_string(course, lang)
+
                 intensive_courses.append({
                     'timetable_code': course.timetable_code,
                     'course_title': course.course_title,
@@ -178,7 +214,8 @@ def build_timetable_from_courses(courses, major1_courses, major2_courses,
                     'syllabus_url': course.syllabus_url or '',
                     'class_format_name': course.class_format.class_format_name if course.class_format else '',
                     'course_type_name': course.course_type.course_type_name if course.course_type else '',
-                    'course_category_id': course_category_id
+                    'course_category_id': course_category_id,
+                    'schedule_string': schedule_string
                 })
         else:
             instructor_name = get_instructor_name(course)
@@ -203,7 +240,8 @@ def build_timetable_from_courses(courses, major1_courses, major2_courses,
                 'syllabus_url': course.syllabus_url or '',
                 'class_format_name': course.class_format.class_format_name if course.class_format else '',
                 'course_type_name': course.course_type.course_type_name if course.course_type else '',
-                'course_category_id': course_category_id
+                'course_category_id': course_category_id,
+                'schedule_string': ''
             })
 
     return timetable, intensive_courses
@@ -230,7 +268,7 @@ def calculate_credits(course_list, major_id):
     return credits
 
 
-def build_timetable_result(semester, major1_id, major2_id, excluded_course_codes=None):
+def build_timetable_result(semester, major1_id, major2_id, excluded_course_codes=None, lang='ja'):
     """
     時間割と単位情報を構築する共通関数
 
@@ -239,6 +277,7 @@ def build_timetable_result(semester, major1_id, major2_id, excluded_course_codes
         major1_id: 第一メジャーID
         major2_id: 第二メジャーID
         excluded_course_codes: 除外する科目コードのセット（オプション）
+        lang: 言語コード ('ja' または 'en')
 
     Returns:
         dict: 時間割データと単位情報を含む辞書
@@ -273,7 +312,7 @@ def build_timetable_result(semester, major1_id, major2_id, excluded_course_codes
     # 時間割を構築
     timetable, intensive_courses = build_timetable_from_courses(
         filtered_courses, major1_courses, major2_courses, others_courses, info_app_courses,
-        major1_id, major2_id
+        major1_id, major2_id, lang
     )
 
     # 共有科目を検出
@@ -494,7 +533,7 @@ def result():
     fiscal_year = fiscal_year_dict.get(current_lang, fiscal_year_dict.get('ja', ''))
 
     # 時間割と単位情報を構築（除外する科目を指定）
-    result_data = build_timetable_result(semester, major1_id, major2_id, excluded_courses)
+    result_data = build_timetable_result(semester, major1_id, major2_id, excluded_courses, current_lang)
 
     # 時間割の重複チェック
     conflicts = detect_and_resolve_conflicts(result_data['timetable'])
@@ -555,6 +594,9 @@ def choose():
     major1_id = request.form.get('major1_id', type=int)
     major2_id = request.form.get('major2_id', type=int)
 
+    # 現在の言語を取得
+    current_lang = request.args.get('lang', app.config.get('DEFAULT_LANGUAGE', 'ja'))
+
     # データがない場合はホーム画面にリダイレクト
     if not all([semester, major1_id, major2_id]):
         return redirect(url_for('index'))
@@ -564,7 +606,7 @@ def choose():
 
     # 重複を再検出して、ユーザーが選択しなかった科目（除外する科目）を特定
     # 一時的にexcluded_course_codes=Noneで時間割を構築
-    temp_result = build_timetable_result(semester, major1_id, major2_id)
+    temp_result = build_timetable_result(semester, major1_id, major2_id, None, current_lang)
 
     # 重複を検出
     conflicts_redetected = detect_and_resolve_conflicts(temp_result['timetable'])

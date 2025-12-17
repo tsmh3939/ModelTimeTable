@@ -165,19 +165,17 @@
                                             {% endif %}
 
                                             <div class="course-content cursor-pointer hover:bg-base-200 rounded p-1"
-                                                 onclick="showCourseDetails(
-                                                     '{{ item['timetable_code'] }}',
-                                                     '{{ item['course_title'] }}',
-                                                     '{{ item['instructor_name'] }}',
-                                                     {{ item['credits'] }},
-                                                     {{ item['offering_category_id'] }},
-                                                     '{{ item['major_type'] }}',
-                                                     {{ day_id }},
-                                                     {{ period }},
-                                                     '{{ item['classroom_name'] }}',
-                                                     '{{ item['syllabus_url'] }}',
-                                                     {{ item['course_category_id'] if item['course_category_id'] is not none else 'null' }}
-                                                 )">
+                                                 data-timetable-code="{{ item['timetable_code'] }}"
+                                                 data-course-title="{{ item['course_title'] }}"
+                                                 data-instructor="{{ item['instructor_name'] }}"
+                                                 data-credits="{{ item['credits'] }}"
+                                                 data-offering="{{ item['offering_category_id'] }}"
+                                                 data-major-type="{{ item['major_type'] }}"
+                                                 data-classroom="{{ item['classroom_name'] }}"
+                                                 data-syllabus="{{ item['syllabus_url'] }}"
+                                                 data-course-category="{{ item['course_category_id'] if item['course_category_id'] is not none else '' }}"
+                                                 data-schedule="{{ item['schedule_string'] }}"
+                                                 onclick="showCourseDetailsFromElement(this)">
                                                 <div class="font-semibold flex items-center gap-1 flex-wrap justify-between">
                                                     <span class="{{ color_class }}">{{ indicator }}</span>
                                                     {% if offering_tag %}
@@ -269,19 +267,17 @@
                                     {% endif %}
 
                                     <div class="course-content cursor-pointer hover:bg-base-200 rounded p-1"
-                                         onclick="showCourseDetails(
-                                             '{{ item['timetable_code'] }}',
-                                             '{{ item['course_title'] }}',
-                                             '{{ item['instructor_name'] }}',
-                                             {{ item['credits'] }},
-                                             {{ item['offering_category_id'] }},
-                                             '{{ item['major_type'] }}',
-                                             0,
-                                             0,
-                                             '{{ item['classroom_name'] }}',
-                                             '{{ item['syllabus_url'] }}',
-                                             {{ item['course_category_id'] if item['course_category_id'] is not none else 'null' }}
-                                         )">
+                                         data-timetable-code="{{ item['timetable_code'] }}"
+                                         data-course-title="{{ item['course_title'] }}"
+                                         data-instructor="{{ item['instructor_name'] }}"
+                                         data-credits="{{ item['credits'] }}"
+                                         data-offering="{{ item['offering_category_id'] }}"
+                                         data-major-type="{{ item['major_type'] }}"
+                                         data-classroom="{{ item['classroom_name'] }}"
+                                         data-syllabus="{{ item['syllabus_url'] }}"
+                                         data-course-category="{{ item['course_category_id'] if item['course_category_id'] is not none else '' }}"
+                                         data-schedule="{{ item['schedule_string'] }}"
+                                         onclick="showCourseDetailsFromElement(this)">
                                         <div class="font-semibold flex items-center gap-1 flex-wrap justify-between">
                                             <span class="{{ color_class }}">{{ indicator }}</span>
                                             {% if offering_tag %}
@@ -536,20 +532,21 @@ window.translations = {
 };
 
 /**
- * 科目詳細をモーダルで表示する
- * @param {string} timetableCode - 時間割コード
- * @param {string} title - 科目名
- * @param {string} instructor - 担当教員名
- * @param {number} credits - 単位数
- * @param {number} offeringCategory - 開講区分ID
- * @param {string} majorType - メジャータイプ
- * @param {number} dayId - 曜日ID (1-5)
- * @param {number} period - 時限 (1-5)
- * @param {string} classroom - 教室名
- * @param {string} syllabusUrl - シラバスURL
- * @param {number} courseCategoryId - 履修区分ID
+ * 要素のデータ属性から科目詳細を取得してモーダルで表示する
+ * @param {HTMLElement} element - クリックされた要素
  */
-function showCourseDetails(timetableCode, title, instructor, credits, offeringCategory, majorType, dayId, period, classroom, syllabusUrl, courseCategoryId) {
+function showCourseDetailsFromElement(element) {
+    const timetableCode = element.dataset.timetableCode;
+    const title = element.dataset.courseTitle;
+    const instructor = element.dataset.instructor;
+    const credits = parseInt(element.dataset.credits);
+    const offeringCategory = parseInt(element.dataset.offering);
+    const majorType = element.dataset.majorType;
+    const classroom = element.dataset.classroom;
+    const syllabusUrl = element.dataset.syllabus;
+    const courseCategoryId = element.dataset.courseCategory ? parseInt(element.dataset.courseCategory) : null;
+    const scheduleString = element.dataset.schedule;
+
     // モーダルに情報を設定
     document.getElementById('modal_timetable_code').textContent = timetableCode || '-';
     document.getElementById('modal_course_title').textContent = title;
@@ -558,14 +555,7 @@ function showCourseDetails(timetableCode, title, instructor, credits, offeringCa
     document.getElementById('modal_offering').textContent = window.translations.offerings[offeringCategory] || '-';
     document.getElementById('modal_major_type').textContent = window.translations.majors[majorType] || '-';
     document.getElementById('modal_course_category').textContent = window.translations.courseCategories[courseCategoryId] || '-';
-
-    // 曜日・時限（集中講義の場合は「-」を表示）
-    if (dayId > 0 && period > 0) {
-        document.getElementById('modal_schedule').textContent = window.translations.days[dayId] + ' ' + period + '限';
-    } else {
-        document.getElementById('modal_schedule').textContent = '-';
-    }
-
+    document.getElementById('modal_schedule').textContent = scheduleString || '-';
     document.getElementById('modal_classroom').textContent = classroom || '-';
 
     // シラバスリンクを設定
