@@ -478,11 +478,15 @@ def index():
 
         assert semester is not None and major1_id is not None and major2_id is not None
 
+        # 現在の言語を取得
+        current_lang = request.args.get('lang', app.config.get('DEFAULT_LANGUAGE', 'ja'))
+
         # result画面にリダイレクト（クエリパラメータ付き）
         return redirect(url_for('result',
                                 semester=semester,
                                 major1_id=major1_id,
-                                major2_id=major2_id))
+                                major2_id=major2_id,
+                                lang=current_lang))
     else:
         # GETリクエストの処理
         # 「その他」と「情報応用科目」を除外
@@ -547,7 +551,8 @@ def result():
             conflicts=conflicts,
             semester=semester,
             major1_id=major1_id,
-            major2_id=major2_id
+            major2_id=major2_id,
+            current_language=current_lang
         )
 
     # 時間割に存在する最大時限を計算（最低5時限までは表示）
@@ -586,6 +591,7 @@ def result():
         total_credits=result_data['total_credits'],
         max_period=max_period,
         excluded_course_names=excluded_course_names,
+        current_language=current_lang,
     )
 
 
@@ -597,8 +603,8 @@ def choose():
     major1_id = request.form.get('major1_id', type=int)
     major2_id = request.form.get('major2_id', type=int)
 
-    # 現在の言語を取得
-    current_lang = request.args.get('lang', app.config.get('DEFAULT_LANGUAGE', 'ja'))
+    # 現在の言語を取得（フォームデータから）
+    current_lang = request.form.get('lang', app.config.get('DEFAULT_LANGUAGE', 'ja'))
 
     # データがない場合はホーム画面にリダイレクト
     if not all([semester, major1_id, major2_id]):
@@ -646,4 +652,5 @@ def choose():
                             semester=semester,
                             major1_id=major1_id,
                             major2_id=major2_id,
-                            excluded=excluded_str))
+                            excluded=excluded_str,
+                            lang=current_lang))
