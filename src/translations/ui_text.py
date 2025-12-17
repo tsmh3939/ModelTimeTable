@@ -54,7 +54,6 @@ INDEX = {
     "how_to_use": {"ja": "使い方", "en": "How to Use"},
     "help_semester": {"ja": "セメスタは必須です。2年前期、2年後期、3年前期、3年後期から選択してください。", "en": "Semester is required. Select from 2nd year first semester, 2nd year second semester, 3rd year first semester, or 3rd year second semester."},
     "help_majors": {"ja": "第1メジャーと第2メジャーは必須です。それぞれ異なるメジャーを選択してください。", "en": "First and second majors are required. Select different majors for each."},
-    "help_major_types": {"ja": "メジャー:", "en": "Majors:"},
     "help_generate": {"ja": "選択後、「時間割を生成」ボタンをクリックすると、条件に合った時間割が作成されます。", "en": "After selecting, click the 'Generate Timetable' button to create a timetable that matches your criteria."},
 }
 
