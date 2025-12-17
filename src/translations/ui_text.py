@@ -86,7 +86,7 @@ RESULT = {
     "major2_courses": {"ja": "第2メジャー科目", "en": "2nd Major Courses"},
     "others_courses": {"ja": "その他メジャー科目", "en": "Other Major Courses"},
     "info_app_courses": {"ja": "情報応用科目", "en": "Information Application Courses"},
-    "required_mandatory": {"ja": "必修/必履修", "en": "Required/Mandatory"},
+    "required_mandatory": {"ja": "必修", "en": "Required"},
     "elective_required_elective": {"ja": "選択・選択必修", "en": "Elective/Required Elective"},
     "credits_unit": {"ja": "単位数", "en": "Credits"},
     "total_simple": {"ja": "合計", "en": "Total"},
