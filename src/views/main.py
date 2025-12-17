@@ -249,20 +249,23 @@ def build_timetable_from_courses(courses, major1_courses, major2_courses,
 
 def calculate_credits(course_list, major_id):
     """
-    指定された科目リストとメジャーIDに基づき、必修・選択単位を計算するヘルパー関数。
+    指定された科目リストとメジャーIDに基づき、必修・選択必修・選択単位を計算するヘルパー関数。
     """
-    credits = {'required': 0, 'elective': 0}
+    credits = {'required': 0, 'required_elective': 0, 'elective': 0}
     for course in course_list:
         # このメジャーにおける履修区分を取得
         for affiliated in course.affiliated_majors:
             if affiliated.major_id == major_id:
                 category_id = affiliated.course_category_id
                 credits_val = course.credits
-                # 必修または必履修
-                if category_id in [CourseCategoryEnum.REQUIRED, CourseCategoryEnum.MANDATORY]:
+                # 必修
+                if category_id in [CourseCategoryEnum.REQUIRED]:
                     credits['required'] += credits_val
-                # 選択または選択必修
-                elif category_id in [CourseCategoryEnum.ELECTIVE, CourseCategoryEnum.REQUIRED_ELECTIVE]:
+                # 選択必修
+                elif category_id == CourseCategoryEnum.REQUIRED_ELECTIVE:
+                    credits['required_elective'] += credits_val
+                # 選択
+                elif category_id == CourseCategoryEnum.ELECTIVE:
                     credits['elective'] += credits_val
                 break
     return credits
@@ -355,11 +358,11 @@ def build_timetable_result(semester, major1_id, major2_id, excluded_course_codes
     info_app_credits = calculate_credits(info_app_courses_filtered, MajorEnum.INFO_APP)
 
     total_credits = (
-        major1_credits['required'] + major1_credits['elective'] +
-        shared_credits['required'] + shared_credits['elective'] +
-        major2_credits['required'] + major2_credits['elective'] +
-        others_credits['required'] + others_credits['elective'] +
-        info_app_credits['required'] + info_app_credits['elective']
+        major1_credits['required'] + major1_credits['required_elective'] + major1_credits['elective'] +
+        shared_credits['required'] + shared_credits['required_elective'] + shared_credits['elective'] +
+        major2_credits['required'] + major2_credits['required_elective'] + major2_credits['elective'] +
+        others_credits['required'] + others_credits['required_elective'] + others_credits['elective'] +
+        info_app_credits['required'] + info_app_credits['required_elective'] + info_app_credits['elective']
     )
 
     return {
