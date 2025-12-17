@@ -139,6 +139,9 @@ CHOOSE = {
     "apply_selections": {"ja": "選択を適用", "en": "Apply Selections"},
     "conflicting_courses": {"ja": "重複する科目ペア", "en": "Conflicting Course Pair"},
     "schedule": {"ja": "開講曜限", "en": "Schedule"},
+    "period_suffix": {"ja": "限", "en": ""},
+    "same_course_warning": {"ja": "同じ科目名のものは、すべて選択するか、すべて選択しないかのどちらかにしてください。", "en": "Courses with the same name must be either all selected or all unselected."},
+    "validation_error": {"ja": "選択内容に誤りがあります。同じ科目名のものは、すべて選択するか、すべて選択しないかのどちらかにしてください。", "en": "Invalid selection. Courses with the same name must be either all selected or all unselected."},
 }
 
 # エラーページ

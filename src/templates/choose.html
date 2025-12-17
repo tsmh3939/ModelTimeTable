@@ -14,16 +14,28 @@
                     {{ t('choose', 'schedule_conflicts') }}
                 </h2>
                 <p class="mb-4">{{ t('choose', 'conflicts_detected') }}</p>
+                <div id="duplicate-warning" class="alert alert-warning mb-4 hidden">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" class="stroke-current shrink-0 w-6 h-6"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                    <span>{{ t('choose', 'same_course_warning') }}</span>
+                </div>
+                <div id="validation-error" class="alert alert-error mb-4 hidden">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="stroke-current shrink-0 h-6 w-6" fill="none" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+                    <span>{{ t('choose', 'validation_error') }}</span>
+                </div>
 
                 <div class="space-y-4">
                     {% for conflict in conflicts %}
                     {% set conflict_index = loop.index0 %}
-                    <div class="border border-warning rounded-lg p-4 bg-warning/5">
+                    <div class="border border-warning rounded-lg p-4 bg-warning/5 space-y-3">
                         <div class="font-semibold">
                             <div class="flex items-center gap-2 flex-wrap">
-                                {% for slot in conflict.conflict_slots %}
-                                <span class="badge badge-warning">{{ slot.day_name_ja }} {{ slot.period }}</span>
-                                {% endfor %}
+                                <span class="badge badge-warning">
+                                    {% if current_language == 'ja' %}
+                                        {{ conflict.day_name_ja }} {{ conflict.period }}{{ t('choose', 'period_suffix') }}
+                                    {% else %}
+                                        {{ conflict.day_name_en }} Period {{ conflict.period }}
+                                    {% endif %}
+                                </span>
                             </div>
                         </div>
 
@@ -33,9 +45,13 @@
                                 <input type="radio"
                                         name="conflict_{{ conflict_index }}" value="{{ course.timetable_code }}"
                                         class="radio radio-warning mt-1 timetable-selector"
-                                        data-timetable-code="{{ course.timetable_code }}">
+                                        data-timetable-code="{{ course.timetable_code }}"
+                                        data-course-title="{{ course.course_title }}">
                                 <div class="flex-1">
-                                    <div class="font-medium">{{ course.course_title }}</div>
+                                    <div class="font-medium flex items-center gap-2">
+                                        <span class="course-marker badge badge-sm" data-course-title="{{ course.course_title }}" style="display:none;"></span>
+                                        <span>{{ course.course_title }}</span>
+                                    </div>
                                     <div class="text-sm text-base-content/70 mt-1">
                                         {% if course.instructor_name %}
                                         <span>{{ course.instructor_name }}</span>
@@ -57,7 +73,7 @@
                         </svg>
                         {{ t('result', 'back') }}
                     </a>
-                    <button type="submit" class="btn btn-primary">
+                    <button type="submit" id="submit-button" class="btn btn-primary" disabled>
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
                         </svg>
@@ -77,81 +93,102 @@
     document.addEventListener('DOMContentLoaded', function() {
         const radioButtons = document.querySelectorAll('.timetable-selector');
 
+        // 同じ科目名を持つ科目にマーカーを付ける
+        const courseTitleCounts = {};
+        const courseTitleColors = {};
+        const colors = ['badge-primary', 'badge-secondary', 'badge-accent', 'badge-info', 'badge-success'];
+        let colorIndex = 0;
+
+        // 科目名の出現回数をカウント
         radioButtons.forEach(radio => {
-            radio.addEventListener('change', function() {
-                const selectedTimetableCode = this.dataset.timetableCode;
-                const currentConflictName = this.name;
-                
-                // -----------------------------------------------------
-                // Step 1: 選択された科目コードのグローバル同期 (ON)
-                // -----------------------------------------------------
-                // この科目コードを持つ全てのラジオボタンをONにする
-                if (this.checked) {
-                    document.querySelectorAll(`[data-timetable-code="${selectedTimetableCode}"]`).forEach(otherRadio => {
-                        otherRadio.checked = true;
-                    });
-                }
-
-                // -----------------------------------------------------
-                // Step 2: OFFになった科目コードのグローバル非同期 (OFF)
-                // -----------------------------------------------------
-                // (重要) 現在のグループ内で、ブラウザの排他動作によりOFFになったものを追跡し、全体でOFFにする。
-                
-                // 現在のグループ内のすべてのラジオボタンをループ
-                document.querySelectorAll(`input[name="${currentConflictName}"]`).forEach(siblingRadio => {
-                    
-                    // ONにならなかった（OFFになった）ラジオボタンを処理
-                    if (!siblingRadio.checked) {
-                        const uncheckedTimetableCode = siblingRadio.dataset.timetableCode;
-                        
-                        // OFFになった科目コードを持つ、他のすべてのグループのラジオボタンを OFF にする
-                        document.querySelectorAll(`[data-timetable-code="${uncheckedTimetableCode}"]`).forEach(otherGroupRadio => {
-                            
-                            // ただし、現在のグループ内のもの（これはブラウザがOFFにしたばかり）は除く
-                            if (otherGroupRadio.name !== currentConflictName) {
-                                otherGroupRadio.checked = false;
-                            }
-                        });
-                    }
-                });
-
-                // -----------------------------------------------------
-                // Step 3: 選択数がゼロになったグループの強制選択（矛盾解消）
-                // -----------------------------------------------------
-                // 上記のON/OFF同期処理の結果、どのグループも選択数ゼロにならないことを保証する。
-
-                const allConflictNames = new Set();
-                radioButtons.forEach(r => allConflictNames.add(r.name));
-
-                allConflictNames.forEach(conflictName => {
-                    const groupRadios = document.querySelectorAll(`input[name="${conflictName}"]`);
-                    let checkedCount = 0;
-                    let uncheckedRadio = null; 
-
-                    groupRadios.forEach(r => {
-                        if (r.checked) {
-                            checkedCount++;
-                        } else {
-                            uncheckedRadio = r; // チェックが外れているラジオボタンを記憶
-                        }
-                    });
-
-                    // 選択数が 0 になってしまった場合
-                    if (checkedCount === 0 && uncheckedRadio) {
-                        
-                        // 残りの一つを強制的にONにする
-                        uncheckedRadio.checked = true;
-                        
-                        // 強制選択によりONになった科目コードを、再度すべてのグループで同期させる
-                        // (これにより、他のグループでこの科目コードがOFFになっていた場合にONに戻す)
-                        const newlySelectedCode = uncheckedRadio.dataset.timetableCode;
-                        document.querySelectorAll(`[data-timetable-code="${newlySelectedCode}"]`).forEach(r => {
-                            r.checked = true;
-                        });
-                    }
-                });
-            });
+            const title = radio.dataset.courseTitle;
+            courseTitleCounts[title] = (courseTitleCounts[title] || 0) + 1;
         });
+
+        // 2回以上出現する科目名にマーカーを表示
+        let hasDuplicates = false;
+        Object.keys(courseTitleCounts).forEach(title => {
+            if (courseTitleCounts[title] > 1) {
+                hasDuplicates = true;
+                courseTitleColors[title] = colors[colorIndex % colors.length];
+                colorIndex++;
+
+                document.querySelectorAll(`.course-marker[data-course-title="${title}"]`).forEach(marker => {
+                    marker.style.display = 'inline-block';
+                    marker.classList.add(courseTitleColors[title]);
+                    marker.textContent = '●';
+                });
+            }
+        });
+
+        // 重複する科目名が存在する場合のみ警告を表示
+        if (hasDuplicates) {
+            document.getElementById('duplicate-warning').classList.remove('hidden');
+        }
+
+        // ボタンの有効/無効を更新する関数
+        function updateSubmitButton() {
+            const submitButton = document.getElementById('submit-button');
+            const conflictGroups = document.querySelectorAll('[name^="conflict_"]');
+            const groupNames = new Set();
+
+            // すべてのグループ名を収集
+            conflictGroups.forEach(input => {
+                groupNames.add(input.name);
+            });
+
+            // 各グループに選択があるかチェック
+            let allGroupsSelected = true;
+            groupNames.forEach(groupName => {
+                const groupInputs = document.querySelectorAll(`[name="${groupName}"]`);
+                const hasSelection = Array.from(groupInputs).some(input => input.checked);
+                if (!hasSelection) {
+                    allGroupsSelected = false;
+                }
+            });
+
+            // バリデーションもチェック
+            const isValid = validateSelection();
+
+            // すべてのグループが選択されていて、バリデーションもOKならボタンを有効化
+            submitButton.disabled = !(allGroupsSelected && isValid);
+        }
+
+        // ラジオボタンの変更を監視
+        radioButtons.forEach(radio => {
+            radio.addEventListener('change', updateSubmitButton);
+        });
+
+        // 初期状態でボタンの状態を更新
+        updateSubmitButton();
+
+        // フォーム送信時のバリデーション
+        const form = document.querySelector('form');
+        form.addEventListener('submit', function(e) {
+            if (!validateSelection()) {
+                e.preventDefault();
+                document.getElementById('validation-error').classList.remove('hidden');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+                return false;
+            }
+            document.getElementById('validation-error').classList.add('hidden');
+        });
+
+        function validateSelection() {
+            // 同じ科目名のものがすべて選択されているか、すべて非選択かをチェック
+            for (const title in courseTitleCounts) {
+                if (courseTitleCounts[title] > 1) {
+                    const sameTitleRadios = Array.from(document.querySelectorAll(`input[data-course-title="${title}"]`));
+                    const checkedCount = sameTitleRadios.filter(r => r.checked).length;
+
+                    // 一部だけ選択されている場合はエラー
+                    if (checkedCount > 0 && checkedCount < sameTitleRadios.length) {
+                        return false;
+                    }
+                }
+            }
+            return true;
+        }
     });
 </script>
 
